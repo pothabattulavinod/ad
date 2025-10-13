@@ -39,7 +39,7 @@ header p{margin-top:0.5rem;font-size:1rem;color:#dce3f1;}
 
 /* Sections */
 section{padding:2rem 1rem;max-width:1200px;margin:auto;width:100%;}
-.about, .services, .packages, .contact-section{border-radius:12px;overflow:hidden;}
+.about, .services, .packages, .contact-section, .popular-models{border-radius:12px;overflow:hidden;}
 .about{background:linear-gradient(120deg,rgba(255,255,255,0.95),rgba(245,245,245,0.95));box-shadow:0 3px 12px var(--shadow);text-align:center;padding:2rem;}
 .about p{max-width:100%;margin:auto;font-size:1rem;line-height:1.7;word-wrap:break-word;}
 .about strong{color:var(--primary);}
@@ -55,6 +55,19 @@ section{padding:2rem 1rem;max-width:1200px;margin:auto;width:100%;}
 .package span{display:inline-block;background:var(--accent);color:#111;padding:0.4rem 1rem;border-radius:20px;font-weight:600;margin-top:0.5rem;word-wrap:break-word;}
 .package a{display:block;margin-top:0.5rem;background:var(--whatsapp);color:#fff;text-decoration:none;padding:0.5rem 1rem;border-radius:20px;font-weight:600;transition:0.3s;word-wrap:break-word;}
 .package a:hover{background:#1da851;}
+
+/* Popular Models */
+.popular-models .package img{
+  width:100%;
+  height:200px;
+  object-fit:cover;
+  border-radius:12px;
+  margin-bottom:1rem;
+  transition:transform 0.3s;
+}
+.popular-models .package img:hover{
+  transform:scale(1.05);
+}
 
 /* Contact */
 .contact-section{background:linear-gradient(135deg,#e0f0ff,#f9fafc);padding:2rem 1rem;}
@@ -137,6 +150,40 @@ footer{background:var(--primary);color:var(--light);text-align:center;padding:1r
 <div class="package"><h3>Rajahmundry to Vijayawada</h3><p>Full-day trip including tolls & fuel.</p><span>₹4,499</span><a href="https://wa.me/919876543210" target="_blank">Book via WhatsApp</a></div>
 <div class="package"><h3>Daily City Rental</h3><p>AC Hatchback – 8 hours, 80 KM.</p><span>₹1,799</span><a href="https://wa.me/919876543210" target="_blank">Book via WhatsApp</a></div>
 <div class="package"><h3>Airport Transfer</h3><p>Rajahmundry to Airport (Drop only).</p><span>₹699</span><a href="https://wa.me/919876543210" target="_blank">Book via WhatsApp</a></div>
+</div>
+</section>
+
+<section class="popular-models">
+<h2>Popular Models</h2>
+<div class="package-list">
+  <div class="package">
+    <img src="https://images.drivespark.com/ph-big/2022/04/2022-maruti-suzuki-ertiga-8.jpg" alt="Maruti Suzuki Ertiga">
+    <h3>Maruti Suzuki Ertiga</h3>
+    <p>Spacious 7-seater, ideal for family trips.</p>
+    <span>Starting ₹1,200/day</span>
+    <a href="https://wa.me/919876543210" target="_blank">Book via WhatsApp</a>
+  </div>
+  <div class="package">
+    <img src="https://www.revv.co.in/blogs/wp-content/uploads/2021/04/Toyota-Innova-1.png" alt="Toyota Innova Crysta">
+    <h3>Toyota Innova Crysta</h3>
+    <p>Premium comfort with AC and ample luggage space.</p>
+    <span>Starting ₹2,000/day</span>
+    <a href="https://wa.me/919876543210" target="_blank">Book via WhatsApp</a>
+  </div>
+  <div class="package">
+    <img src="https://www.topgearmag.in/uploads/Featuresthumb/Image/featuresthumb_best_7_seater_cars_under_rs_10_lakhs1716872562.jpg" alt="Hyundai Creta">
+    <h3>Hyundai Creta</h3>
+    <p>Stylish SUV, perfect for city rides and weekend trips.</p>
+    <span>Starting ₹1,800/day</span>
+    <a href="https://wa.me/919876543210" target="_blank">Book via WhatsApp</a>
+  </div>
+  <div class="package">
+    <img src="https://imgd.aeplcdn.com/1056x594/n/cw/ec/118194/mahindra-xuv700-right-front-three-quarter-2.jpeg?q=75" alt="Mahindra XUV500">
+    <h3>Mahindra XUV500</h3>
+    <p>Rugged SUV for long-distance journeys with family.</p>
+    <span>Starting ₹2,500/day</span>
+    <a href="https://wa.me/919876543210" target="_blank">Book via WhatsApp</a>
+  </div>
 </div>
 </section>
 
