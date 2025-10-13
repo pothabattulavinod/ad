@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nandana Car Travels & Rentals</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&family=Montserrat:wght@600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #004aad;
+      --accent: #f4c542;
+      --bg: #f9fafc;
+      --text: #222;
+      --light: #ffffff;
+      --shadow: rgba(0, 0, 0, 0.12);
+      --whatsapp: #25d366;
+      --call: #34b7f1;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      overflow-x: hidden;
+    }
+
+    header {
+      background: linear-gradient(135deg, var(--primary), #002b6b);
+      color: var(--light);
+      text-align: center;
+      padding: 2rem 1rem;
+      box-shadow: 0 3px 8px var(--shadow);
+    }
+
+    header h1 {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 2.3rem;
+      font-weight: 600;
+    }
+
+    header p {
+      margin-top: 8px;
+      font-size: 1.1rem;
+      color: #dce3f1;
+    }
+
+    /* Slideshow */
+    .slideshow-container {
+      position: relative;
+      max-width: 100%;
+      overflow: hidden;
+    }
+
+    .slide {
+      display: none;
+      width: 100%;
+      animation: fade 1.2s ease-in-out;
+    }
+
+    .slide img {
+      width: 100%;
+      height: 450px;
+      object-fit: cover;
+      filter: brightness(0.9);
+    }
+
+    @keyframes fade {
+      from {opacity: 0.3;} 
+      to {opacity: 1;}
+    }
+
+    .dots {
+      text-align: center;
+      margin: 15px 0 25px;
+    }
+
+    .dot {
+      height: 12px;
+      width: 12px;
+      margin: 0 4px;
+      background-color: #bbb;
+      border-radius: 50%;
+      display: inline-block;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    .dot.active {
+      background-color: var(--primary);
+    }
+
+    section {
+      padding: 60px 25px;
+      max-width: 1100px;
+      margin: auto;
+    }
+
+    h2 {
+      text-align: center;
+      color: var(--primary);
+      font-size: 1.8rem;
+      font-family: 'Montserrat', sans-serif;
+      margin-bottom: 25px;
+      position: relative;
+    }
+
+    h2::after {
+      content: '';
+      width: 80px;
+      height: 3px;
+      background: var(--accent);
+      display: block;
+      margin: 10px auto 0;
+      border-radius: 2px;
+    }
+
+    /* About */
+    .about {
+      background: var(--light);
+      border-radius: 12px;
+      box-shadow: 0 3px 12px var(--shadow);
+      padding: 40px;
+      margin-bottom: 40px;
+      transition: transform 0.3s ease;
+    }
+
+    .about:hover { transform: translateY(-5px); }
+
+    .about p {
+      text-align: center;
+      max-width: 850px;
+      margin: auto;
+      font-size: 1.05rem;
+      color: #444;
+      line-height: 1.8;
+    }
+
+    .about strong { color: var(--primary); }
+
+    /* Services */
+    .services-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 25px;
+      margin-top: 40px;
+    }
+
+    .service {
+      background: var(--light);
+      border-radius: 15px;
+      box-shadow: 0 4px 12px var(--shadow);
+      padding: 25px 20px;
+      text-align: center;
+      transition: all 0.3s ease;
+    }
+
+    .service:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+    }
+
+    .service h3 {
+      color: var(--primary);
+      margin-bottom: 12px;
+      font-size: 1.2rem;
+    }
+
+    .service p {
+      color: #555;
+      font-size: 0.95rem;
+      line-height: 1.6;
+    }
+
+    /* Packages */
+    .packages {
+      margin-top: 40px;
+    }
+
+    .package-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 25px;
+    }
+
+    .package {
+      background: var(--light);
+      border-radius: 15px;
+      box-shadow: 0 4px 12px var(--shadow);
+      padding: 25px 20px;
+      text-align: center;
+      transition: all 0.3s ease;
+    }
+
+    .package:hover { transform: translateY(-6px); }
+
+    .package h3 {
+      color: var(--primary);
+      margin-bottom: 10px;
+    }
+
+    .package p {
+      font-size: 0.95rem;
+      color: #555;
+      margin-bottom: 10px;
+    }
+
+    .package span {
+      display: inline-block;
+      background: var(--accent);
+      color: #111;
+      padding: 6px 15px;
+      border-radius: 20px;
+      font-weight: 600;
+    }
+
+    /* Contact */
+    .contact-section {
+      background: url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1200&q=80') center/cover no-repeat;
+      color: white;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .contact-section::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0,0,0,0.6);
+      z-index: 1;
+    }
+
+    .contact-content {
+      position: relative;
+      z-index: 2;
+      max-width: 900px;
+      margin: auto;
+      padding: 80px 20px;
+      text-align: center;
+    }
+
+    .contact-cards {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 25px;
+      margin-top: 40px;
+    }
+
+    .contact-card {
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.3);
+      border-radius: 12px;
+      padding: 25px;
+      width: 250px;
+      backdrop-filter: blur(8px);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .contact-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+    }
+
+    .contact-card h3 {
+      font-size: 1.2rem;
+      margin-bottom: 10px;
+      color: var(--accent);
+    }
+
+    .contact-card p, .contact-card a {
+      font-size: 0.95rem;
+      color: #f0f0f0;
+      text-decoration: none;
+      transition: color 0.3s ease;
+    }
+
+    .contact-card a:hover { color: var(--accent); }
+
+    /* Floating Icon Buttons */
+    .float-buttons {
+      position: fixed;
+      bottom: 25px;
+      right: 25px;
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      z-index: 999;
+    }
+
+    .float-buttons a {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+      transition: all 0.3s ease;
+      position: relative;
+    }
+
+    .float-buttons a:hover { transform: scale(1.1); }
+
+    .float-buttons .whatsapp {
+      background: var(--whatsapp);
+    }
+
+    .float-buttons .call {
+      background: var(--call);
+    }
+
+    .float-buttons img {
+      width: 28px;
+      height: 28px;
+    }
+
+    .tooltip {
+      visibility: hidden;
+      width: 80px;
+      background: #111;
+      color: #fff;
+      text-align: center;
+      border-radius: 6px;
+      padding: 5px 0;
+      position: absolute;
+      right: 60px;
+      font-size: 0.8rem;
+    }
+
+    .float-buttons a:hover .tooltip {
+      visibility: visible;
+    }
+
+    footer {
+      background: var(--primary);
+      color: var(--light);
+      text-align: center;
+      padding: 20px 10px;
+      font-size: 0.95rem;
+      letter-spacing: 0.5px;
+    }
+
+    @media (max-width: 768px) {
+      .slide img { height: 280px; }
+      .contact-card { width: 90%; }
+      .tooltip { display: none; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Nandana Car Travels & Rentals</h1>
+    <p>Reliable • Comfortable • Affordable</p>
+  </header>
+
+  <!-- Banner -->
+  <div class="slideshow-container">
+    <div class="slide"><img src="https://images.unsplash.com/photo-1502877338535-766e1452684a?auto=format&fit=crop&w=1200&q=80"></div>
+    <div class="slide"><img src="https://images.unsplash.com/photo-1519583234361-7f3b56e14d53?auto=format&fit=crop&w=1200&q=80"></div>
+    <div class="slide"><img src="https://images.unsplash.com/photo-1503736334956-4c8f8e92946d?auto=format&fit=crop&w=1200&q=80"></div>
+  </div>
+
+  <div class="dots">
+    <span class="dot" onclick="currentSlide(1)"></span>
+    <span class="dot" onclick="currentSlide(2)"></span>
+    <span class="dot" onclick="currentSlide(3)"></span>
+  </div>
+
+  <!-- About -->
+  <section class="about">
+    <h2>About Us</h2>
+    <p><strong>Nandana Car Travels & Rentals</strong> offers the most reliable car rental and travel experience in Rajahmundry. We provide everything from local rides and airport transfers to long outstation trips and luxury car rentals. With clean cars, trained drivers, and punctual service, we make every journey comfortable and stress-free.</p>
+  </section>
+
+  <!-- Services -->
+  <section class="services">
+    <h2>Our Services</h2>
+    <div class="services-list">
+      <div class="service"><h3>🚗 Local City Rides</h3><p>Hourly city rides for meetings, shopping, and events.</p></div>
+      <div class="service"><h3>🌄 Outstation Trips</h3><p>Travel comfortably to cities and tourist spots.</p></div>
+      <div class="service"><h3>✈️ Airport Transfers</h3><p>On-time pickup and drop for Rajahmundry & Visakhapatnam airports.</p></div>
+      <div class="service"><h3>🚙 Car Rentals</h3><p>Choose economy, sedan, or SUV for rent at best prices.</p></div>
+      <div class="service"><h3>🏢 Corporate Travel</h3><p>Business travel made simple for executives and clients.</p></div>
+      <div class="service"><h3>🗺️ Tour Packages</h3><p>Explore Andhra Pradesh with customized tour plans.</p></div>
+    </div>
+  </section>
+
+  <!-- Packages -->
+  <section class="packages">
+    <h2>Popular Packages</h2>
+    <div class="package-list">
+      <div class="package">
+        <h3>Rajahmundry to Araku Valley</h3>
+        <p>Round trip for 2 days with AC Sedan & driver.</p>
+        <span>₹7,999</span>
+      </div>
+      <div class="package">
+        <h3>Rajahmundry to Vijayawada</h3>
+        <p>Full-day trip including tolls and fuel.</p>
+        <span>₹4,499</span>
+      </div>
+      <div class="package">
+        <h3>Daily City Rental</h3>
+        <p>AC Hatchback (Swift / i10) – 8 hours, 80 KM.</p>
+        <span>₹1,799</span>
+      </div>
+      <div class="package">
+        <h3>Airport Transfer</h3>
+        <p>Rajahmundry to Airport (Drop only).</p>
+        <span>₹699</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact -->
+  <section class="contact-section">
+    <div class="contact-content">
+      <h2>Contact Us</h2>
+      <div class="contact-cards">
+        <div class="contact-card"><h3>📍 Address</h3><p>Rajanagaram, Rajahmundry<br>Andhra Pradesh</p></div>
+        <div class="contact-card"><h3>📞 Phone</h3><a href="tel:+919876543210">+91 98765 43210</a></div>
+        <div class="contact-card"><h3>✉️ Email</h3><a href="mailto:nandanatravels@gmail.com">nandanatravels@gmail.com</a></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Floating Buttons -->
+  <div class="float-buttons">
+    <a href="https://wa.me/919876543210" target="_blank" class="whatsapp">
+      <img src="https://cdn-icons-png.flaticon.com/512/733/733585.png" alt="WhatsApp">
+      <span class="tooltip">WhatsApp</span>
+    </a>
+    <a href="tel:+919876543210" class="call">
+      <img src="https://cdn-icons-png.flaticon.com/512/724/724664.png" alt="Call">
+      <span class="tooltip">Call Now</span>
+    </a>
+  </div>
+
+  <footer>
+    © 2025 Nandana Car Travels & Rentals. All Rights Reserved.
+  </footer>
+
+  <script>
+    let slideIndex = 0;
+    showSlides();
+    function showSlides() {
+      let slides = document.getElementsByClassName("slide");
+      let dots = document.getElementsByClassName("dot");
+      for (let i = 0; i < slides.length; i++) slides[i].style.display = "none";
+      slideIndex++;
+      if (slideIndex > slides.length) slideIndex = 1;
+      for (let i = 0; i < dots.length; i++) dots[i].classList.remove("active");
+      slides[slideIndex - 1].style.display = "block";
+      dots[slideIndex - 1].classList.add("active");
+      setTimeout(showSlides, 4000);
+    }
+    function currentSlide(n) { slideIndex = n - 1; showSlides(); }
+  </script>
+</body>
+</html>
