@@ -38,22 +38,86 @@ header p{margin-top:0.5rem;font-size:1rem;color:#dce3f1;}
 .dot.active{background-color:var(--primary);}
 
 /* Sections */
-section{padding:2rem 1rem;max-width:1200px;margin:0;width:100%;}
+section{
+  padding:2rem 1rem;
+  width:100%;
+  margin:0;
+  max-width:none;
+}
+section > * {
+  max-width:1200px;
+  margin:0 auto;
+}
+
+/* About */
 .about, .services, .packages, .contact-section, .popular-models, .trust-section{border-radius:12px;overflow:hidden;}
-.about{background:linear-gradient(120deg,rgba(255,255,255,0.95),rgba(245,245,245,0.95));box-shadow:0 3px 12px var(--shadow);text-align:center;padding:2rem;}
+.about{
+  background:linear-gradient(120deg,rgba(255,255,255,0.95),rgba(245,245,245,0.95));
+  box-shadow:0 3px 12px var(--shadow);
+  text-align:center;
+  padding:2rem;
+}
 .about p{max-width:100%;margin:auto;font-size:1rem;line-height:1.7;word-wrap:break-word;}
 .about strong{color:var(--primary);}
 
 /* Grid containers */
-.services-list, .package-list, .contact-cards, .trust-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:1rem;width:100%;}
+.services-list, .package-list, .contact-cards, .trust-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+  gap:1rem;
+  width:100%;
+}
 
 /* Boxes */
-.service, .package, .contact-card, .trust-box{background:var(--light);border-radius:12px;box-shadow:0 4px 15px rgba(0,0,0,0.1);padding:1.5rem;text-align:center;transition:0.3s;width:100%;overflow:hidden;}
-.service:hover, .package:hover, .contact-card:hover, .trust-box:hover{transform:translateY(-5px);box-shadow:0 10px 25px rgba(0,0,0,0.15);}
-.service h3, .package h3{color:var(--primary);margin-bottom:0.5rem;font-weight:600;font-size:1.1rem;word-wrap:break-word;}
-.service p, .package p{color:#555;font-size:0.95rem;line-height:1.5;word-wrap:break-word;}
-.package span{display:inline-block;background:var(--accent);color:#111;padding:0.4rem 1rem;border-radius:20px;font-weight:600;margin-top:0.5rem;word-wrap:break-word;}
-.package a{display:block;margin-top:0.5rem;background:var(--whatsapp);color:#fff;text-decoration:none;padding:0.5rem 1rem;border-radius:20px;font-weight:600;transition:0.3s;word-wrap:break-word;}
+.service, .package, .contact-card, .trust-box{
+  background:var(--light);
+  border-radius:12px;
+  box-shadow:0 4px 15px rgba(0,0,0,0.1);
+  padding:1.5rem;
+  text-align:center;
+  transition:0.3s;
+  width:100%;
+  overflow:hidden;
+}
+.service:hover, .package:hover, .contact-card:hover, .trust-box:hover{
+  transform:translateY(-5px);
+  box-shadow:0 10px 25px rgba(0,0,0,0.15);
+}
+.service h3, .package h3{
+  color:var(--primary);
+  margin-bottom:0.5rem;
+  font-weight:600;
+  font-size:1.1rem;
+  word-wrap:break-word;
+}
+.service p, .package p{
+  color:#555;
+  font-size:0.95rem;
+  line-height:1.5;
+  word-wrap:break-word;
+}
+.package span{
+  display:inline-block;
+  background:var(--accent);
+  color:#111;
+  padding:0.4rem 1rem;
+  border-radius:20px;
+  font-weight:600;
+  margin-top:0.5rem;
+  word-wrap:break-word;
+}
+.package a{
+  display:block;
+  margin-top:0.5rem;
+  background:var(--whatsapp);
+  color:#fff;
+  text-decoration:none;
+  padding:0.5rem 1rem;
+  border-radius:20px;
+  font-weight:600;
+  transition:0.3s;
+  word-wrap:break-word;
+}
 .package a:hover{background:#1da851;}
 
 /* Popular Models */
@@ -65,9 +129,7 @@ section{padding:2rem 1rem;max-width:1200px;margin:0;width:100%;}
   margin-bottom:1rem;
   transition:transform 0.3s;
 }
-.popular-models .package img:hover{
-  transform:scale(1.05);
-}
+.popular-models .package img:hover{transform:scale(1.05);}
 
 /* Trust Section */
 .trust-section{
@@ -76,9 +138,7 @@ section{padding:2rem 1rem;max-width:1200px;margin:0;width:100%;}
   box-shadow:0 3px 15px var(--shadow);
   margin-top:2rem;
 }
-.trust-grid{
-  margin-top:2rem;
-}
+.trust-grid{margin-top:2rem;}
 .trust-box{
   background:var(--light);
   border-radius:12px;
@@ -91,29 +151,75 @@ section{padding:2rem 1rem;max-width:1200px;margin:0;width:100%;}
   font-weight:700;
   margin-bottom:0.5rem;
 }
-.trust-box p{
-  color:#555;
-  font-weight:500;
-}
+.trust-box p{color:#555;font-weight:500;}
 
 /* Contact */
-.contact-section{background:linear-gradient(135deg,#e0f0ff,#f9fafc);padding:2rem 1rem;}
-.contact-card h3{font-size:1.2rem;margin-bottom:0.5rem;color:var(--accent);word-wrap:break-word;}
-.contact-card a{color:#222;text-decoration:none;transition:0.3s;word-wrap:break-word;}
+.contact-section{
+  background:linear-gradient(135deg,#e0f0ff,#f9fafc);
+  padding:2rem 1rem;
+}
+.contact-card h3{
+  font-size:1.2rem;
+  margin-bottom:0.5rem;
+  color:var(--accent);
+  word-wrap:break-word;
+}
+.contact-card a{
+  color:#222;
+  text-decoration:none;
+  transition:0.3s;
+  word-wrap:break-word;
+}
 .contact-card a:hover{color:var(--primary);}
 
 /* Floating Buttons */
-.float-buttons{position:fixed;bottom:15px;right:15px;display:flex;flex-direction:column;gap:10px;z-index:999;}
-.float-buttons a{width:50px;height:50px;border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 10px rgba(0,0,0,0.3);position:relative;transition:0.3s;}
+.float-buttons{
+  position:fixed;
+  bottom:15px;
+  right:15px;
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+  z-index:999;
+}
+.float-buttons a{
+  width:50px;
+  height:50px;
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  box-shadow:0 4px 10px rgba(0,0,0,0.3);
+  position:relative;
+  transition:0.3s;
+}
 .float-buttons a:hover{transform:scale(1.1);}
 .float-buttons .whatsapp{background:var(--whatsapp);}
 .float-buttons .call{background:var(--call);}
 .float-buttons img{width:28px;height:28px;}
-.tooltip{visibility:hidden;width:80px;background:#111;color:#fff;text-align:center;border-radius:6px;padding:0.3rem 0;position:absolute;right:60px;font-size:0.8rem;}
+.tooltip{
+  visibility:hidden;
+  width:80px;
+  background:#111;
+  color:#fff;
+  text-align:center;
+  border-radius:6px;
+  padding:0.3rem 0;
+  position:absolute;
+  right:60px;
+  font-size:0.8rem;
+}
 .float-buttons a:hover .tooltip{visibility:visible;}
 
 /* Footer */
-footer{background:var(--primary);color:var(--light);text-align:center;padding:1rem;font-size:0.9rem;border-radius:12px 12px 0 0;}
+footer{
+  background:var(--primary);
+  color:var(--light);
+  text-align:center;
+  padding:1rem;
+  font-size:0.9rem;
+  border-radius:12px 12px 0 0;
+}
 
 /* Responsive */
 @media(max-width:1024px){
@@ -143,14 +249,14 @@ footer{background:var(--primary);color:var(--light);text-align:center;padding:1r
 </header>
 
 <div class="slideshow-container">
-<div class="slide"><img src="https://images.drivespark.com/ph-big/2022/04/2022-maruti-suzuki-ertiga-8.jpg" alt="Car 1"></div>
-<div class="slide"><img src="https://www.revv.co.in/blogs/wp-content/uploads/2021/04/Toyota-Innova-1.png" alt="Car 2"></div>
-<div class="slide"><img src="https://www.topgearmag.in/uploads/Featuresthumb/Image/featuresthumb_best_7_seater_cars_under_rs_10_lakhs1716872562.jpg" alt="Car 3"></div>
+  <div class="slide"><img src="https://images.drivespark.com/ph-big/2022/04/2022-maruti-suzuki-ertiga-8.jpg" alt="Car 1"></div>
+  <div class="slide"><img src="https://www.revv.co.in/blogs/wp-content/uploads/2021/04/Toyota-Innova-1.png" alt="Car 2"></div>
+  <div class="slide"><img src="https://www.topgearmag.in/uploads/Featuresthumb/Image/featuresthumb_best_7_seater_cars_under_rs_10_lakhs1716872562.jpg" alt="Car 3"></div>
 </div>
 <div class="dots">
-<span class="dot" onclick="currentSlide(1)"></span>
-<span class="dot" onclick="currentSlide(2)"></span>
-<span class="dot" onclick="currentSlide(3)"></span>
+  <span class="dot" onclick="currentSlide(1)"></span>
+  <span class="dot" onclick="currentSlide(2)"></span>
+  <span class="dot" onclick="currentSlide(3)"></span>
 </div>
 
 <section class="about">
@@ -161,22 +267,22 @@ footer{background:var(--primary);color:var(--light);text-align:center;padding:1r
 <section class="services">
 <h2>Our Services</h2>
 <div class="services-list">
-<div class="service"><h3>🚗 Local City Rides</h3><p>Hourly city rides for meetings, shopping, and events.</p></div>
-<div class="service"><h3>🌄 Outstation Trips</h3><p>Travel comfortably to cities and tourist spots.</p></div>
-<div class="service"><h3>✈️ Airport Transfers</h3><p>On-time pickup and drop at Rajahmundry & Visakhapatnam airports.</p></div>
-<div class="service"><h3>🚙 Car Rentals</h3><p>Choose economy, sedan, or SUV for daily or long-term rentals.</p></div>
-<div class="service"><h3>🏢 Corporate Travel</h3><p>Business travel made simple for executives and clients.</p></div>
-<div class="service"><h3>🗺️ Tour Packages</h3><p>Explore Andhra Pradesh with custom tour plans.</p></div>
+  <div class="service"><h3>🚗 Local City Rides</h3><p>Hourly city rides for meetings, shopping, and events.</p></div>
+  <div class="service"><h3>🌄 Outstation Trips</h3><p>Travel comfortably to cities and tourist spots.</p></div>
+  <div class="service"><h3>✈️ Airport Transfers</h3><p>On-time pickup and drop at Rajahmundry & Visakhapatnam airports.</p></div>
+  <div class="service"><h3>🚙 Car Rentals</h3><p>Choose economy, sedan, or SUV for daily or long-term rentals.</p></div>
+  <div class="service"><h3>🏢 Corporate Travel</h3><p>Business travel made simple for executives and clients.</p></div>
+  <div class="service"><h3>🗺️ Tour Packages</h3><p>Explore Andhra Pradesh with custom tour plans.</p></div>
 </div>
 </section>
 
 <section class="packages">
 <h2>Popular Packages</h2>
 <div class="package-list">
-<div class="package"><h3>Rajahmundry to Araku Valley</h3><p>2-day round trip with AC Sedan & driver.</p><span>₹7,999</span><a href="https://wa.me/919876543210" target="_blank">Book via WhatsApp</a></div>
-<div class="package"><h3>Rajahmundry to Vijayawada</h3><p>Full-day trip including tolls & fuel.</p><span>₹4,499</span><a href="https://wa.me/919876543210" target="_blank">Book via WhatsApp</a></div>
-<div class="package"><h3>Daily City Rental</h3><p>AC Hatchback – 8 hours, 80 KM.</p><span>₹1,799</span><a href="https://wa.me/919876543210" target="_blank">Book via WhatsApp</a></div>
-<div class="package"><h3>Airport Transfer</h3><p>Rajahmundry to Airport (Drop only).</p><span>₹699</span><a href="https://wa.me/919876543210" target="_blank">Book via WhatsApp</a></div>
+  <div class="package"><h3>Rajahmundry to Araku Valley</h3><p>2-day round trip with AC Sedan & driver.</p><span>₹7,999</span><a href="https://wa.me/919876543210" target="_blank">Book via WhatsApp</a></div>
+  <div class="package"><h3>Rajahmundry to Vijayawada</h3><p>Full-day trip including tolls & fuel.</p><span>₹4,499</span><a href="https://wa.me/919876543210" target="_blank">Book via WhatsApp</a></div>
+  <div class="package"><h3>Daily City Rental</h3><p>AC Hatchback – 8 hours, 80 KM.</p><span>₹1,799</span><a href="https://wa.me/919876543210" target="_blank">Book via WhatsApp</a></div>
+  <div class="package"><h3>Airport Transfer</h3><p>Rajahmundry to Airport (Drop only).</p><span>₹699</span><a href="https://wa.me/919876543210" target="_blank">Book via WhatsApp</a></div>
 </div>
 </section>
 
@@ -217,31 +323,19 @@ footer{background:var(--primary);color:var(--light);text-align:center;padding:1r
 <section class="trust-section">
 <h2>Why Customers Trust Us</h2>
 <div class="trust-grid">
-  <div class="trust-box">
-    <h3>10,000+</h3>
-    <p>Happy Trips Completed</p>
-  </div>
-  <div class="trust-box">
-    <h3>5,000+</h3>
-    <p>Satisfied Customers</p>
-  </div>
-  <div class="trust-box">
-    <h3>50+</h3>
-    <p>Cars Available</p>
-  </div>
-  <div class="trust-box">
-    <h3>8+</h3>
-    <p>Years of Service</p>
-  </div>
+  <div class="trust-box"><h3>10,000+</h3><p>Happy Trips Completed</p></div>
+  <div class="trust-box"><h3>5,000+</h3><p>Satisfied Customers</p></div>
+  <div class="trust-box"><h3>50+</h3><p>Cars Available</p></div>
+  <div class="trust-box"><h3>8+</h3><p>Years of Service</p></div>
 </div>
 </section>
 
 <section class="contact-section">
 <h2>Contact Us</h2>
 <div class="contact-cards">
-<div class="contact-card"><h3>📍 Address</h3><p>Rajanagaram, Rajahmundry<br>Andhra Pradesh</p></div>
-<div class="contact-card"><h3>📞 Phone</h3><a href="tel:+919876543210">+91 98765 43210</a></div>
-<div class="contact-card"><h3>✉️ Email</h3><a href="mailto:nandanatravels@gmail.com">nandanatravels@gmail.com</a></div>
+  <div class="contact-card"><h3>📍 Address</h3><p>Rajanagaram, Rajahmundry<br>Andhra Pradesh</p></div>
+  <div class="contact-card"><h3>📞 Phone</h3><a href="tel:+919876543210">+91 98765 43210</a></div>
+  <div class="contact-card"><h3>✉️ Email</h3><a href="mailto:nandanatravels@gmail.com">nandanatravels@gmail.com</a></div>
 </div>
 </section>
 
