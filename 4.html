@@ -3,11 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Nandana Car Travels & Rentals</title>
+<title>Nandana Car Travels</title>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&family=Montserrat:wght@600&display=swap" rel="stylesheet">
-<meta name="description" content="Nandana Car Travels & Rentals in Rajahmundry offers affordable car rentals, city rides, airport transfers, and outstation trips with professional drivers.">
-<meta name="keywords" content="Car Rentals Rajahmundry, Taxi Service Rajahmundry, Nandana Travels, Airport Cab Rajahmundry, Outstation Trips">
-<link rel="icon" href="https://cdn-icons-png.flaticon.com/512/743/743922.png">
 <style>
 :root {
   --primary:#004aad;
@@ -34,7 +31,7 @@ header p{margin-top:0.5rem;font-size:1rem;color:#dce3f1;}
 /* Slideshow */
 .slideshow-container{position:relative;width:100%;overflow:hidden;border-radius:12px;margin-bottom:2rem;}
 .slide{display:none;width:100%;}
-.slide img{width:100%;height:auto;display:block;object-fit:cover;border-radius:12px;transition:transform 0.5s;}
+.slide img{width:100%;height:auto;display:block;object-fit:cover;border-radius:12px;transition:transform 0.5s;background:#ccc;}
 .slide img:hover{transform:scale(1.05);}
 .dots{text-align:center;margin:1rem 0;}
 .dot{height:12px;width:12px;margin:0 4px;background-color:#bbb;border-radius:50%;display:inline-block;cursor:pointer;transition:0.3s;}
@@ -42,56 +39,49 @@ header p{margin-top:0.5rem;font-size:1rem;color:#dce3f1;}
 
 /* Sections */
 section{padding:2rem 1rem;width:100%;margin:0;max-width:none;}
-section > *{max-width:1200px;margin:0 auto;}
-.about, .services, .packages, .contact-section, .popular-models, .trust-section, .map-section, .reviews-section{border-radius:12px;overflow:hidden;}
+section > * {max-width:1200px;margin:0 auto;}
+.about, .services, .packages, .contact-section, .popular-models, .trust-section, .outstation{border-radius:12px;overflow:hidden;}
 .about{background:linear-gradient(120deg,rgba(255,255,255,0.95),rgba(245,245,245,0.95));box-shadow:0 3px 12px var(--shadow);text-align:center;padding:2rem;}
 .about p{max-width:100%;margin:auto;font-size:1rem;line-height:1.7;word-wrap:break-word;}
 .about strong{color:var(--primary);}
 
 /* Grid containers */
-.services-list, .package-list, .contact-cards, .trust-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:1rem;width:100%;}
+.services-list, .package-list, .contact-cards, .trust-grid, .outstation-list{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+  gap:1rem;
+  width:100%;
+}
 
 /* Boxes */
-.service, .package, .contact-card, .trust-box{background:var(--light);border-radius:12px;box-shadow:0 4px 15px rgba(0,0,0,0.1);padding:1.5rem;text-align:center;transition:0.3s;width:100%;overflow:hidden;}
-.service:hover, .package:hover, .contact-card:hover, .trust-box:hover{transform:translateY(-5px);box-shadow:0 10px 25px rgba(0,0,0,0.15);}
-.service h3, .package h3{color:var(--primary);margin-bottom:0.5rem;font-weight:600;font-size:1.1rem;word-wrap:break-word;}
-.service p, .package p{color:#555;font-size:0.95rem;line-height:1.5;word-wrap:break-word;}
-.package span{display:inline-block;background:var(--accent);color:#111;padding:0.4rem 1rem;border-radius:20px;font-weight:600;margin-top:0.5rem;word-wrap:break-word;}
-.package a{display:block;margin-top:0.5rem;background:var(--whatsapp);color:#fff;text-decoration:none;padding:0.5rem 1rem;border-radius:20px;font-weight:600;transition:0.3s;word-wrap:break-word;}
-.package a:hover{background:#1da851;}
-
-/* Popular Models */
-.popular-models .package img{
-  width:100%;
-  height:200px;
-  object-fit:cover;
+.service, .package, .contact-card, .trust-box, .outstation-box{
+  background:var(--light);
   border-radius:12px;
-  margin-bottom:1rem;
-  transition:transform 0.3s;
+  box-shadow:0 4px 15px rgba(0,0,0,0.1);
+  padding:1.5rem;
+  text-align:center;
+  transition:0.3s;
+  width:100%;
+  overflow:hidden;
 }
-.popular-models .package img:hover{transform:scale(1.05);}
+.service:hover, .package:hover, .contact-card:hover, .trust-box:hover, .outstation-box:hover{
+  transform:translateY(-5px);
+  box-shadow:0 10px 25px rgba(0,0,0,0.15);
+}
+.service h3, .package h3, .outstation-box h3, .trust-box h3{color:var(--primary);margin-bottom:0.5rem;font-weight:600;font-size:1.1rem;word-wrap:break-word;}
+.service p, .package p, .outstation-box p, .trust-box p{color:#555;font-size:0.95rem;line-height:1.5;word-wrap:break-word;}
+.package span, .outstation-box span{display:inline-block;background:var(--accent);color:#111;padding:0.4rem 1rem;border-radius:20px;font-weight:600;margin-top:0.5rem;word-wrap:break-word;}
+.package a, .outstation-box a{display:block;margin-top:0.5rem;background:var(--whatsapp);color:#fff;text-decoration:none;padding:0.5rem 1rem;border-radius:20px;font-weight:600;transition:0.3s;word-wrap:break-word;}
+.package a:hover, .outstation-box a:hover{background:#1da851;}
+
+/* Popular Models & Outstation Images */
+.package img, .outstation-box img{width:100%;height:200px;object-fit:cover;border-radius:12px;margin-bottom:1rem;transition:transform 0.3s;background:#ccc;}
+.package img:hover, .outstation-box img:hover{transform:scale(1.05);}
 
 /* Trust Section */
-.trust-section{
-  background:linear-gradient(135deg,#ffffff,#e9f2ff);
-  text-align:center;
-  box-shadow:0 3px 15px var(--shadow);
-  margin-top:2rem;
-}
+.trust-section{background:linear-gradient(135deg,#ffffff,#e9f2ff);text-align:center;box-shadow:0 3px 15px var(--shadow);margin-top:2rem;}
 .trust-grid{margin-top:2rem;}
 .trust-box{background:var(--light);border-radius:12px;box-shadow:0 3px 10px rgba(0,0,0,0.1);padding:1.5rem;}
-.trust-box h3{color:var(--primary);font-size:2rem;font-weight:700;margin-bottom:0.5rem;}
-.trust-box p{color:#555;font-weight:500;}
-
-/* Map Section */
-.map-section{margin-top:2rem;text-align:center;}
-.map-container{max-width:100%;height:400px;border-radius:12px;overflow:hidden;box-shadow:0 3px 15px var(--shadow);}
-.map-container iframe{width:100%;height:100%;border:0;}
-
-/* Google Reviews */
-.reviews-section{text-align:center;padding:2rem 1rem;background:linear-gradient(135deg,#fdfdfd,#f1f6ff);}
-.review-widget{max-width:800px;margin:0 auto;}
-iframe.review-frame{width:100%;height:400px;border:0;border-radius:12px;box-shadow:0 3px 12px var(--shadow);}
 
 /* Contact */
 .contact-section{background:linear-gradient(135deg,#e0f0ff,#f9fafc);padding:2rem 1rem;}
@@ -99,42 +89,103 @@ iframe.review-frame{width:100%;height:400px;border:0;border-radius:12px;box-shad
 .contact-card a{color:#222;text-decoration:none;transition:0.3s;word-wrap:break-word;}
 .contact-card a:hover{color:var(--primary);}
 
-/* Floating Buttons */
-.float-buttons{position:fixed;bottom:15px;right:15px;display:flex;flex-direction:column;gap:10px;z-index:999;}
-.float-buttons a{width:50px;height:50px;border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 10px rgba(0,0,0,0.3);position:relative;transition:0.3s;}
-.float-buttons a:hover{transform:scale(1.1);}
-.float-buttons .whatsapp{background:var(--whatsapp);}
-.float-buttons .call{background:var(--call);}
-.float-buttons img{width:28px;height:28px;}
-.tooltip{visibility:hidden;width:80px;background:#111;color:#fff;text-align:center;border-radius:6px;padding:0.3rem 0;position:absolute;right:60px;font-size:0.8rem;}
-.float-buttons a:hover .tooltip{visibility:visible;}
+/* Floating Buttons (No Background) */
+.float-buttons {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  z-index: 1000;
+}
+.float-buttons a {
+  width: 50px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  transition: transform 0.3s;
+  background: transparent;
+  box-shadow: none;
+  border-radius: 50%;
+}
+.float-buttons a:hover {
+  transform: scale(1.2);
+}
+.float-buttons img { width: 30px; height: 30px; }
+.tooltip {
+  visibility: hidden;
+  width: 90px;
+  background: #111;
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  padding: 0.3rem 0;
+  position: absolute;
+  right: 70px;
+  font-size: 0.8rem;
+  opacity: 0.9;
+}
+.float-buttons a:hover .tooltip { visibility: visible; }
+
+/* Back to Top Button */
+#backToTop {
+  position: fixed;
+  bottom: 80px;
+  left: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width:55px;
+  height:55px;
+  background: linear-gradient(135deg, #004aad, #1e90ff);
+  color: #fff;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size:26px;
+  display: none;
+  z-index: 999;
+  box-shadow: 0 6px 15px rgba(0,0,0,0.3);
+  transition: transform 0.3s, box-shadow 0.3s, background 0.3s;
+}
+#backToTop:hover {
+  transform: scale(1.2) rotate(10deg);
+  box-shadow: 0 10px 20px rgba(0,0,0,0.4);
+  background: linear-gradient(135deg, #1e90ff, #004aad);
+}
 
 /* Footer */
-footer{background:var(--primary);color:var(--light);text-align:center;padding:1.5rem;font-size:0.9rem;border-radius:12px 12px 0 0;}
-footer .social-links{margin-top:0.8rem;}
-footer .social-links a{color:var(--accent);margin:0 10px;text-decoration:none;font-weight:500;transition:0.3s;}
-footer .social-links a:hover{color:var(--light);}
+footer{background:var(--primary);color:var(--light);text-align:center;padding:1rem;font-size:0.9rem;border-radius:12px 12px 0 0;}
 
 /* Responsive */
+@media(max-width:1024px){.slide img{height:auto;}}
 @media(max-width:768px){
   header h1{font-size:1.5rem;}
   h2{font-size:1.5rem;}
-  .services-list, .package-list, .contact-cards, .trust-grid{grid-template-columns:1fr;}
-  .tooltip{display:none;}
+  .services-list, .package-list, .contact-cards, .trust-grid, .outstation-list{grid-template-columns:1fr;}
+  .package img, .outstation-box img{height:auto;}
+}
+@media(max-width:480px){
+  header h1{font-size:1.3rem;}
+  h2{font-size:1.3rem;}
+  .service h3,.package h3,.outstation-box h3,.trust-box h3{font-size:0.95rem;}
 }
 </style>
 </head>
 <body>
 
 <header>
-  <h1>Nandana Car Travels & Rentals</h1>
-  <p>Reliable • Comfortable • Affordable</p>
+<h1>Nandana Car Travels</h1>
+<p>Reliable • Comfortable • Affordable</p>
 </header>
 
+<!-- Slideshow -->
 <div class="slideshow-container">
-  <div class="slide"><img src="https://images.drivespark.com/ph-big/2022/04/2022-maruti-suzuki-ertiga-8.jpg" alt="Car 1"></div>
-  <div class="slide"><img src="https://www.revv.co.in/blogs/wp-content/uploads/2021/04/Toyota-Innova-1.png" alt="Car 2"></div>
-  <div class="slide"><img src="https://www.topgearmag.in/uploads/Featuresthumb/Image/featuresthumb_best_7_seater_cars_under_rs_10_lakhs1716872562.jpg" alt="Car 3"></div>
+  <div class="slide"><img src="https://images.drivespark.com/ph-big/2022/04/2022-maruti-suzuki-ertiga-8.jpg"></div>
+  <div class="slide"><img src="https://www.revv.co.in/blogs/wp-content/uploads/2021/04/Toyota-Innova-1.png"></div>
+  <div class="slide"><img src="https://www.topgearmag.in/uploads/Featuresthumb/Image/featuresthumb_best_7_seater_cars_under_rs_10_lakhs1716872562.jpg"></div>
 </div>
 <div class="dots">
   <span class="dot" onclick="currentSlide(1)"></span>
@@ -142,107 +193,200 @@ footer .social-links a:hover{color:var(--light);}
   <span class="dot" onclick="currentSlide(3)"></span>
 </div>
 
+<!-- About -->
 <section class="about">
-  <h2>About Us</h2>
-  <p><strong>Nandana Car Travels & Rentals</strong> offers the most reliable car rental and travel experience in Rajahmundry. From city rides and airport transfers to outstation trips and luxury rentals, we ensure every journey is comfortable, safe, and timely.</p>
+<h2>About Us</h2>
+<p><strong>Nandana Car Travels</strong> offers the most reliable car rental and travel experience in Vijayawada and Rajahmundry. From city rides and airport transfers to outstation trips and luxury rentals, we ensure every journey is comfortable, safe, and timely.</p>
 </section>
 
+<!-- Services -->
 <section class="services">
-  <h2>Our Services</h2>
-  <div class="services-list">
-    <div class="service"><h3>🚗 Local City Rides</h3><p>Hourly city rides for meetings, shopping, and events.</p></div>
-    <div class="service"><h3>🌄 Outstation Trips</h3><p>Travel comfortably to cities and tourist spots.</p></div>
-    <div class="service"><h3>✈️ Airport Transfers</h3><p>On-time pickup and drop at Rajahmundry & Visakhapatnam airports.</p></div>
-    <div class="service"><h3>🚙 Car Rentals</h3><p>Choose economy, sedan, or SUV for daily or long-term rentals.</p></div>
-    <div class="service"><h3>🏢 Corporate Travel</h3><p>Business travel made simple for executives and clients.</p></div>
-    <div class="service"><h3>🗺️ Tour Packages</h3><p>Explore Andhra Pradesh with custom tour plans.</p></div>
-  </div>
+<h2>Our Services</h2>
+<div class="services-list">
+  <div class="service"><h3>🚗 Local City Rides</h3><p>Hourly city rides for meetings, shopping, and events.</p></div>
+  <div class="service"><h3>🌄 Outstation Trips</h3><p>Travel comfortably to Hyderabad, Vizag, Kerala, Arunachalam, Tirupati, Tamil Nadu.</p></div>
+  <div class="service"><h3>✈️ Airport Transfers</h3><p>On-time pickup and drop at Rajahmundry & Visakhapatnam airports.</p></div>
+  <div class="service"><h3>🚙 Car Rentals</h3><p>Choose economy, sedan, or SUV for daily or long-term rentals.</p></div>
+  <div class="service"><h3>🏢 Corporate Travel</h3><p>Business travel made simple for executives and clients.</p></div>
+  <div class="service"><h3>🗺️ Tour Packages</h3><p>Explore Andhra Pradesh with custom tour plans.</p></div>
+</div>
 </section>
 
+<!-- Local Trips (Hourly Based) -->
 <section class="packages">
-  <h2>Popular Packages</h2>
-  <div class="package-list">
-    <div class="package"><h3>Rajahmundry to Araku Valley</h3><p>2-day round trip with AC Sedan & driver.</p><span>₹7,999</span><a href="https://wa.me/919876543210" target="_blank">Book via WhatsApp</a></div>
-    <div class="package"><h3>Rajahmundry to Vijayawada</h3><p>Full-day trip including tolls & fuel.</p><span>₹4,499</span><a href="https://wa.me/919876543210" target="_blank">Book via WhatsApp</a></div>
-    <div class="package"><h3>Daily City Rental</h3><p>AC Hatchback – 8 hours, 80 KM.</p><span>₹1,799</span><a href="https://wa.me/919876543210" target="_blank">Book via WhatsApp</a></div>
-    <div class="package"><h3>Airport Transfer</h3><p>Rajahmundry to Airport (Drop only).</p><span>₹699</span><a href="https://wa.me/919876543210" target="_blank">Book via WhatsApp</a></div>
+<h2>Local Trips (Hourly Based)</h2>
+<div class="package-list">
+  <div class="package">
+    <h3>Maruti Suzuki Dzire - 8 Hours</h3>
+    <span>₹2,000</span>
+    <a href="https://wa.me/919394996655?text=Hello,%20I%20want%20to%20book%20Maruti%20Suzuki%20Dzire%20-%208%20Hours">Book via WhatsApp</a>
   </div>
+  <div class="package">
+    <h3>Maruti Suzuki Ertiga - 8 Hours</h3>
+    <span>₹2,500</span>
+    <a href="https://wa.me/919394996655?text=Hello,%20I%20want%20to%20book%20Maruti%20Suzuki%20Ertiga%20-%208%20Hours">Book via WhatsApp</a>
+  </div>
+</div>
 </section>
 
+<!-- Outstation Trips -->
+<section class="outstation">
+<h2>Outstation Trips</h2>
+<div class="outstation-list">
+  <div class="outstation-box">
+    <img src="https://5.imimg.com/data5/SELLER/Default/2023/7/327368978/AS/AS/NM/9325903/maruti-swift-dzire-tour-car-rental-services-1000x1000.jpg" alt="Dzire">
+    <h3>Hyderabad - Dzire</h3>
+    <span>₹6,000</span>
+    <a href="https://wa.me/919394996655?text=Hello,%20I%20want%20to%20book%20Hyderabad%20-%20Dzire%20trip">Book via WhatsApp</a>
+  </div>
+  <div class="outstation-box">
+    <img src="https://images.drivespark.com/ph-big/2022/04/2022-maruti-suzuki-ertiga-8.jpg" alt="Ertiga">
+    <h3>Hyderabad - Ertiga</h3>
+    <span>₹7,000</span>
+    <a href="https://wa.me/919394996655?text=Hello,%20I%20want%20to%20book%20Hyderabad%20-%20Ertiga%20trip">Book via WhatsApp</a>
+  </div>
+  <div class="outstation-box">
+    <img src="https://www.revv.co.in/blogs/wp-content/uploads/2021/04/Toyota-Innova-1.png" alt="Innova">
+    <h3>Hyderabad - Innova</h3>
+    <span>₹8,000</span>
+    <a href="https://wa.me/919394996655?text=Hello,%20I%20want%20to%20book%20Hyderabad%20-%20Innova%20trip">Book via WhatsApp</a>
+  </div>
+
+  <!-- Other destinations -->
+  <div class="outstation-box"><h3>Vizag - Devotional Trip</h3><a href="https://wa.me/919394996655?text=Hello,%20I%20want%20to%20book%20Vizag%20Devotional%20Trip">Book via WhatsApp</a></div>
+  <div class="outstation-box"><h3>Kerala - Special Trip</h3><a href="https://wa.me/919394996655?text=Hello,%20I%20want%20to%20book%20Kerala%20Special%20Trip">Book via WhatsApp</a></div>
+  <div class="outstation-box"><h3>Tirupati - Temple Trip</h3><a href="https://wa.me/919394996655?text=Hello,%20I%20want%20to%20book%20Tirupati%20Temple%20Trip">Book via WhatsApp</a></div>
+  <div class="outstation-box"><h3>Arunachalam (Tamil Nadu) - Devotional Trip</h3><a href="https://wa.me/919394996655?text=Hello,%20I%20want%20to%20book%20Arunachalam%20Devotional%20Trip">Book via WhatsApp</a></div>
+  <div class="outstation-box"><h3>Tamil Nadu - Special Trip</h3><a href="https://wa.me/919394996655?text=Hello,%20I%20want%20to%20book%20Tamil%20Nadu%20Special%20Trip">Book via WhatsApp</a></div>
+</div>
+</section>
+
+<!-- Popular Models -->
 <section class="popular-models">
-  <h2>Popular Models</h2>
-  <div class="package-list">
-    <div class="package"><img src="https://images.drivespark.com/ph-big/2022/04/2022-maruti-suzuki-ertiga-8.jpg" alt="Ertiga"><h3>Maruti Suzuki Ertiga</h3><p>Spacious 7-seater, ideal for family trips.</p><span>Starting ₹1,200/day</span><a href="#">Book via WhatsApp</a></div>
-    <div class="package"><img src="https://www.revv.co.in/blogs/wp-content/uploads/2021/04/Toyota-Innova-1.png" alt="Innova"><h3>Toyota Innova Crysta</h3><p>Premium comfort and space for long trips.</p><span>Starting ₹2,000/day</span><a href="#">Book via WhatsApp</a></div>
-    <div class="package"><img src="https://www.topgearmag.in/uploads/Featuresthumb/Image/featuresthumb_best_7_seater_cars_under_rs_10_lakhs1716872562.jpg" alt="Creta"><h3>Hyundai Creta</h3><p>Perfect SUV for city and weekend rides.</p><span>Starting ₹1,800/day</span><a href="#">Book via WhatsApp</a></div>
-    <div class="package"><img src="https://imgd.aeplcdn.com/1056x594/n/cw/ec/118194/mahindra-xuv700-right-front-three-quarter-2.jpeg?q=75" alt="XUV500"><h3>Mahindra XUV500</h3><p>Rugged SUV for long-distance comfort.</p><span>Starting ₹2,500/day</span><a href="#">Book via WhatsApp</a></div>
+<h2>Popular Models</h2>
+<div class="package-list">
+  <div class="package">
+    <img src="https://5.imimg.com/data5/SELLER/Default/2023/7/327368978/AS/AS/NM/9325903/maruti-swift-dzire-tour-car-rental-services-1000x1000.jpg" alt="Maruti Suzuki Dzire">
+    <h3>Maruti Suzuki Dzire</h3>
+    <p>Perfect for local and business trips.</p>
+    <a href="https://wa.me/919394996655?text=Hello,%20I%20want%20to%20book%20Maruti%20Suzuki%20Dzire">Book via WhatsApp</a>
   </div>
+  <div class="package">
+    <img src="https://images.drivespark.com/ph-big/2022/04/2022-maruti-suzuki-ertiga-8.jpg" alt="Maruti Suzuki Ertiga">
+    <h3>Maruti Suzuki Ertiga</h3>
+    <p>Spacious 7-seater for family travel.</p>
+    <a href="https://wa.me/919394996655?text=Hello,%20I%20want%20to%20book%20Maruti%20Suzuki%20Ertiga">Book via WhatsApp</a>
+  </div>
+  <div class="package">
+    <img src="https://www.revv.co.in/blogs/wp-content/uploads/2021/04/Toyota-Innova-1.png" alt="Toyota Innova">
+    <h3>Toyota Innova</h3>
+    <p>Comfortable SUV for long trips.</p>
+    <a href="https://wa.me/919394996655?text=Hello,%20I%20want%20to%20book%20Toyota%20Innova">Book via WhatsApp</a>
+  </div>
+  <div class="package">
+    <img src="https://5.imimg.com/data5/SELLER/Default/2023/4/299207921/VK/ED/ZU/104030512/22-seater-mini-bus-rental-services-500x500.jpg" alt="22 Seater Bus">
+    <h3>22 Seater Bus</h3>
+    <p>Spacious mini-bus for group tours.</p>
+    <a href="https://wa.me/919394996655?text=Hello,%20I%20want%20to%20book%2022%20Seater%20Bus">Book via WhatsApp</a>
+  </div>
+  <div class="package">
+    <img src="https://i.ytimg.com/vi/wqO8bWPIJH0/maxresdefault.jpg" alt="12 Seater Bus">
+    <h3>12 Seater Bus</h3>
+    <p>Perfect for small group tours.</p>
+    <a href="https://wa.me/919394996655?text=Hello,%20I%20want%20to%20book%2012%20Seater%20Bus">Book via WhatsApp</a>
+  </div>
+  <div class="package">
+    <img src="https://i.ytimg.com/vi/xX3vnJHIhLg/maxresdefault.jpg" alt="16 Seater Bus">
+    <h3>16 Seater Bus</h3>
+    <p>Ideal for team or family group travel.</p>
+    <a href="https://wa.me/919394996655?text=Hello,%20I%20want%20to%20book%2016%20Seater%20Bus">Book via WhatsApp</a>
+  </div>
+  <div class="package">
+    <img src="https://cdn.motor1.com/images/mgl/yY8e0x/s1/volvo-b8rle-bus-india.jpg" alt="44 Seater Bus">
+    <h3>44 Seater Bus</h3>
+    <p>Luxury bus for large group travel.</p>
+    <a href="https://wa.me/919394996655?text=Hello,%20I%20want%20to%20book%2044%20Seater%20Bus">Book via WhatsApp</a>
+  </div>
+</div>
 </section>
 
+<!-- Trust Section -->
 <section class="trust-section">
-  <h2>Why Customers Trust Us</h2>
-  <div class="trust-grid">
-    <div class="trust-box"><h3>10,000+</h3><p>Happy Trips Completed</p></div>
-    <div class="trust-box"><h3>5,000+</h3><p>Satisfied Customers</p></div>
-    <div class="trust-box"><h3>50+</h3><p>Cars Available</p></div>
-    <div class="trust-box"><h3>8+</h3><p>Years of Service</p></div>
+<h2>Why Customers Trust Us</h2>
+<div class="trust-grid">
+  <div class="trust-box">
+    <h3>10,000+</h3>
+    <p>Happy Trips Completed</p>
   </div>
+  <div class="trust-box">
+    <h3>5,000+</h3>
+    <p>Satisfied Customers</p>
+  </div>
+  <div class="trust-box">
+    <h3>50+</h3>
+    <p>Cars Available</p>
+  </div>
+  <div class="trust-box">
+    <h3>8+</h3>
+    <p>Years of Service</p>
+  </div>
+</div>
 </section>
 
-<!-- Google Map -->
-<section class="map-section">
-  <h2>Find Us on Google Maps</h2>
-  <div class="map-container">
-    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3826.214653743042!2d81.804!3d17.004!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3a37b1e65a37dbf3%3A0x6f0e8ef9e3b7a72b!2sRajahmundry%2C%20Andhra%20Pradesh!5e0!3m2!1sen!2sin!4v1707480000000" allowfullscreen="" loading="lazy"></iframe>
-  </div>
-</section>
-
-<!-- Google Reviews Widget -->
-<section class="reviews-section">
-  <h2>What Our Customers Say</h2>
-  <div class="review-widget">
-    <iframe class="review-frame" src="https://www.google.com/maps/embed?pb=!4v1707490000000!6m8!1m7!1sCAoSLEFGMVFpcE1vR3B6RzJxa2FpMnQtU0p1VnVndmVBYnYxekZ5d3VNNW9tSmhK!2m2!1d17.004!2d81.804!3f0!4f0!5f0.7820865974627469" allowfullscreen="" loading="lazy"></iframe>
-  </div>
-</section>
-
+<!-- Contact -->
 <section class="contact-section">
-  <h2>Contact Us</h2>
-  <div class="contact-cards">
-    <div class="contact-card"><h3>📍 Address</h3><p>Rajanagaram, Rajahmundry<br>Andhra Pradesh</p></div>
-    <div class="contact-card"><h3>📞 Phone</h3><a href="tel:+919876543210">+91 98765 43210</a></div>
-    <div class="contact-card"><h3>✉️ Email</h3><a href="mailto:nandanatravels@gmail.com">nandanatravels@gmail.com</a></div>
-  </div>
+<h2>Contact Us</h2>
+<div class="contact-cards">
+  <div class="contact-card"><h3>📍 Address</h3><p>Ibrahimpatnam, Vijayawada<br>Andhra Pradesh 521456</p></div>
+  <div class="contact-card"><h3>📞 Phone</h3><a href="tel:+919394996655">+91 93949 96655</a><br><a href="tel:+917993899551">+91 79938 99551</a></div>
+  <div class="contact-card"><h3>✉️ Email</h3><a href="mailto:srinu9394996655@gmail.com">srinu9394996655@gmail.com</a></div>
+</div>
 </section>
 
+<!-- Floating Buttons -->
 <div class="float-buttons">
-  <a href="https://wa.me/919876543210" class="whatsapp" target="_blank"><img src="https://cdn-icons-png.flaticon.com/512/733/733585.png" alt="WhatsApp"><span class="tooltip">WhatsApp</span></a>
-  <a href="tel:+919876543210" class="call"><img src="https://cdn-icons-png.flaticon.com/512/724/724664.png" alt="Call"><span class="tooltip">Call Now</span></a>
+  <a href="https://wa.me/919394996655" target="_blank" class="whatsapp">
+    <img src="https://cdn-icons-png.flaticon.com/512/733/733585.png">
+    <span class="tooltip">WhatsApp</span>
+  </a>
+  <a href="tel:+919394996655" class="call">
+    <img src="https://cdn-icons-png.flaticon.com/512/724/724664.png">
+    <span class="tooltip">Call Now</span>
+  </a>
 </div>
 
-<footer>
-  <p>© 2025 Nandana Car Travels & Rentals. All Rights Reserved.</p>
-  <div class="social-links">
-    <a href="https://facebook.com" target="_blank">Facebook</a> |
-    <a href="https://instagram.com" target="_blank">Instagram</a> |
-    <a href="https://maps.google.com" target="_blank">Google Maps</a>
-  </div>
-</footer>
+<!-- Back to Top Button -->
+<div id="backToTop">&#8679;</div>
+
+<footer>© 2025 Nandana Car Travels. All Rights Reserved.</footer>
 
 <script>
-let slideIndex=0;
-showSlides();
+let slideIndex=0;showSlides();
 function showSlides(){
-  let i;
   let slides=document.getElementsByClassName("slide");
   let dots=document.getElementsByClassName("dot");
-  for(i=0;i<slides.length;i++){slides[i].style.display="none";}
+  for(let i=0;i<slides.length;i++){slides[i].style.display="none";}
   slideIndex++;
   if(slideIndex>slides.length){slideIndex=1;}
-  for(i=0;i<dots.length;i++){dots[i].className=dots[i].className.replace(" active","");}
+  for(let i=0;i<dots.length;i++){dots[i].classList.remove("active");}
   slides[slideIndex-1].style.display="block";
-  dots[slideIndex-1].className+=" active";
+  dots[slideIndex-1].classList.add("active");
   setTimeout(showSlides,4000);
 }
+function currentSlide(n){slideIndex=n-1;showSlides();}
+
+// Back to Top
+let backToTop = document.getElementById("backToTop");
+window.onscroll = function() {
+  if(document.body.scrollTop > 300 || document.documentElement.scrollTop > 300){
+    backToTop.style.display = "flex";
+  }else{
+    backToTop.style.display = "none";
+  }
+};
+backToTop.addEventListener("click", () => {
+  window.scrollTo({top:0, behavior:'smooth'});
+});
 </script>
 
 </body>
