@@ -24,9 +24,20 @@
     .navbar-toggler-icon { background-image:url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='white' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E"); }
 
     /* Carousel */
-    #heroCarousel .carousel-item { width:100%; aspect-ratio:16/9; overflow:hidden; }
-    #heroCarousel .carousel-item img { width:100%; height:100%; object-fit:cover; object-position:center; }
-    .carousel-caption { display:none; }
+    #heroCarousel { position: relative; }
+    #heroCarousel .carousel-item { width:100%; aspect-ratio:16/9; overflow:hidden; position: relative; }
+    #heroCarousel .carousel-item img { width:100%; height:100%; object-fit:cover; object-position:center; position: relative; z-index: 0; }
+
+    /* Gradient Overlay */
+    #heroCarousel .carousel-item::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to bottom right, rgba(13,33,79,0.65), rgba(0,0,0,0.5));
+      z-index: 1;
+    }
+
+    .carousel-caption { display:none; z-index: 2; }
 
     /* Buttons */
     .btn-primary-custom { background-color:#0d6efd; border:none; font-weight:700; padding:0.6rem 1.8rem; color:white; border-radius:40px; box-shadow:0 4px 15px rgba(13,110,253,0.5); transition:0.3s ease; }
@@ -62,7 +73,7 @@
     .float-buttons a.whatsapp { background-color:#25d366; box-shadow:0 4px 12px rgba(37,211,102,0.5); }
     .float-buttons a:hover { transform:scale(1.15); }
 
-    /* FAQ Accordion Fix - remove blue line/underline */
+    /* FAQ Accordion */
     .accordion-item { border:none; }
     .accordion-button { background-color:transparent; box-shadow:none; border-bottom:none; color:#333; font-weight:600; }
     .accordion-button:focus { box-shadow:none; }
@@ -101,7 +112,7 @@
 
 <!-- Hero Carousel -->
 <div id="heroCarousel" class="carousel slide carousel-fade" data-bs-ride="carousel" data-bs-interval="5000">
-  <div class="carousel-inner">
+  <div class="carousel-inner position-relative">
     <div class="carousel-item active">
       <img src="https://www-asia.nissan-cdn.net/content/dam/Nissan/in/vehicles/NissanIntelligentChoice/4-Website-Page-1500x664-241224.jpg.ximg.l_full_h.smart.jpg" alt="Ertiga Ride" />
     </div>
