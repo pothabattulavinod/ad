@@ -58,8 +58,11 @@ h1,h2,h3,h4,h5 {
 #hero { position:relative; }
 #hero .carousel-item img {
   width:100%;
-  height:75vh;
+  height:60vh; /* desktop height */
   object-fit:cover;
+}
+@media (max-width:768px){
+  #hero .carousel-item img { height:40vh; }
 }
 .carousel-overlay {
   position:absolute;
@@ -83,7 +86,15 @@ h1,h2,h3,h4,h5 {
   transition:transform .3s;
 }
 .card:hover { transform:translateY(-5px); }
-.equal-card { display:flex; flex-direction:column; justify-content:center; height:100%; }
+.equal-card {
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  height:100%;
+  text-align:center;
+}
+.card i { font-size:3rem; color:var(--pink); margin-bottom:15px; }
 
 /* Colored Sections */
 #about { background:#e7f5ff; }
@@ -93,15 +104,21 @@ h1,h2,h3,h4,h5 {
 #testimonials { background:#e3f2fd; }
 #contact { background:#f0f8ff; padding:60px 0; }
 
+/* Section Container */
+section > .container { max-width:1200px; margin:auto; padding:0 15px; }
+
 /* Gallery */
 .gallery-img {
   border-radius:12px;
   width:100%;
-  height:220px;
+  height:250px;
   object-fit:cover;
   transition:transform .3s;
 }
 .gallery-img:hover { transform:scale(1.05); }
+
+/* Diwali Greeting */
+#diwali { background: linear-gradient(135deg, #ff9a9e, #fecfef); color:#fff; padding:60px 15px; text-align:center; }
 
 /* Contact Info */
 .contact-info {
@@ -164,6 +181,14 @@ footer {
       <span>📚 Parent-Teacher Meeting – Oct 25</span>
       <span>❄ Winter Break Starts Dec 20</span>
     </div>
+  </div>
+</section>
+
+<!-- Diwali Greeting -->
+<section id="diwali" class="fade-up">
+  <div class="container">
+    <h2 class="section-title">✨ Happy Diwali! ✨</h2>
+    <p class="lead">Harie Techno School wishes all our students, parents, and staff a joyful, bright, and safe Diwali filled with happiness and prosperity!</p>
   </div>
 </section>
 
