@@ -1,0 +1,700 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Nandana Car Travels | Professional Travel Services</title>
+
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&family=Montserrat:wght@600&display=swap" rel="stylesheet" />
+
+  <style>
+    body { font-family: 'Poppins', sans-serif; background: #fefefe; color: #333; scroll-behavior: smooth; margin:0; padding:0; }
+    h1,h2,h3,h4,h5 { font-family: 'Montserrat', sans-serif; color: #222; }
+    h2 { text-align:center; margin-bottom:2rem; position:relative; }
+    h2::after { content:""; display:block; width:60px; height:3px; background:#0d6efd; margin:0.5rem auto 0; border-radius:4px; }
+
+    /* Navbar */
+    .navbar { background-color:#0d214f; box-shadow:0 2px 6px rgba(13,33,79,0.8); }
+    .navbar-brand, .navbar-nav .nav-link { color:#e0e0e0 !important; font-weight:600; transition:color 0.3s; }
+    .navbar-nav .nav-link:hover { color:#0d6efd !important; }
+    .navbar-toggler { border-color:rgba(255,255,255,0.2); }
+    .navbar-toggler-icon { background-image:url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='white' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E"); }
+
+    /* Carousel */
+    #heroCarousel { position: relative; }
+    #heroCarousel .carousel-item { width:100%; aspect-ratio:16/9; overflow:hidden; position: relative; }
+    #heroCarousel .carousel-item img { width:100%; height:100%; object-fit:cover; object-position:center; position: relative; z-index: 0; }
+
+    /* Gradient Overlay */
+    #heroCarousel .carousel-item::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to bottom right, rgba(13,33,79,0.65), rgba(0,0,0,0.5));
+      z-index: 1;
+    }
+
+    .carousel-caption { display:none; z-index: 2; }
+
+    /* Buttons */
+    .btn-primary-custom { background-color:#0d6efd; border:none; font-weight:700; padding:0.6rem 1.8rem; color:white; border-radius:40px; box-shadow:0 4px 15px rgba(13,110,253,0.5); transition:0.3s ease; }
+    .btn-primary-custom:hover { background-color:#0849c9; transform:translateY(-2px); }
+    .btn-whatsapp { background-color:#25d366; border:none; border-radius:30px; font-weight:600; box-shadow:0 6px 18px rgba(37,211,102,0.4); transition:0.3s ease; color:white; width:100%; padding:0.5rem 0; }
+    .btn-whatsapp:hover { background-color:#1aae55; transform:translateY(-2px); }
+
+    /* Feature Boxes */
+    .feature-box { background:#fff; border-radius:12px; padding:3rem 2rem; text-align:center; transition:0.3s ease; box-shadow:0 3px 12px rgba(0,0,0,0.05); cursor:pointer; display:flex; flex-direction:column; justify-content:center; gap:1rem; color:#444; height:100%; }
+    .feature-box:hover { box-shadow:0 15px 35px rgba(0,0,0,0.12); transform:translateY(-4px); }
+    .feature-icon { font-size:4rem; color:#0d6efd; transition:color 0.3s; }
+    .feature-box:hover .feature-icon { color:#063fbb; }
+
+    /* Cards */
+    .card { border-radius:10px; box-shadow:0 6px 15px rgba(0,0,0,0.07); transition:0.3s ease; cursor:pointer; }
+    .card:hover { box-shadow:0 15px 40px rgba(0,0,0,0.12); transform:translateY(-6px); }
+    .card-img-top { width:100%; height:220px; object-fit:cover; border-top-left-radius:10px; border-top-right-radius:10px; }
+
+    /* Contact Cards */
+    #contact .contact-card { background:#fff; border-radius:15px; padding:2.5rem 2rem; box-shadow:0 10px 25px rgba(0,0,0,0.1); position:relative; overflow:hidden; transition:0.4s ease; }
+    #contact .contact-card i { font-size:3rem; color:#0d6efd; margin-bottom:1rem; transition:0.3s ease; }
+    #contact .contact-card:hover i { color:#0849c9; transform:rotate(15deg); }
+    #contact .contact-card p { font-size:1rem; color:#555; word-break:break-word; }
+    #contact .contact-card a { color:#0d6efd; font-weight:600; text-decoration:none; word-break:break-word; }
+    #contact .contact-card a:hover { text-decoration:underline; }
+
+    /* Footer */
+    footer { background-color:#0d214f; color:#ccc; padding:1.5rem 1rem; text-align:center; font-weight:500; font-size:0.95rem; box-shadow:0 -4px 10px rgba(13,33,79,0.7); }
+
+    /* Floating Buttons */
+    .float-buttons { position:fixed; bottom:25px; right:25px; display:flex; flex-direction:column; gap:15px; z-index:1050; }
+    .float-buttons a { width:52px; height:52px; background-color:#0d6efd; border-radius:50%; display:flex; align-items:center; justify-content:center; box-shadow:0 4px 12px rgba(13,33,79,0.3); transition:0.3s ease; color:white; font-size:1.6rem; text-decoration:none; }
+    .float-buttons a.whatsapp { background-color:#25d366; box-shadow:0 4px 12px rgba(37,211,102,0.5); }
+    .float-buttons a:hover { transform:scale(1.15); }
+
+    /* FAQ Accordion */
+    .accordion-item { border:none; }
+    .accordion-button { background-color:transparent; box-shadow:none; border-bottom:none; color:#333; font-weight:600; }
+    .accordion-button:focus { box-shadow:none; }
+    .accordion-button:not(.collapsed) { color:#0d6efd; }
+    .accordion-button::after { filter: invert(0.5); }
+
+    /* Responsive */
+    @media (max-width:575.98px) { 
+      .card-img-top { height:180px !important; }
+      .float-buttons a { width:45px; height:45px; font-size:1.3rem; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg sticky-top">
+  <div class="container">
+    <a class="navbar-brand fs-4 fw-semibold text-light" href="#">Nandana Car Travels</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" 
+      aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+      <ul class="navbar-nav fs-6">
+        <li class="nav-item"><a class="nav-link" href="#about">About</a></li>
+        <li class="nav-item"><a class="nav-link" href="#services">Services</a></li>
+        <li class="nav-item"><a class="nav-link" href="#packages">Packages</a></li>
+        <li class="nav-item"><a class="nav-link" href="#vehicles">Vehicles</a></li>
+        <li class="nav-item"><a class="nav-link" href="#outstation">Outstation</a></li>
+        <li class="nav-item"><a class="nav-link" href="#trust-us">Trust Us</a></li>
+        <li class="nav-item"><a class="nav-link" href="#faq">FAQs</a></li>
+        <li class="nav-item"><a class="nav-link" href="#contact">Contact</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<!-- Hero Carousel -->
+<div id="heroCarousel" class="carousel slide carousel-fade" data-bs-ride="carousel" data-bs-interval="5000">
+  <div class="carousel-inner position-relative">
+    <div class="carousel-item active">
+      <img src="https://www-asia.nissan-cdn.net/content/dam/Nissan/in/vehicles/NissanIntelligentChoice/4-Website-Page-1500x664-241224.jpg.ximg.l_full_h.smart.jpg" alt="Ertiga Ride" />
+    </div>
+    <div class="carousel-item">
+      <img src="https://www.revv.co.in/blogs/wp-content/uploads/2021/04/Toyota-Innova-1.png" alt="Innova Travel" />
+    </div>
+    <div class="carousel-item">
+      <img src="https://cassette.sphdigital.com.sg/image/businesstimes/9e5907274e47cb84e95ce390d17eb2cefbe0f0598f6a95ca71472b398d692c0c?w=1200&f=webp" alt="Bus Ride" />
+    </div>
+  </div>
+  <button class="carousel-control-prev" type="button" data-bs-target="#heroCarousel" data-bs-slide="prev">
+    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+  </button>
+  <button class="carousel-control-next" type="button" data-bs-target="#heroCarousel" data-bs-slide="next">
+    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+  </button>
+</div>
+
+<!-- About Section -->
+<section id="about" class="py-5">
+  <div class="container">
+    <h2>About Us</h2>
+    <p class="lead text-center mx-auto" style="max-width:720px;">
+      At Nandana Car Travels, we offer high-quality car rental and outstation services in Vijayawada, Rajahmundry, and nearby regions. 
+      With over 8 years of trusted service, we’re known for providing comfort, safety, and punctuality on every journey.
+    </p>
+  </div>
+</section>
+
+<!-- Local Trips Section -->
+<section id="local-trips" class="py-5 bg-light">
+  <div class="container">
+    <h2>Local Trips (Hourly Based)</h2>
+    <div class="row g-4 mt-3 justify-content-center">
+      <div class="col-md-4">
+        <div class="card h-100">
+          <img src="https://www.autovista.in/assets/img/new_cars_colour_variants/new-dzire-colour-pearl-arctic-white.jpg" class="card-img-top" alt="Dzire" />
+          <div class="card-body d-flex flex-column align-items-center">
+            <h5 class="fw-semibold text-center">Maruti Suzuki Dzire – 8 Hours</h5>
+            <p><span class="badge bg-secondary text-white fs-6">₹2,000</span></p>
+            <a href="https://wa.me/919394996655" class="btn btn-whatsapp w-100">Book via WhatsApp</a>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card h-100">
+          <img src="https://images.drivespark.com/ph-big/2022/04/2022-maruti-suzuki-ertiga-8.jpg" class="card-img-top" alt="Ertiga" />
+          <div class="card-body d-flex flex-column align-items-center">
+            <h5 class="fw-semibold text-center">Maruti Suzuki Ertiga – 8 Hours</h5>
+            <p><span class="badge bg-secondary text-white fs-6">₹2,500</span></p>
+            <a href="https://wa.me/919394996655" class="btn btn-whatsapp w-100">Book via WhatsApp</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Services Section -->
+<section id="services" class="py-5">
+  <div class="container">
+    <h2>Our Services</h2>
+    <div class="row g-4 mt-4 justify-content-center">
+      <div class="col-md-4">
+        <div class="feature-box">
+          <i class="bi bi-building feature-icon"></i>
+          <h5 class="fw-semibold my-3">Corporate Travel</h5>
+          <p>Business transfers and executive rides with comfort and reliability.</p>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="feature-box">
+          <i class="bi bi-airplane feature-icon"></i>
+          <h5 class="fw-semibold my-3">Airport Transfers</h5>
+          <p>On-time pickups and drops at Rajahmundry and Vizag airports.</p>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="feature-box">
+          <i class="bi bi-map feature-icon"></i>
+          <h5 class="fw-semibold my-3">Outstation Trips</h5>
+          <p>Travel to Tirupati, Kerala, Hyderabad, or any destination you desire.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Packages Section -->
+<section id="packages" class="py-5 bg-light">
+  <div class="container">
+    <h2>Popular Packages</h2>
+    <div class="row g-4 mt-3 justify-content-center">
+      <div class="col-md-4">
+        <div class="card h-100">
+          <img src="https://www.autovista.in/assets/img/new_cars_colour_variants/new-dzire-colour-pearl-arctic-white.jpg" class="card-img-top" alt="Dzire" />
+          <div class="card-body d-flex flex-column align-items-center">
+            <h5 class="fw-semibold text-center">Dzire – 8 Hours</h5>
+            <p><span class="badge bg-secondary text-white fs-6">₹2,000</span></p>
+            <a href="https://wa.me/919394996655" class="btn btn-whatsapp w-100">Book via WhatsApp</a>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card h-100">
+          <img src="https://images.drivespark.com/ph-big/2022/04/2022-maruti-suzuki-ertiga-8.jpg" class="card-img-top" alt="Ertiga" />
+          <div class="card-body d-flex flex-column align-items-center">
+            <h5 class="fw-semibold text-center">Ertiga – 8 Hours</h5>
+            <p><span class="badge bg-secondary text-white fs-6">₹2,500</span></p>
+            <a href="https://wa.me/919394996655" class="btn btn-whatsapp w-100">Book via WhatsApp</a>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card h-100">
+          <img src="https://www.revv.co.in/blogs/wp-content/uploads/2021/04/Toyota-Innova-1.png" class="card-img-top" alt="Innova" />
+          <div class="card-body d-flex flex-column align-items-center">
+            <h5 class="fw-semibold text-center">Innova – 8 Hours</h5>
+            <p><span class="badge bg-secondary text-white fs-6">₹3,000</span></p>
+            <a href="https://wa.me/919394996655" class="btn btn-whatsapp w-100">Book via WhatsApp</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Available Vehicles Section -->
+<section id="vehicles" class="py-5">
+  <div class="container">
+    <h2>Available Vehicles</h2>
+    <div class="row g-4 mt-4 justify-content-center">
+      <div class="col-md-3 col-6">
+        <div class="card h-100 text-center p-3">
+          <i class="bi bi-car-front fs-1 text-primary mb-2"></i>
+          <h5>Dzire</h5>
+        </div>
+      </div>
+      <div class="col-md-3 col-6">
+        <div class="card h-100 text-center p-3">
+          <i class="bi bi-car-front fs-1 text-primary mb-2"></i>
+          <h5>Ertiga</h5>
+        </div>
+      </div>
+      <div class="col-md-3 col-6">
+        <div class="card h-100 text-center p-3">
+          <i class="bi bi-car-front fs-1 text-primary mb-2"></i>
+          <h5>Innova</h5>
+        </div>
+      </div>
+      <div class="col-md-3 col-6">
+        <div class="card h-100 text-center p-3">
+          <i class="bi bi-bus-front fs-1 text-primary mb-2"></i>
+          <h5>12 Seater Bus</h5>
+        </div>
+      </div>
+      <div class="col-md-3 col-6">
+        <div class="card h-100 text-center p-3">
+          <i class="bi bi-bus-front fs-1 text-primary mb-2"></i>
+          <h5>16 Seater Bus</h5>
+        </div>
+      </div>
+      <div class="col-md-3 col-6">
+        <div class="card h-100 text-center p-3">
+          <i class="bi bi-bus-front fs-1 text-primary mb-2"></i>
+          <h5>22 Seater Bus</h5>
+        </div>
+      </div>
+      <div class="col-md-3 col-6">
+        <div class="card h-100 text-center p-3">
+          <i class="bi bi-bus-front fs-1 text-primary mb-2"></i>
+          <h5>44 Seater Bus</h5>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Outstation Packages Section -->
+<!-- Outstation Packages Section -->
+<section id="outstation" class="py-5 bg-light">
+  <div class="container">
+    <h2>Outstation Packages</h2>
+    <p class="text-center text-muted mb-4">Affordable trips to major South India destinations.</p>
+    <div class="row g-4 justify-content-center">
+      
+      <!-- Hyderabad -->
+      <div class="col-md-4">
+        <div class="card h-100 text-center p-4 shadow-sm">
+          <h5 class="fw-semibold mb-3">Hyderabad</h5>
+          <p class="mb-0">Dzire – ₹6,000</p>
+          <p class="mb-0">Ertiga – ₹7,000</p>
+          <p class="mb-0">Innova – ₹8,000</p>
+        </div>
+      </div>
+
+      <!-- Vizag -->
+      <div class="col-md-4">
+        <div class="card h-100 text-center p-4 shadow-sm">
+          <h5 class="fw-semibold mb-3">Vizag</h5>
+          <p class="mb-0">Custom packages available</p>
+        </div>
+      </div>
+
+      <!-- Kerala -->
+      <div class="col-md-4">
+        <div class="card h-100 text-center p-4 shadow-sm">
+          <h5 class="fw-semibold mb-3">Kerala</h5>
+          <p class="mb-0">Custom packages available</p>
+        </div>
+      </div>
+
+      <!-- Arunachalam (Tamil Nadu) -->
+      <div class="col-md-4">
+        <div class="card h-100 text-center p-4 shadow-sm">
+          <h5 class="fw-semibold mb-3">Arunachalam (Tamil Nadu)</h5>
+          <p class="mb-0">Custom packages available</p>
+        </div>
+      </div>
+
+      <!-- Tirupati -->
+      <div class="col-md-4">
+        <div class="card h-100 text-center p-4 shadow-sm">
+          <h5 class="fw-semibold mb-3">Tirupati</h5>
+          <p class="mb-0">Custom packages available</p>
+        </div>
+      </div>
+
+      <!-- Tamil Nadu -->
+      <div class="col-md-4">
+        <div class="card h-100 text-center p-4 shadow-sm">
+          <h5 class="fw-semibold mb-3">Tamil Nadu</h5>
+          <p class="mb-0">Custom packages available</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- Trust Us Section -->
+<section id="trust-us" class="py-5">
+  <div class="container">
+    <h2>Why Customers Trust Us</h2>
+    <div class="row g-4 mt-4 text-center">
+      <div class="col-md-3 col-6">
+        <div class="feature-box">
+          <h3 class="fw-bold text-primary">10,000+</h3>
+          <p>Happy Trips Completed</p>
+        </div>
+      </div>
+      <div class="col-md-3 col-6">
+        <div class="feature-box">
+          <h3 class="fw-bold text-primary">5,000+</h3>
+          <p>Satisfied Customers</p>
+        </div>
+      </div>
+      <div class="col-md-3 col-6">
+        <div class="feature-box">
+          <h3 class="fw-bold text-primary">50+</h3>
+          <p>Cars Available</p>
+        </div>
+      </div>
+      <div class="col-md-3 col-6">
+        <div class="feature-box">
+          <h3 class="fw-bold text-primary">8+</h3>
+          <p>Years of Service</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+<section id="journey-section" class="py-5" style="background: linear-gradient(135deg, #e0f2ff, #f8f9fa);">
+  <div class="container">
+
+    <!-- Section Header -->
+    <h2 class="text-center mb-5">Your Safe & Seamless Booking Journey</h2>
+
+    <!-- Safety & Hygiene Cards -->
+    <div class="row g-4 justify-content-center text-center mb-5">
+      <div class="col-md-3 col-6">
+        <div class="safety-card p-4 shadow-lg rounded h-100 d-flex flex-column align-items-center justify-content-center">
+          <div class="icon-circle mb-3">
+            <i class="bi bi-shield-check fs-1 text-primary"></i>
+          </div>
+          <small class="text-primary fw-bold mb-1">100% Safe</small>
+          <h5 class="fw-semibold mb-2">Insured Trips</h5>
+          <p>All vehicles are fully insured to protect your journey.</p>
+        </div>
+      </div>
+      <div class="col-md-3 col-6">
+        <div class="safety-card p-4 shadow-lg rounded h-100 d-flex flex-column align-items-center justify-content-center">
+          <div class="icon-circle mb-3">
+            <i class="bi bi-droplet fs-1 text-success"></i>
+          </div>
+          <small class="text-success fw-bold mb-1">Sanitized</small>
+          <h5 class="fw-semibold mb-2">Clean Vehicles</h5>
+          <p>Sanitized cars for every trip to ensure your health and comfort.</p>
+        </div>
+      </div>
+      <div class="col-md-3 col-6">
+        <div class="safety-card p-4 shadow-lg rounded h-100 d-flex flex-column align-items-center justify-content-center">
+          <div class="icon-circle mb-3">
+            <i class="bi bi-person-check fs-1 text-warning"></i>
+          </div>
+          <small class="text-warning fw-bold mb-1">Trusted</small>
+          <h5 class="fw-semibold mb-2">Verified Drivers</h5>
+          <p>Professional drivers with verified credentials for safe trips.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- How It Works Timeline -->
+    <div class="timeline-container position-relative mb-5">
+      <div class="timeline-line d-none d-md-block"></div>
+      <div class="timeline-progress d-none d-md-block"></div>
+
+      <div class="d-flex justify-content-between align-items-center flex-wrap text-center position-relative">
+
+        <div class="step-box d-flex flex-column align-items-center justify-content-center shadow-sm rounded p-4">
+          <div class="step-icon mb-2"><i class="bi bi-car-front fs-2 text-primary"></i></div>
+          <h6 class="fw-semibold">Choose Vehicle</h6>
+          <div class="step-dot d-none d-md-block"></div>
+          <i class="bi bi-arrow-right fs-2 text-secondary d-none d-md-block step-arrow"></i>
+        </div>
+
+        <div class="step-box d-flex flex-column align-items-center justify-content-center shadow-sm rounded p-4">
+          <div class="step-icon mb-2"><i class="bi bi-whatsapp fs-2 text-success"></i></div>
+          <h6 class="fw-semibold">Contact via WhatsApp</h6>
+          <div class="step-dot d-none d-md-block"></div>
+          <i class="bi bi-arrow-right fs-2 text-secondary d-none d-md-block step-arrow"></i>
+        </div>
+
+        <div class="step-box d-flex flex-column align-items-center justify-content-center shadow-sm rounded p-4">
+          <div class="step-icon mb-2"><i class="bi bi-check-circle fs-2 text-primary"></i></div>
+          <h6 class="fw-semibold">Confirm Booking</h6>
+          <div class="step-dot d-none d-md-block"></div>
+          <i class="bi bi-arrow-right fs-2 text-secondary d-none d-md-block step-arrow"></i>
+        </div>
+
+        <div class="step-box d-flex flex-column align-items-center justify-content-center shadow-sm rounded p-4">
+          <div class="step-icon mb-2"><i class="bi bi-emoji-smile fs-2 text-warning"></i></div>
+          <h6 class="fw-semibold">Enjoy Trip</h6>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Booking Comparison Table with Arrows -->
+    <h2 class="text-center mb-4">Booking Experience Comparison</h2>
+    <div class="table-responsive">
+      <table class="table text-center align-middle">
+        <thead class="table-dark">
+          <tr>
+            <th>Feature</th>
+            <th>Nandana Car Travels</th>
+            <th><i class="bi bi-arrow-right fs-3 text-secondary"></i> Typical Booking Websites</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Ease of Booking</strong></td>
+            <td class="table-success"><i class="bi bi-check-circle-fill text-success"></i> Instant via WhatsApp, phone, or email</td>
+            <td class="table-light"><i class="bi bi-x-circle-fill text-danger"></i> Requires filling forms and waiting</td>
+          </tr>
+          <tr>
+            <td><strong>Speed</strong></td>
+            <td class="table-success"><i class="bi bi-check-circle-fill text-success"></i> Real-time confirmation</td>
+            <td class="table-light"><i class="bi bi-x-circle-fill text-danger"></i> Can take hours or days</td>
+          </tr>
+          <tr>
+            <td><strong>User Interface</strong></td>
+            <td class="table-success"><i class="bi bi-check-circle-fill text-success"></i> Clean, visually appealing cards</td>
+            <td class="table-light"><i class="bi bi-x-circle-fill text-danger"></i> Often cluttered or confusing</td>
+          </tr>
+          <tr>
+            <td><strong>Mobile Experience</strong></td>
+            <td class="table-success"><i class="bi bi-check-circle-fill text-success"></i> Fully responsive and easy to navigate</td>
+            <td class="table-light"><i class="bi bi-x-circle-fill text-danger"></i> Poor mobile usability</td>
+          </tr>
+          <tr>
+            <td><strong>Trust & Transparency</strong></td>
+            <td class="table-success"><i class="bi bi-check-circle-fill text-success"></i> Clear pricing, FAQs, and service highlights</td>
+            <td class="table-light"><i class="bi bi-x-circle-fill text-danger"></i> Hidden fees, unclear details</td>
+          </tr>
+          <tr>
+            <td><strong>Customer Support</strong></td>
+            <td class="table-success"><i class="bi bi-check-circle-fill text-success"></i> Direct, personalized responses</td>
+            <td class="table-light"><i class="bi bi-x-circle-fill text-danger"></i> Mostly automated or slow</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+</section>
+
+<style>
+/* Safety Cards */
+.safety-card {
+  background: #fff;
+  transition: transform 0.4s, box-shadow 0.4s;
+  text-align: center;
+  padding: 2rem 1.5rem;
+}
+.safety-card:hover {
+  transform: translateY(-8px) scale(1.03);
+  box-shadow: 0 18px 35px rgba(0,0,0,0.18);
+}
+.icon-circle {
+  width: 70px;
+  height: 70px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: rgba(13,110,253,0.1);
+  transition: transform 0.3s, background 0.3s;
+}
+.safety-card:hover .icon-circle {
+  transform: scale(1.2) rotate(10deg);
+  background: rgba(13,110,253,0.2);
+}
+p { font-size: 0.95rem; color: #555; }
+small { text-transform: uppercase; letter-spacing: 0.5px; }
+
+/* Timeline */
+.timeline-container {
+  position: relative;
+  margin: 3rem 0;
+}
+.timeline-line {
+  position: absolute;
+  top: 50%;
+  left: 5%;
+  right: 5%;
+  height: 4px;
+  background-color: #dee2e6;
+  z-index: 0;
+  border-radius: 2px;
+}
+.timeline-progress {
+  position: absolute;
+  top: 50%;
+  left: 5%;
+  height: 4px;
+  background-color: #0d6efd;
+  z-index: 1;
+  border-radius: 2px;
+  width: 75%;
+  transition: width 0.5s ease-in-out;
+}
+.step-box {
+  background: #fff;
+  transition: transform 0.3s, box-shadow 0.3s;
+  position: relative;
+  text-align: center;
+  z-index: 2;
+  min-width: 140px;
+}
+.step-box:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 25px rgba(0,0,0,0.15);
+}
+.step-icon i { transition: transform 0.3s; }
+.step-box:hover .step-icon i { transform: scale(1.2) rotate(10deg); }
+/* Dots & arrows */
+.step-dot {
+  width: 12px;
+  height: 12px;
+  background-color: #0d6efd;
+  border-radius: 50%;
+  margin: 0.5rem 0;
+}
+.step-arrow {
+  position: absolute;
+  right: -40px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+.timeline-container .step-box:last-child .step-arrow { display: none; }
+
+@media (max-width: 767px) {
+  .timeline-line, .timeline-progress, .step-dot, .step-arrow { display: none; }
+  .step-box { width: 80%; margin: 0 auto 1.5rem auto; }
+}
+
+/* Table */
+table, th, td { border: 1px solid #000 !important; }
+</style>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+
+
+<!-- FAQ Section -->
+<section id="faq" class="py-5 bg-light">
+  <div class="container">
+    <h2>Frequently Asked Questions</h2>
+    <div class="accordion mt-4" id="faqAccordion">
+      <div class="accordion-item">
+        <h2 class="accordion-header" id="faqHeading1">
+          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq1" aria-expanded="false" aria-controls="faq1">
+            What areas do you cover?
+          </button>
+        </h2>
+        <div id="faq1" class="accordion-collapse collapse" aria-labelledby="faqHeading1" data-bs-parent="#faqAccordion">
+          <div class="accordion-body">We operate primarily in Vijayawada, Rajahmundry, and surrounding regions, but outstation trips can go anywhere in India.</div>
+        </div>
+      </div>
+      <div class="accordion-item">
+        <h2 class="accordion-header" id="faqHeading2">
+          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq2" aria-expanded="false" aria-controls="faq2">
+            How can I book a ride?
+          </button>
+        </h2>
+        <div id="faq2" class="accordion-collapse collapse" aria-labelledby="faqHeading2" data-bs-parent="#faqAccordion">
+          <div class="accordion-body">You can book via our WhatsApp links, phone call, or email. We'll confirm your ride promptly.</div>
+        </div>
+      </div>
+      <div class="accordion-item">
+        <h2 class="accordion-header" id="faqHeading3">
+          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq3" aria-expanded="false" aria-controls="faq3">
+            Are the cars insured?
+          </button>
+        </h2>
+        <div id="faq3" class="accordion-collapse collapse" aria-labelledby="faqHeading3" data-bs-parent="#faqAccordion">
+          <div class="accordion-body">Yes, all our vehicles are fully insured and maintained for your safety.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Contact Section -->
+<section id="contact" class="py-5">
+  <div class="container">
+    <h2>Contact Us</h2>
+    <p class="text-center text-primary fw-semibold fs-5 mb-5">Get in touch for bookings, quotes, or travel plans</p>
+    <div class="row g-4 justify-content-center">
+      <div class="col-md-4">
+        <div class="contact-card text-center">
+          <i class="bi bi-geo-alt"></i>
+          <p><a href="https://www.google.com/maps/search/Ibrahimpatnam+Vijayawada" target="_blank">Ibrahimpatnam, Vijayawada<br>Andhra Pradesh - 521456</a></p>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="contact-card text-center">
+          <i class="bi bi-telephone"></i>
+          <p><a href="tel:+919394996655">+91 93949 96655</a><br>
+          <a href="tel:+917993899551">+91 79938 99551</a></p>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="contact-card text-center">
+          <i class="bi bi-envelope"></i>
+          <p><a href="mailto:srinu9394996655@gmail.com">srinu9394996655@gmail.com</a></p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer>
+  <div class="container py-3">
+    <small>© 2025 Nandana Car Travels | All Rights Reserved.</small>
+  </div>
+</footer>
+
+<!-- Floating Buttons -->
+<div class="float-buttons">
+  <a href="https://wa.me/919394996655" target="_blank" class="whatsapp"><i class="bi bi-whatsapp"></i></a>
+  <a href="tel:+919394996655"><i class="bi bi-telephone"></i></a>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
