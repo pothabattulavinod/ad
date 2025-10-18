@@ -122,6 +122,7 @@ footer { background: linear-gradient(90deg,#0f2027,#2c5364); color:#fff; text-al
 let studentData = [];
 let currentStudent = null;
 
+// Load attendance.json and populate classes
 fetch("attendance.json")
   .then(res => res.json())
   .then(data => {
@@ -201,6 +202,7 @@ function displayAttendance(student, selectedMonth) {
   container.innerHTML = html;
 }
 
+// Search button click
 document.getElementById('search-btn').addEventListener('click', function() {
   const roll = document.getElementById('roll-number').value.trim();
   const classSel = document.getElementById('class-select').value;
@@ -224,11 +226,14 @@ document.getElementById('search-btn').addEventListener('click', function() {
   }
 
   currentStudent = student;
+
+  // ✅ Populate month dropdown
   populateMonths(student);
+
   container.innerHTML = '<p class="text-center mt-4 text-info">Now select a month to view attendance.</p>';
 });
 
-// Automatically fetch data when month selected
+// Month select change
 document.getElementById('month-select').addEventListener('change', function() {
   if(currentStudent && this.value){
     displayAttendance(currentStudent, this.value);
