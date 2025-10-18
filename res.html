@@ -11,7 +11,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&family=Fredoka+One&display=swap" rel="stylesheet">
 
 <style>
-:root { --pink:#ff6b6b; --yellow:#ffe66d; --blue:#0099FF; }
+:root { --pink:#ff6b6b; --yellow:#ffe66d; --blue:#0099FF; --lightblue:#e7f5ff; }
 body { font-family:'Roboto', sans-serif; background:#f8f9fa; color:#2c3e50; margin:0; }
 h1,h2,h3,h4,h5 { font-family:'Fredoka One', cursive; margin:0; }
 .navbar { background: linear-gradient(90deg,#2c5364,#203a43,#0f2027); }
@@ -31,8 +31,9 @@ h1,h2,h3,h4,h5 { font-family:'Fredoka One', cursive; margin:0; }
 #filters button:hover { background:#0077cc; }
 
 /* Result Cards */
-.result-card-container { max-width:450px; margin:20px auto; }
+.result-card-container { max-width:900px; margin:20px auto; }
 .result-card { background:#fff; border-radius:15px; padding:20px; margin-bottom:20px; box-shadow:0 6px 20px rgba(0,0,0,0.1); }
+.result-card h4 { color:var(--blue); margin-bottom:15px; text-align:center; }
 .result-card img.logo { height:80px; display:block; margin:0 auto 15px auto; }
 
 /* Subjects Table */
@@ -44,19 +45,8 @@ h1,h2,h3,h4,h5 { font-family:'Fredoka One', cursive; margin:0; }
 
 .overall-result { background:#ffe66d; padding:15px; border-radius:12px; text-align:center; font-weight:600; font-size:1.1rem; margin-top:15px; color:#2c3e50; }
 
-/* Image Content */
-#image-content {
-  width: 100%;
-  max-width: 450px; 
-  height: 800px; /* WhatsApp-story-friendly */
-  margin: auto;
-  padding: 20px;
-  background: #fff;
-  display: block;
-  border-radius:15px;
-  box-shadow:0 6px 20px rgba(0,0,0,0.1);
-  overflow: hidden;
-}
+/* Image content for download only */
+#download-content { display:none; width:1080px; height:1920px; background:#fff; padding:40px; box-sizing:border-box; }
 
 /* Info Table */
 .info-table { width: 100%; margin-bottom: 20px; }
@@ -146,7 +136,7 @@ footer { background: linear-gradient(90deg,#0f2027,#2c5364); color:#fff; text-al
 <!-- Result Display -->
 <div id="result-container" class="result-card-container"></div>
 
-<!-- Download Image Button -->
+<!-- Download Button -->
 <div id="download-wrapper" class="text-center mt-3" style="display:none;">
   <button id="download-btn" class="btn btn-success"><i class="bi bi-download"></i> Download as Image</button>
 </div>
@@ -161,31 +151,34 @@ footer { background: linear-gradient(90deg,#0f2027,#2c5364); color:#fff; text-al
 
 <script>
 let studentResults = [];
-const logoBase64 = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMgAAADICAYAAACtWK6eAAAA..."; // full base64 logo
+const logoBase64 = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMgAAADICAYAAACtWK6eAAAA...";
 
-// Fetch results.json dynamically
+// Fetch results.json
 fetch('results.json')
   .then(res => res.json())
   .then(data => {
     studentResults = data;
-    // Populate classes dynamically
-    const classSet = new Set(studentResults.map(s => s.class));
+    const classSet = new Set();
+    const examSet = new Set();
+    studentResults.forEach(s => {
+      classSet.add(s.class);
+      s.exams.forEach(e => examSet.add(e.examType));
+    });
+
     const classSelect = document.getElementById('class-select');
     classSet.forEach(c => {
-      const option = document.createElement('option');
-      option.value = c;
-      option.textContent = "Class " + c;
-      classSelect.appendChild(option);
+      const opt = document.createElement('option');
+      opt.value = c;
+      opt.textContent = c;
+      classSelect.appendChild(opt);
     });
-    // Populate exams dynamically
-    const examSet = new Set();
-    studentResults.forEach(s => s.exams.forEach(e => examSet.add(e.examType)));
+
     const examSelect = document.getElementById('exam-select');
     examSet.forEach(e => {
-      const option = document.createElement('option');
-      option.value = e;
-      option.textContent = e;
-      examSelect.appendChild(option);
+      const opt = document.createElement('option');
+      opt.value = e;
+      opt.textContent = e;
+      examSelect.appendChild(opt);
     });
   })
   .catch(err => console.error("Error fetching results.json:", err));
@@ -205,71 +198,74 @@ document.getElementById('search-btn').addEventListener('click', function() {
     return;
   }
 
-  const filtered = studentResults.filter(s =>
+  const student = studentResults.find(s => 
     s.roll === roll && s.class === classSel && s.section.toLowerCase() === section.toLowerCase() && s.dob === dob
   );
-  if(filtered.length === 0){
+  if(!student){
     container.innerHTML = '<p class="text-center mt-4 text-danger">No student found.</p>';
     return;
   }
 
-  const student = filtered[0];
   const examData = student.exams.find(e => e.examType === exam);
   if(!examData){
     container.innerHTML = '<p class="text-center mt-4 text-danger">Exam not found for this student.</p>';
     return;
   }
 
-  let totalMarks = 0, obtainedMarks = 0;
-  let cardsHTML = `<div class="result-card" id="printable-result">
-    <div id="image-content">
+  // Display full-page result
+  let total = 0, obtained = 0;
+  let html = `<div class="result-card">
       <img src="${logoBase64}" class="logo" alt="School Logo">
+      <h4 class="text-center">Check Your Result</h4>
       <h4 class="text-center">${examData.examType} Exam Result</h4>
       <table class="info-table">
-        <tr><td><strong>Name:</strong> ${student.name}</td><td><strong>Roll No:</strong> ${student.roll}</td></tr>
+        <tr><td><strong>Name:</strong> ${student.name}</td><td><strong>Roll:</strong> ${student.roll}</td></tr>
         <tr><td><strong>Class:</strong> ${student.class}</td><td><strong>Section:</strong> ${student.section}</td></tr>
       </table>
       <table class="subjects-table">
-        <tr>
-          <th>Subject</th>
-          <th>Marks Obtained</th>
-          <th>Total Marks</th>
-          <th>Result</th>
-        </tr>`;
+        <tr><th>Subject</th><th>Marks Obtained</th><th>Total Marks</th><th>Result</th></tr>`;
 
-  examData.subjects.forEach(sub => {
-    totalMarks += sub.total;
-    obtainedMarks += sub.marks;
-    const statusClass = sub.result.toLowerCase() === 'pass' ? 'pass' : 'fail';
-    cardsHTML += `<tr class="${statusClass}">
-      <td>${sub.name}</td>
-      <td>${sub.marks}</td>
-      <td>${sub.total}</td>
-      <td>${sub.result}</td>
-    </tr>`;
+  examData.subjects.forEach(s => {
+    total += s.total;
+    obtained += s.marks;
+    const cls = s.result.toLowerCase() === 'pass' ? 'pass' : 'fail';
+    html += `<tr class="${cls}"><td>${s.name}</td><td>${s.marks}</td><td>${s.total}</td><td>${s.result}</td></tr>`;
   });
 
-  const percentage = ((obtainedMarks / totalMarks) * 100).toFixed(2);
-  const overallStatus = examData.subjects.every(s => s.result.toLowerCase() === 'pass') ? 'Pass' : 'Fail';
+  const percentage = ((obtained / total) * 100).toFixed(2);
+  const overall = examData.subjects.every(s => s.result.toLowerCase() === 'pass') ? 'Pass' : 'Fail';
 
-  cardsHTML += `</table>
-    <div class="overall-result">
-      <p><strong>Total:</strong> ${obtainedMarks} / ${totalMarks}</p>
-      <p><strong>Percentage:</strong> ${percentage}%</p>
-      <p><strong>Overall Result:</strong> ${overallStatus}</p>
-    </div>
-  </div></div>`;
+  html += `</table>
+      <div class="overall-result">
+        <p><strong>Total:</strong> ${obtained} / ${total}</p>
+        <p><strong>Percentage:</strong> ${percentage}%</p>
+        <p><strong>Overall Result:</strong> ${overall}</p>
+      </div>
+    </div>`;
 
-  container.innerHTML = cardsHTML;
+  container.innerHTML = html;
   downloadWrapper.style.display = 'block';
 
   document.getElementById('download-btn').onclick = function() {
-    const element = document.getElementById('image-content');
-    const filename = `${student.name.replace(/\s+/g,'_')}_${student.roll}_${examData.examType.replace(/\s+/g,'_')}.png`;
-    html2canvas(element, { scale: 3 }).then(canvas => {
+    const element = container.querySelector('.result-card');
+    const targetW = 1080;
+    const targetH = 1920;
+    const scale = Math.min(targetW / element.offsetWidth, targetH / element.offsetHeight);
+
+    html2canvas(element, { scale: scale, useCORS:true, backgroundColor:"#fff" }).then(canvas => {
+      const finalCanvas = document.createElement('canvas');
+      finalCanvas.width = targetW;
+      finalCanvas.height = targetH;
+      const ctx = finalCanvas.getContext('2d');
+      ctx.fillStyle = "#fff";
+      ctx.fillRect(0,0,targetW,targetH);
+      const x = (targetW - canvas.width)/2;
+      const y = (targetH - canvas.height)/2;
+      ctx.drawImage(canvas, x, y, canvas.width, canvas.height);
+
       const link = document.createElement('a');
-      link.href = canvas.toDataURL("image/png");
-      link.download = filename;
+      link.href = finalCanvas.toDataURL("image/png");
+      link.download = `${student.name.replace(/\s+/g,'_')}_${student.roll}_${examData.examType.replace(/\s+/g,'_')}.png`;
       link.click();
     });
   };
