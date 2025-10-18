@@ -23,30 +23,33 @@ h1,h2,h3,h4,h5 { font-family:'Fredoka One', cursive; margin:0; }
 .section-title { text-align:center; margin-bottom:30px; color:var(--pink); }
 
 /* Search Card */
-#search-card { max-width:950px; margin:20px auto; padding:30px; border-radius:20px; background:#fff; box-shadow:0 10px 30px rgba(0,0,0,0.15); transition: transform 0.3s; }
-#search-card:hover { transform:translateY(-3px); }
+#search-card { max-width:950px; margin:20px auto; padding:30px; border-radius:20px; background:#fff; box-shadow:0 10px 30px rgba(0,0,0,0.15); }
 #filters { display:flex; gap:15px; flex-wrap:wrap; justify-content:center; }
 .input-group-text { background:var(--blue); color:#fff; border:none; border-radius:12px 0 0 12px; }
 .form-control, .form-select { border-radius:0 12px 12px 0; border-left:none; }
-#filters input:focus, #filters select:focus { outline:none; box-shadow:0 0 8px rgba(0,153,255,0.4); transform:scale(1.02); transition:0.2s; }
-#filters button { flex:none; background:var(--blue); color:#fff; font-weight:600; border:none; border-radius:12px; transition: transform 0.2s, box-shadow 0.2s; }
-#filters button:hover { background:#0077cc; transform:scale(1.05); box-shadow:0 5px 15px rgba(0,0,0,0.2); }
+#filters button { flex:none; background:var(--blue); color:#fff; font-weight:600; border:none; border-radius:12px; }
+#filters button:hover { background:#0077cc; }
 
 /* Result Cards */
 .result-card-container { max-width:900px; margin:20px auto; }
-.result-card { background:#fff; border-radius:15px; box-shadow:0 8px 30px rgba(0,0,0,0.15); padding:20px; margin-bottom:20px; transition: transform 0.3s; }
-.result-card:hover { transform:translateY(-5px); }
+.result-card { background:#fff; border-radius:15px; padding:20px; margin-bottom:20px; }
 .result-card h4 { color:var(--blue); margin-bottom:15px; text-align:center; }
-.subject-card { background:#0099FF; color:#fff; border-radius:12px; padding:15px; margin-bottom:15px; transition: transform 0.2s, box-shadow 0.2s; }
-.subject-card:hover { transform:translateY(-2px); box-shadow:0 8px 20px rgba(0,0,0,0.2); }
+.subject-card { background:#0099FF; color:#fff; border-radius:12px; padding:15px; margin-bottom:15px; }
 .subject-card p { margin:0; font-weight:500; }
 .subject-card .result-status { font-weight:700; }
 .subject-card.pass { background:#28a745; }
 .subject-card.fail { background:#dc3545; }
-.overall-result { background:#ffe66d; padding:15px; border-radius:12px; text-align:center; font-weight:600; font-size:1.1rem; margin-top:15px; color:#2c3e50; box-shadow:0 4px 15px rgba(0,0,0,0.1); }
+.overall-result { background:#ffe66d; padding:15px; border-radius:12px; text-align:center; font-weight:600; font-size:1.1rem; margin-top:15px; color:#2c3e50; }
 
 /* PDF Content */
-#pdf-content { background:#fff; padding:20px; border-radius:10px; }
+#pdf-content {
+  width: 100%;
+  max-width: 800px;
+  margin: auto;
+  padding: 20px;
+  background: #fff;
+  display: block;
+}
 
 /* Footer */
 footer { background: linear-gradient(90deg,#0f2027,#2c5364); color:#fff; text-align:center; padding:20px 0; }
@@ -135,14 +138,12 @@ footer { background: linear-gradient(90deg,#0f2027,#2c5364); color:#fff; text-al
   <p>© 2025 Hari E Techno School, Rajanagaram | All Rights Reserved</p>
 </footer>
 
-<!-- JS Libraries -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
 <script>
 let studentResults = [];
 
-// Load results JSON
 fetch('results.json')
   .then(res => res.json())
   .then(data => studentResults = data)
@@ -206,34 +207,34 @@ document.getElementById('search-btn').addEventListener('click', function() {
 
   container.innerHTML = cardsHTML;
 
+  // PDF Download
   document.getElementById('download-btn').addEventListener('click', function(){
     const element = document.getElementById('pdf-content');
     if (!element) return;
 
-    // Wait for all images to load
     const images = element.querySelectorAll('img');
     const promises = [];
     images.forEach(img => {
         if (!img.complete) {
-            promises.push(new Promise(resolve => {
-                img.onload = img.onerror = resolve;
-            }));
+            promises.push(new Promise(resolve => { img.onload = img.onerror = resolve; }));
         }
     });
 
     Promise.all(promises).then(() => {
+      setTimeout(() => {
         const name = student.name.replace(/\s+/g,'_');
         const rollNum = student.roll;
         const examType = examData.examType.replace(/\s+/g,'_');
         const filename = `${name}_${rollNum}_${examType}.pdf`;
 
         html2pdf().set({
-            margin: [10,10,10,10],
+            margin: 10,
             filename: filename,
             image: { type: 'jpeg', quality: 0.98 },
-            html2canvas: { scale:2, backgroundColor: '#fff' },
+            html2canvas: { scale: 2, backgroundColor: '#fff' },
             jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
         }).from(element).save();
+      }, 300);
     });
   });
 });
