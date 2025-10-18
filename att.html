@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hari E Techno School | Attendance Result</title>
+
+<!-- Bootstrap & Icons -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&family=Fredoka+One&display=swap" rel="stylesheet">
+
+<style>
+:root { --blue:#0099FF; --green:#28a745; --red:#dc3545; --yellow:#ffe66d; }
+body { font-family:'Roboto', sans-serif; background:#f8f9fa; color:#2c3e50; }
+
+/* Navbar */
+.navbar { background: linear-gradient(90deg,#2c5364,#203a43,#0f2027); }
+.navbar-brand { display:flex; align-items:center; font-weight:700; color:#fff; }
+.navbar-brand img { height:50px; margin-right:10px; transition: transform 0.3s; }
+.navbar-brand:hover img { transform:scale(1.1); }
+.navbar-nav .nav-link { color:#fff; font-weight:500; }
+.navbar-nav .nav-link:hover, .navbar-nav .nav-link.active { color:var(--yellow); }
+
+/* Section Title */
+.section-title { text-align:center; font-family:'Fredoka One', cursive; color:var(--blue); margin:40px 0 20px; }
+
+/* Search Card */
+#search-card { max-width:900px; margin:20px auto; background:#fff; padding:30px; border-radius:20px; box-shadow:0 8px 25px rgba(0,0,0,0.1); }
+#filters { display:flex; flex-wrap:wrap; gap:15px; justify-content:center; }
+.input-group-text { background:var(--blue); color:#fff; border:none; border-radius:12px 0 0 12px; }
+.form-control, .form-select { border-radius:0 12px 12px 0; border-left:none; }
+#filters button { background:var(--blue); color:#fff; font-weight:600; border:none; border-radius:12px; }
+#filters button:hover { background:#0077cc; }
+
+/* Result Card */
+.result-card { background:#fff; border-radius:15px; padding:25px; max-width:900px; margin:30px auto; box-shadow:0 6px 20px rgba(0,0,0,0.1); }
+.result-card h4 { color:var(--blue); text-align:center; margin-bottom:15px; }
+.info-table { width:100%; margin-bottom:20px; }
+.info-table td { padding:8px 10px; font-weight:500; }
+.attendance-table { width:100%; border-collapse:collapse; margin-bottom:15px; }
+.attendance-table th, .attendance-table td { border:1px solid #ddd; text-align:center; padding:8px; }
+.attendance-table th { background:var(--blue); color:#fff; }
+.attendance-table .present { background:var(--green); color:#fff; }
+.attendance-table .absent { background:var(--red); color:#fff; }
+.overall-result { background:var(--yellow); border-radius:12px; padding:15px; text-align:center; font-weight:600; color:#2c3e50; }
+
+/* Footer */
+footer { background: linear-gradient(90deg,#0f2027,#2c5364); color:#fff; text-align:center; padding:20px 0; margin-top:40px; }
+
+/* Responsive */
+@media(max-width:768px){
+  #filters { flex-direction:column; align-items:center; }
+  .input-group { width:100%; }
+  #filters button { width:100%; }
+}
+</style>
+</head>
+<body>
+
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-dark sticky-top">
+  <div class="container">
+    <a class="navbar-brand" href="#">
+      <img src="https://harietechnoschool.com/LOGO.png" alt="Logo">
+      Hari E Techno School
+    </a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse justify-content-end" id="navMenu">
+      <ul class="navbar-nav">
+        <li class="nav-item"><a class="nav-link" href="#">Home</a></li>
+        <li class="nav-item"><a class="nav-link" href="#">About</a></li>
+        <li class="nav-item"><a class="nav-link active" href="#">Attendance</a></li>
+        <li class="nav-item"><a class="nav-link" href="#">Contact</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<!-- Heading -->
+<h2 class="section-title">Check Your Attendance</h2>
+
+<!-- Search Card -->
+<div id="search-card">
+  <div id="filters">
+    <div class="input-group flex-fill">
+      <span class="input-group-text"><i class="bi bi-person-badge"></i></span>
+      <input type="text" id="roll-number" placeholder="Roll Number" class="form-control">
+    </div>
+    <div class="input-group flex-fill">
+      <span class="input-group-text"><i class="bi bi-journal-bookmark"></i></span>
+      <select id="class-select" class="form-select"><option value="">Select Class</option></select>
+    </div>
+    <div class="input-group flex-fill">
+      <span class="input-group-text"><i class="bi bi-building"></i></span>
+      <input type="text" id="section-input" placeholder="Section" class="form-control">
+    </div>
+    <div class="input-group flex-fill">
+      <span class="input-group-text"><i class="bi bi-calendar-date"></i></span>
+      <input type="date" id="dob-input" class="form-control">
+    </div>
+    <div class="input-group flex-fill">
+      <span class="input-group-text"><i class="bi bi-calendar-month"></i></span>
+      <select id="month-select" class="form-select"><option value="">Select Month</option></select>
+    </div>
+    <button id="search-btn" class="btn w-100 mt-2"><i class="bi bi-search"></i> Search</button>
+  </div>
+</div>
+
+<!-- Results -->
+<div id="result-container"></div>
+
+<!-- Footer -->
+<footer>
+  <p>© 2025 Hari E Techno School, Rajanagaram | All Rights Reserved</p>
+</footer>
+
+<!-- JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+let studentData = [];
+
+fetch("attendance.json")
+  .then(res => res.json())
+  .then(data => {
+    studentData = data;
+    const classSelect = document.getElementById('class-select');
+    const classes = [...new Set(studentData.map(s => s.class))];
+    classes.forEach(c => {
+      const opt = document.createElement('option');
+      opt.value = c;
+      opt.textContent = `Class ${c}`;
+      classSelect.appendChild(opt);
+    });
+  })
+  .catch(err => console.error("Error loading attendance.json:", err));
+
+function populateMonths(student) {
+  const monthSelect = document.getElementById('month-select');
+  monthSelect.innerHTML = '<option value="">Select Month</option>';
+  const validRecords = student.records.filter(r => new Date(r.date) <= new Date());
+  const months = [...new Set(validRecords.map(r => {
+    const d = new Date(r.date);
+    return `${d.getFullYear()}-${d.getMonth() + 1}`;
+  }))];
+  months.sort((a,b) => new Date(a) - new Date(b));
+  months.forEach(m => {
+    const [year, month] = m.split("-");
+    const monthName = new Date(year, month - 1).toLocaleString('default', { month: 'long', year: 'numeric' });
+    const opt = document.createElement('option');
+    opt.value = m;
+    opt.textContent = monthName;
+    monthSelect.appendChild(opt);
+  });
+}
+
+document.getElementById('search-btn').addEventListener('click', function() {
+  const roll = document.getElementById('roll-number').value.trim();
+  const classSel = document.getElementById('class-select').value;
+  const section = document.getElementById('section-input').value.trim();
+  const dob = document.getElementById('dob-input').value;
+  const selectedMonth = document.getElementById('month-select').value;
+  const container = document.getElementById('result-container');
+  container.innerHTML = "";
+
+  if(!roll || !classSel || !section || !dob){
+    container.innerHTML = '<p class="text-center mt-4 text-danger">Please fill all fields first.</p>';
+    return;
+  }
+
+  const student = studentData.find(s =>
+    s.roll === roll && s.class === classSel && s.section.toLowerCase() === section.toLowerCase() && s.dob === dob
+  );
+
+  if(!student){
+    container.innerHTML = '<p class="text-center mt-4 text-danger">No student found.</p>';
+    return;
+  }
+
+  populateMonths(student);
+
+  if(!selectedMonth){
+    container.innerHTML = '<p class="text-center mt-4 text-info">Now select a month to view attendance.</p>';
+    return;
+  }
+
+  const [year, month] = selectedMonth.split("-");
+  const monthRecords = student.records.filter(r => {
+    const d = new Date(r.date);
+    return d.getMonth() + 1 === parseInt(month) && d.getFullYear() === parseInt(year);
+  });
+
+  const validRecords = student.records.filter(r => new Date(r.date) <= new Date());
+  const sorted = validRecords.sort((a,b) => new Date(a.date) - new Date(b.date));
+  const firstMonth = new Date(sorted[0].date).toLocaleString('default',{month:'long', year:'numeric'});
+  const lastMonth = new Date(sorted[sorted.length - 1].date).toLocaleString('default',{month:'long', year:'numeric'});
+
+  const totalDays = validRecords.length;
+  const presentDays = validRecords.filter(r => r.status === "Present").length;
+  const overallPercentage = totalDays ? ((presentDays / totalDays) * 100).toFixed(2) : 0;
+
+  let html = `<div class="result-card">
+    <h4>Attendance from ${firstMonth} to ${lastMonth}</h4>
+    <table class="info-table">
+      <tr><td><strong>Name:</strong> ${student.name}</td><td><strong>Roll No:</strong> ${student.roll}</td></tr>
+      <tr><td><strong>Class:</strong> ${student.class}</td><td><strong>Section:</strong> ${student.section}</td></tr>
+    </table>
+    <table class="attendance-table">
+      <tr><th>Date</th><th>Status</th></tr>`;
+
+  if(monthRecords.length === 0){
+    html += `<tr><td colspan="2">No records for this month.</td></tr>`;
+  } else {
+    monthRecords.forEach(r => {
+      const cls = r.status === "Present" ? "present" : "absent";
+      html += `<tr class="${cls}"><td>${r.date}</td><td>${r.status}</td></tr>`;
+    });
+  }
+
+  html += `</table>
+    <div class="overall-result">
+      <p><strong>Overall Attendance:</strong> ${presentDays} / ${totalDays} days</p>
+      <p><strong>Percentage:</strong> ${overallPercentage}%</p>
+    </div>
+  </div>`;
+
+  container.innerHTML = html;
+});
+</script>
+</body>
+</html>
