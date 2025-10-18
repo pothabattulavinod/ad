@@ -43,7 +43,7 @@ body { font-family:'Roboto', sans-serif; background:#f8f9fa; color:#2c3e50; }
 .attendance-table th { background:var(--blue); color:#fff; }
 .attendance-table .present { background:var(--green); color:#fff; }
 .attendance-table .absent { background:var(--red); color:#fff; }
-.overall-result { background:var(--yellow); border-radius:12px; padding:15px; text-align:center; font-weight:600; color:#2c3e50; }
+.overall-result { background:var(--yellow); border-radius:12px; padding:15px; text-align:center; font-weight:600; color:#2c3e50; margin-bottom:20px; }
 
 /* Footer */
 footer { background: linear-gradient(90deg,#0f2027,#2c5364); color:#fff; text-align:center; padding:20px 0; margin-top:40px; }
@@ -101,7 +101,8 @@ footer { background: linear-gradient(90deg,#0f2027,#2c5364); color:#fff; text-al
       <span class="input-group-text"><i class="bi bi-calendar-date"></i></span>
       <input type="date" id="dob-input" class="form-control">
     </div>
-    <div class="input-group flex-fill">
+    <!-- Month dropdown hidden initially -->
+    <div class="input-group flex-fill" id="month-container" style="display:none;">
       <span class="input-group-text"><i class="bi bi-calendar-month"></i></span>
       <select id="month-select" class="form-select"><option value="">Select Month</option></select>
     </div>
@@ -157,25 +158,39 @@ function populateMonths(student) {
   });
 }
 
-function displayAttendance(student, selectedMonth) {
+function displayAttendance(student, selectedMonth = null) {
   const container = document.getElementById('result-container');
-  const [year, month] = selectedMonth.split("-");
-  const monthRecords = student.records.filter(r => {
-    const d = new Date(r.date);
-    return d.getMonth() + 1 === parseInt(month) && d.getFullYear() === parseInt(year);
-  });
 
-  const validRecords = student.records.filter(r => new Date(r.date) <= new Date());
-  const sorted = validRecords.sort((a,b) => new Date(a.date) - new Date(b.date));
-  const firstMonth = new Date(sorted[0].date).toLocaleString('default',{month:'long', year:'numeric'});
-  const lastMonth = new Date(sorted[sorted.length - 1].date).toLocaleString('default',{month:'long', year:'numeric'});
-
-  const totalDays = validRecords.length;
-  const presentDays = validRecords.filter(r => r.status === "Present").length;
+  // Compute overall attendance
+  const overallRecords = student.records.filter(r => new Date(r.date) <= new Date());
+  const totalDays = overallRecords.length;
+  const presentDays = overallRecords.filter(r => r.status === "Present").length;
   const overallPercentage = totalDays ? ((presentDays / totalDays) * 100).toFixed(2) : 0;
 
-  let html = `<div class="result-card">
-    <h4>Attendance from ${firstMonth} to ${lastMonth}</h4>
+  let html = `<div class="overall-result">
+      <p><strong>Overall Attendance:</strong> ${presentDays} / ${totalDays} days</p>
+      <p><strong>Percentage:</strong> ${overallPercentage}%</p>
+    </div>`;
+
+  let recordsToShow = overallRecords;
+  let headingText = "";
+
+  if(selectedMonth){
+    const [year, month] = selectedMonth.split("-");
+    recordsToShow = overallRecords.filter(r => {
+      const d = new Date(r.date);
+      return d.getMonth() + 1 === parseInt(month) && d.getFullYear() === parseInt(year);
+    });
+    headingText = `Attendance for ${new Date(year, month-1).toLocaleString('default',{month:'long', year:'numeric'})}`;
+  } else {
+    const sorted = overallRecords.sort((a,b)=>new Date(a.date)-new Date(b.date));
+    const firstMonth = new Date(sorted[0].date).toLocaleString('default',{month:'long', year:'numeric'});
+    const lastMonth = new Date(sorted[sorted.length - 1].date).toLocaleString('default',{month:'long', year:'numeric'});
+    headingText = `Attendance from ${firstMonth} to ${lastMonth}`;
+  }
+
+  html += `<div class="result-card">
+    <h4>${headingText}</h4>
     <table class="info-table">
       <tr><td><strong>Name:</strong> ${student.name}</td><td><strong>Roll No:</strong> ${student.roll}</td></tr>
       <tr><td><strong>Class:</strong> ${student.class}</td><td><strong>Section:</strong> ${student.section}</td></tr>
@@ -183,22 +198,16 @@ function displayAttendance(student, selectedMonth) {
     <table class="attendance-table">
       <tr><th>Date</th><th>Status</th></tr>`;
 
-  if(monthRecords.length === 0){
+  if(recordsToShow.length === 0){
     html += `<tr><td colspan="2">No records for this month.</td></tr>`;
   } else {
-    monthRecords.forEach(r => {
+    recordsToShow.forEach(r => {
       const cls = r.status === "Present" ? "present" : "absent";
       html += `<tr class="${cls}"><td>${r.date}</td><td>${r.status}</td></tr>`;
     });
   }
 
-  html += `</table>
-    <div class="overall-result">
-      <p><strong>Overall Attendance:</strong> ${presentDays} / ${totalDays} days</p>
-      <p><strong>Percentage:</strong> ${overallPercentage}%</p>
-    </div>
-  </div>`;
-
+  html += `</table></div>`;
   container.innerHTML = html;
 }
 
@@ -210,6 +219,9 @@ document.getElementById('search-btn').addEventListener('click', function() {
   const dob = document.getElementById('dob-input').value;
   const container = document.getElementById('result-container');
   container.innerHTML = "";
+
+  // Hide month dropdown initially
+  document.getElementById('month-container').style.display = "none";
 
   if(!roll || !classSel || !section || !dob){
     container.innerHTML = '<p class="text-center mt-4 text-danger">Please fill all fields first.</p>';
@@ -227,10 +239,12 @@ document.getElementById('search-btn').addEventListener('click', function() {
 
   currentStudent = student;
 
-  // ✅ Populate month dropdown
+  // Populate and show month dropdown
   populateMonths(student);
+  document.getElementById('month-container').style.display = "flex";
 
-  container.innerHTML = '<p class="text-center mt-4 text-info">Now select a month to view attendance.</p>';
+  // Display overall attendance immediately
+  displayAttendance(student);
 });
 
 // Month select change
