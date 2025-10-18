@@ -34,7 +34,7 @@ h1,h2,h3,h4,h5 { font-family:'Fredoka One', cursive; margin:0; }
 
 /* Result Cards */
 .result-card-container { max-width:900px; margin:20px auto; }
-.result-card { background:#e7f5ff; border-radius:15px; box-shadow:0 8px 30px rgba(0,0,0,0.15); padding:20px; margin-bottom:20px; transition: transform 0.3s; }
+.result-card { background:#fff; border-radius:15px; box-shadow:0 8px 30px rgba(0,0,0,0.15); padding:20px; margin-bottom:20px; transition: transform 0.3s; }
 .result-card:hover { transform:translateY(-5px); }
 .result-card h4 { color:var(--blue); margin-bottom:15px; text-align:center; }
 .subject-card { background:linear-gradient(135deg,#0099FF,#00c4ff); color:#fff; border-radius:12px; padding:15px; margin-bottom:15px; transition: transform 0.2s, box-shadow 0.2s; }
@@ -44,6 +44,9 @@ h1,h2,h3,h4,h5 { font-family:'Fredoka One', cursive; margin:0; }
 .subject-card.pass { background:linear-gradient(135deg,#28a745,#6fdc84); }
 .subject-card.fail { background:linear-gradient(135deg,#dc3545,#ff6b6b); }
 .overall-result { background:#ffe66d; padding:15px; border-radius:12px; text-align:center; font-weight:600; font-size:1.1rem; margin-top:15px; color:#2c3e50; box-shadow:0 4px 15px rgba(0,0,0,0.1); }
+
+/* PDF Content */
+#pdf-content { background:#fff; padding:20px; border-radius:10px; }
 
 /* Footer */
 footer { background: linear-gradient(90deg,#0f2027,#2c5364); color:#fff; text-align:center; padding:20px 0; }
@@ -140,7 +143,7 @@ footer { background: linear-gradient(90deg,#0f2027,#2c5364); color:#fff; text-al
 let studentResults = [];
 
 fetch('results.json')
-  .then(response => response.json())
+  .then(res => res.json())
   .then(data => studentResults = data)
   .catch(err => console.error("Error loading JSON:", err));
 
@@ -157,7 +160,6 @@ document.getElementById('search-btn').addEventListener('click', function() {
   }
 
   const filtered = studentResults.filter(s => s.roll === roll && s.class === classSel && s.dob === dob);
-
   if(filtered.length === 0){
     container.innerHTML = '<p class="text-center mt-4 text-danger">No student found.</p>';
     return;
@@ -165,16 +167,16 @@ document.getElementById('search-btn').addEventListener('click', function() {
 
   const student = filtered[0];
   const examData = student.exams.find(e => e.examType === exam);
-
   if(!examData){
     container.innerHTML = '<p class="text-center mt-4 text-danger">Exam not found for this student.</p>';
     return;
   }
 
   let totalMarks = 0, obtainedMarks = 0;
-  let cardsHTML = `<div class="result-card" id="printable-result" style="padding:20px; text-align:center;">
-    <img src="https://harietechnoschool.com/LOGO.png" alt="School Logo" style="height:80px; margin-bottom:15px;">
-    <h4>${student.name} (Roll: ${student.roll}) - ${examData.examType}</h4>`;
+  let cardsHTML = `<div class="result-card" id="printable-result">
+    <div id="pdf-content">
+      <img src="https://harietechnoschool.com/LOGO.png" alt="School Logo" style="height:80px; margin-bottom:15px;">
+      <h4>${student.name} (Roll: ${student.roll}) - ${examData.examType}</h4>`;
 
   examData.subjects.forEach(sub => {
     totalMarks += sub.total;
@@ -194,9 +196,9 @@ document.getElementById('search-btn').addEventListener('click', function() {
     <p><strong>Total:</strong> ${obtainedMarks} / ${totalMarks}</p>
     <p><strong>Percentage:</strong> ${percentage}%</p>
     <p><strong>Overall Result:</strong> ${overallStatus}</p>
-  </div></div>`;
+  </div></div></div>`;
 
-  // Add Download PDF button outside printable div
+  // Add Download PDF button outside printable content
   cardsHTML += `<div class="text-center mt-3">
     <button id="download-btn" class="btn btn-warning"><i class="bi bi-download"></i> Download PDF</button>
   </div>`;
@@ -204,20 +206,23 @@ document.getElementById('search-btn').addEventListener('click', function() {
   container.innerHTML = cardsHTML;
 
   document.getElementById('download-btn').addEventListener('click', function(){
-    const element = document.getElementById('printable-result');
+    const element = document.getElementById('pdf-content');
     if (!element) return;
-    const name = student.name.replace(/\s+/g, '_');
+    const name = student.name.replace(/\s+/g,'_');
     const rollNum = student.roll;
-    const examType = examData.examType.replace(/\s+/g, '_');
+    const examType = examData.examType.replace(/\s+/g,'_');
     const filename = `${name}_${rollNum}_${examType}.pdf`;
 
-    html2pdf().set({
-      margin: [10,10,10,10],
-      filename: filename,
-      image: { type: 'jpeg', quality: 0.98 },
-      html2canvas: { scale: 2 },
-      jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
-    }).from(element).save();
+    // Small timeout to ensure rendering
+    setTimeout(() => {
+      html2pdf().set({
+        margin: [10,10,10,10],
+        filename: filename,
+        image: { type: 'jpeg', quality: 0.98 },
+        html2canvas: { scale:2, backgroundColor: null },
+        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+      }).from(element).save();
+    }, 300);
   });
 });
 </script>
