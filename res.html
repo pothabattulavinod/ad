@@ -11,7 +11,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&family=Fredoka+One&display=swap" rel="stylesheet">
 
 <style>
-:root { --pink:#ff6b6b; --yellow:#ffe66d; --blue:#0099FF; --lightblue:#e7f5ff; }
+:root { --pink:#ff6b6b; --yellow:#ffe66d; --blue:#0099FF; }
 body { font-family:'Roboto', sans-serif; background:#f8f9fa; color:#2c3e50; margin:0; }
 h1,h2,h3,h4,h5 { font-family:'Fredoka One', cursive; margin:0; }
 .navbar { background: linear-gradient(90deg,#2c5364,#203a43,#0f2027); }
@@ -41,7 +41,7 @@ h1,h2,h3,h4,h5 { font-family:'Fredoka One', cursive; margin:0; }
 .subject-card.fail { background:#dc3545; }
 .overall-result { background:#ffe66d; padding:15px; border-radius:12px; text-align:center; font-weight:600; font-size:1.1rem; margin-top:15px; color:#2c3e50; }
 
-/* PDF Content - Image-free */
+/* PDF Content */
 #pdf-content {
   width: 100%;
   max-width: 800px;
@@ -49,6 +49,7 @@ h1,h2,h3,h4,h5 { font-family:'Fredoka One', cursive; margin:0; }
   padding: 20px;
   background: #fff;
   display: block;
+  word-wrap: break-word;
 }
 
 /* Footer */
@@ -147,13 +148,25 @@ footer { background: linear-gradient(90deg,#0f2027,#2c5364); color:#fff; text-al
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
 <script>
-let studentResults = [];
-
-// Example JSON fetch (replace with your actual results.json)
-fetch('results.json')
-  .then(res => res.json())
-  .then(data => studentResults = data)
-  .catch(err => console.error("Error loading JSON:", err));
+// Sample student JSON data (replace with results.json)
+let studentResults = [
+  {
+    roll: "101",
+    name: "John Doe",
+    class: "10",
+    dob: "2010-01-15",
+    exams: [
+      {
+        examType: "Final",
+        subjects: [
+          { name: "Maths", marks: 95, total: 100, result: "Pass" },
+          { name: "Science", marks: 90, total: 100, result: "Pass" },
+          { name: "English", marks: 88, total: 100, result: "Pass" }
+        ]
+      }
+    ]
+  }
+];
 
 document.getElementById('search-btn').addEventListener('click', function() {
   const roll = document.getElementById('roll-number').value.trim();
@@ -206,6 +219,9 @@ document.getElementById('search-btn').addEventListener('click', function() {
     <p><strong>Total:</strong> ${obtainedMarks} / ${totalMarks}</p>
     <p><strong>Percentage:</strong> ${percentage}%</p>
     <p><strong>Overall Result:</strong> ${overallStatus}</p>
+  </div>
+  <div style="margin-top:15px; font-style:italic; color:#555;">
+    Sample text you can copy from PDF after download.
   </div></div></div>`;
 
   container.innerHTML = cardsHTML;
