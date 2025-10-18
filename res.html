@@ -11,7 +11,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&family=Fredoka+One&display=swap" rel="stylesheet">
 
 <style>
-:root { --pink:#ff6b6b; --yellow:#ffe66d; --blue:#0099FF; }
+:root { --pink:#ff6b6b; --yellow:#ffe66d; --blue:#0099FF; --lightblue:#e7f5ff; }
 body { font-family:'Roboto', sans-serif; background:#f8f9fa; color:#2c3e50; margin:0; }
 h1,h2,h3,h4,h5 { font-family:'Fredoka One', cursive; margin:0; }
 .navbar { background: linear-gradient(90deg,#2c5364,#203a43,#0f2027); }
@@ -34,32 +34,50 @@ h1,h2,h3,h4,h5 { font-family:'Fredoka One', cursive; margin:0; }
 .result-card-container { max-width:900px; margin:20px auto; }
 .result-card { background:#fff; border-radius:15px; padding:20px; margin-bottom:20px; }
 .result-card h4 { color:var(--blue); margin-bottom:15px; text-align:center; }
-.subject-card { background:#0099FF; color:#fff; border-radius:12px; padding:15px; margin-bottom:15px; }
-.subject-card p { margin:0; font-weight:500; }
-.subject-card .result-status { font-weight:700; }
-.subject-card.pass { background:#28a745; }
-.subject-card.fail { background:#dc3545; }
+.result-card img.logo { height:80px; display:block; margin:0 auto 15px auto; }
+
+/* Subjects Table */
+.subjects-table { width:100%; border-collapse: collapse; margin-bottom:15px; }
+.subjects-table th, .subjects-table td { border:1px solid #ddd; padding:10px; text-align:center; font-weight:500; }
+.subjects-table th { background:#0099FF; color:#fff; }
+.subjects-table .pass { background:#28a745; color:#fff; }
+.subjects-table .fail { background:#dc3545; color:#fff; }
+
 .overall-result { background:#ffe66d; padding:15px; border-radius:12px; text-align:center; font-weight:600; font-size:1.1rem; margin-top:15px; color:#2c3e50; }
 
-/* PDF Content */
-#pdf-content {
+/* Image Content */
+#image-content {
   width: 100%;
   max-width: 800px;
   margin: auto;
   padding: 20px;
   background: #fff;
   display: block;
-  word-wrap: break-word;
+  border-radius:15px;
+  box-shadow:0 6px 20px rgba(0,0,0,0.1);
 }
+
+/* Info Table */
+.info-table { width: 100%; margin-bottom: 20px; }
+.info-table td { padding: 5px 10px; font-weight:500; }
 
 /* Footer */
 footer { background: linear-gradient(90deg,#0f2027,#2c5364); color:#fff; text-align:center; padding:20px 0; }
 
 /* Responsive */
-@media(max-width:768px){
-  #filters { flex-direction:column; }
+@media(max-width:992px){
+  #filters { flex-direction:column; align-items:center; gap:10px; }
   .input-group { width:100%; }
   #filters button { width:100%; }
+}
+
+@media(max-width:576px){
+  #search-card { padding:15px 10px; }
+  .input-group-text { font-size:0.9rem; }
+  .form-control, .form-select { font-size:0.9rem; }
+  .subjects-table th, .subjects-table td { font-size:12px; padding:6px; }
+  .overall-result { font-size:0.95rem; padding:10px; }
+  #search-btn { font-size:1rem; }
 }
 </style>
 </head>
@@ -69,7 +87,7 @@ footer { background: linear-gradient(90deg,#0f2027,#2c5364); color:#fff; text-al
 <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
   <div class="container">
     <a class="navbar-brand" href="index.html">
-      <img src="https://harietechnoschool.com/LOGO.png" alt="Logo">
+      <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMgAAADICAYAAACtWK6eAAAA..." alt="Logo">
       Hari E Techno School
     </a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
@@ -90,19 +108,17 @@ footer { background: linear-gradient(90deg,#0f2027,#2c5364); color:#fff; text-al
 <section class="py-5 bg-light">
   <div class="container text-center">
     <h2 class="section-title">Check Your Result</h2>
-    <p>Enter Roll Number, Class, Exam Type, and Date of Birth to view your results</p>
   </div>
 </section>
 
 <!-- Search Card -->
 <div id="search-card">
   <div id="filters">
-    <div class="input-group">
+    <div class="input-group flex-fill">
       <span class="input-group-text"><i class="bi bi-person-badge"></i></span>
       <input type="text" id="roll-number" placeholder="Roll Number" class="form-control">
     </div>
-
-    <div class="input-group">
+    <div class="input-group flex-fill">
       <span class="input-group-text"><i class="bi bi-journal-bookmark"></i></span>
       <select id="class-select" class="form-select">
         <option value="">Select Class</option>
@@ -111,32 +127,30 @@ footer { background: linear-gradient(90deg,#0f2027,#2c5364); color:#fff; text-al
         <option value="8">Class 8</option>
       </select>
     </div>
-
-    <div class="input-group">
+    <div class="input-group flex-fill">
+      <span class="input-group-text"><i class="bi bi-building"></i></span>
+      <input type="text" id="section-input" placeholder="Section" class="form-control">
+    </div>
+    <div class="input-group flex-fill">
       <span class="input-group-text"><i class="bi bi-card-checklist"></i></span>
       <select id="exam-select" class="form-select">
         <option value="">Select Exam</option>
-        <option value="Midterm">Midterm</option>
-        <option value="Final">Final</option>
-        <option value="Semester">Semester</option>
       </select>
     </div>
-
-    <div class="input-group">
+    <div class="input-group flex-fill">
       <span class="input-group-text"><i class="bi bi-calendar-date"></i></span>
       <input type="date" id="dob-input" class="form-control">
     </div>
-
-    <button id="search-btn" class="btn"><i class="bi bi-search"></i> Search</button>
+    <button id="search-btn" class="btn w-100 mt-2"><i class="bi bi-search"></i> Search</button>
   </div>
 </div>
 
 <!-- Result Display -->
 <div id="result-container" class="result-card-container"></div>
 
-<!-- Download PDF Button -->
+<!-- Download Image Button -->
 <div id="download-wrapper" class="text-center mt-3" style="display:none;">
-  <button id="download-btn" class="btn btn-warning"><i class="bi bi-download"></i> Download PDF</button>
+  <button id="download-btn" class="btn btn-success"><i class="bi bi-download"></i> Download as Image</button>
 </div>
 
 <!-- Footer -->
@@ -145,45 +159,47 @@ footer { background: linear-gradient(90deg,#0f2027,#2c5364); color:#fff; text-al
 </footer>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <script>
-// Sample student JSON data (replace with results.json)
-let studentResults = [
-  {
-    roll: "101",
-    name: "John Doe",
-    class: "10",
-    dob: "2010-01-15",
-    exams: [
-      {
-        examType: "Final",
-        subjects: [
-          { name: "Maths", marks: 95, total: 100, result: "Pass" },
-          { name: "Science", marks: 90, total: 100, result: "Pass" },
-          { name: "English", marks: 88, total: 100, result: "Pass" }
-        ]
-      }
-    ]
-  }
-];
+let studentResults = [];
+const logoBase64 = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMgAAADICAYAAACtWK6eAAAA..."; // Replace with full base64 of your logo
+
+// Fetch results.json dynamically
+fetch('results.json')
+  .then(res => res.json())
+  .then(data => {
+    studentResults = data;
+    // Populate exam types dynamically
+    const examSet = new Set();
+    studentResults.forEach(s => s.exams.forEach(e => examSet.add(e.examType)));
+    const examSelect = document.getElementById('exam-select');
+    examSet.forEach(e => {
+      const option = document.createElement('option');
+      option.value = e;
+      option.textContent = e;
+      examSelect.appendChild(option);
+    });
+  })
+  .catch(err => console.error("Error fetching results.json:", err));
 
 document.getElementById('search-btn').addEventListener('click', function() {
   const roll = document.getElementById('roll-number').value.trim();
   const classSel = document.getElementById('class-select').value;
+  const section = document.getElementById('section-input').value.trim();
   const exam = document.getElementById('exam-select').value;
   const dob = document.getElementById('dob-input').value;
   const container = document.getElementById('result-container');
   const downloadWrapper = document.getElementById('download-wrapper');
+  downloadWrapper.style.display = 'none';
 
-  downloadWrapper.style.display = 'none'; // hide download button initially
-
-  if(!roll || !classSel || !exam || !dob){
+  if(!roll || !classSel || !section || !exam || !dob){
     container.innerHTML = '<p class="text-center mt-4 text-danger">Please fill all fields.</p>';
     return;
   }
 
-  const filtered = studentResults.filter(s => s.roll === roll && s.class === classSel && s.dob === dob);
+  const filtered = studentResults.filter(s =>
+    s.roll === roll && s.class === classSel && s.section.toLowerCase() === section.toLowerCase() && s.dob === dob
+  );
   if(filtered.length === 0){
     container.innerHTML = '<p class="text-center mt-4 text-danger">No student found.</p>';
     return;
@@ -198,47 +214,56 @@ document.getElementById('search-btn').addEventListener('click', function() {
 
   let totalMarks = 0, obtainedMarks = 0;
   let cardsHTML = `<div class="result-card" id="printable-result">
-    <div id="pdf-content">
-      <h4>${student.name} (Roll: ${student.roll}) - ${examData.examType}</h4>`;
+    <div id="image-content">
+      <img src="${logoBase64}" class="logo" alt="School Logo">
+      <h4 class="text-center">${examData.examType} Exam Result</h4>
+      <table class="info-table">
+        <tr><td><strong>Name:</strong> ${student.name}</td><td><strong>Roll No:</strong> ${student.roll}</td></tr>
+        <tr><td><strong>Class:</strong> ${student.class}</td><td><strong>Section:</strong> ${student.section}</td></tr>
+      </table>
+      <table class="subjects-table">
+        <tr>
+          <th>Subject</th>
+          <th>Marks Obtained</th>
+          <th>Total Marks</th>
+          <th>Result</th>
+        </tr>`;
 
   examData.subjects.forEach(sub => {
     totalMarks += sub.total;
     obtainedMarks += sub.marks;
     const statusClass = sub.result.toLowerCase() === 'pass' ? 'pass' : 'fail';
-    cardsHTML += `<div class="subject-card ${statusClass}">
-      <p><strong>Subject:</strong> ${sub.name}</p>
-      <p><strong>Marks:</strong> ${sub.marks} / ${sub.total}</p>
-      <p class="result-status"><strong>Result:</strong> ${sub.result}</p>
-    </div>`;
+    cardsHTML += `<tr class="${statusClass}">
+      <td>${sub.name}</td>
+      <td>${sub.marks}</td>
+      <td>${sub.total}</td>
+      <td>${sub.result}</td>
+    </tr>`;
   });
 
   const percentage = ((obtainedMarks / totalMarks) * 100).toFixed(2);
   const overallStatus = examData.subjects.every(s => s.result.toLowerCase() === 'pass') ? 'Pass' : 'Fail';
 
-  cardsHTML += `<div class="overall-result">
-    <p><strong>Total:</strong> ${obtainedMarks} / ${totalMarks}</p>
-    <p><strong>Percentage:</strong> ${percentage}%</p>
-    <p><strong>Overall Result:</strong> ${overallStatus}</p>
-  </div>
-  <div style="margin-top:15px; font-style:italic; color:#555;">
-    Sample text you can copy from PDF after download.
-  </div></div></div>`;
+  cardsHTML += `</table>
+    <div class="overall-result">
+      <p><strong>Total:</strong> ${obtainedMarks} / ${totalMarks}</p>
+      <p><strong>Percentage:</strong> ${percentage}%</p>
+      <p><strong>Overall Result:</strong> ${overallStatus}</p>
+    </div>
+  </div></div>`;
 
   container.innerHTML = cardsHTML;
-  downloadWrapper.style.display = 'block'; // show download button
+  downloadWrapper.style.display = 'block';
 
   document.getElementById('download-btn').onclick = function() {
-    const element = document.getElementById('pdf-content');
-    const filename = `${student.name.replace(/\s+/g,'_')}_${student.roll}_${examData.examType.replace(/\s+/g,'_')}.pdf`;
-    setTimeout(() => {
-      html2pdf().set({
-        margin: 10,
-        filename: filename,
-        image: { type: 'jpeg', quality: 0.98 },
-        html2canvas: { scale: 2, backgroundColor: '#fff' },
-        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
-      }).from(element).save();
-    }, 300);
+    const element = document.getElementById('image-content');
+    const filename = `${student.name.replace(/\s+/g,'_')}_${student.roll}_${examData.examType.replace(/\s+/g,'_')}.png`;
+    html2canvas(element, { scale: 2 }).then(canvas => {
+      const link = document.createElement('a');
+      link.href = canvas.toDataURL("image/png");
+      link.download = filename;
+      link.click();
+    });
   };
 });
 </script>
