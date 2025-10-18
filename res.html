@@ -133,6 +133,11 @@ footer { background: linear-gradient(90deg,#0f2027,#2c5364); color:#fff; text-al
 <!-- Result Display -->
 <div id="result-container" class="result-card-container"></div>
 
+<!-- Download PDF Button -->
+<div id="download-wrapper" class="text-center mt-3" style="display:none;">
+  <button id="download-btn" class="btn btn-warning"><i class="bi bi-download"></i> Download PDF</button>
+</div>
+
 <!-- Footer -->
 <footer>
   <p>© 2025 Hari E Techno School, Rajanagaram | All Rights Reserved</p>
@@ -156,6 +161,9 @@ document.getElementById('search-btn').addEventListener('click', function() {
   const exam = document.getElementById('exam-select').value;
   const dob = document.getElementById('dob-input').value;
   const container = document.getElementById('result-container');
+  const downloadWrapper = document.getElementById('download-wrapper');
+
+  downloadWrapper.style.display = 'none'; // hide download button initially
 
   if(!roll || !classSel || !exam || !dob){
     container.innerHTML = '<p class="text-center mt-4 text-danger">Please fill all fields.</p>';
@@ -200,18 +208,12 @@ document.getElementById('search-btn').addEventListener('click', function() {
     <p><strong>Overall Result:</strong> ${overallStatus}</p>
   </div></div></div>`;
 
-  // Add Download PDF button outside printable content
-  cardsHTML += `<div class="text-center mt-3">
-    <button id="download-btn" class="btn btn-warning"><i class="bi bi-download"></i> Download PDF</button>
-  </div>`;
-
   container.innerHTML = cardsHTML;
+  downloadWrapper.style.display = 'block'; // show download button
 
-  // PDF Download
-  document.getElementById('download-btn').addEventListener('click', function(){
+  document.getElementById('download-btn').onclick = function() {
     const element = document.getElementById('pdf-content');
     const filename = `${student.name.replace(/\s+/g,'_')}_${student.roll}_${examData.examType.replace(/\s+/g,'_')}.pdf`;
-
     setTimeout(() => {
       html2pdf().set({
         margin: 10,
@@ -220,8 +222,8 @@ document.getElementById('search-btn').addEventListener('click', function() {
         html2canvas: { scale: 2, backgroundColor: '#fff' },
         jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
       }).from(element).save();
-    }, 300); // short delay ensures content is fully rendered
-  });
+    }, 300);
+  };
 });
 </script>
 </body>
