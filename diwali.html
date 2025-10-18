@@ -215,16 +215,25 @@ Celebrate the festival with delight, and may your journey ahead be bright and pr
 With warm regards,`
 ];
 
+// Helper function: Capitalize each word
+function capitalizeWords(str) {
+    return str.replace(/\b\w/g, char => char.toUpperCase());
+}
+
 wishForm.addEventListener('submit', function(e){
   e.preventDefault();
 
-  const student = document.getElementById('student-name').value.trim();
-  const parent = document.getElementById('parent-name').value.trim();
+  let student = document.getElementById('student-name').value.trim();
+  let parent = document.getElementById('parent-name').value.trim();
 
   if(!student || !parent){
     alert("Please enter both Student Name and Parent Name.");
     return;
   }
+
+  // Capitalize user inputs
+  student = capitalizeWords(student);
+  parent = capitalizeWords(parent);
 
   const randomIndex = Math.floor(Math.random() * diwaliWishes.length);
   let selectedWish = diwaliWishes[randomIndex];
@@ -235,14 +244,34 @@ wishForm.addEventListener('submit', function(e){
   wishResult.scrollIntoView({behavior:'smooth'});
 });
 
-// High-quality download
+// High-resolution download across all devices
 document.getElementById('download-btn').addEventListener('click', function(){
-  html2canvas(wishPreview, {scale:3, useCORS:true, backgroundColor:'#fff'}).then(canvas=>{
-    const link = document.createElement('a');
-    link.href = canvas.toDataURL('image/png');
-    link.download = 'Hari_Diwali_Wish.png';
-    link.click();
-  });
+    const clone = wishPreview.cloneNode(true);
+    clone.style.width = '700px';
+    clone.style.maxWidth = '700px';
+    clone.style.padding = '50px 40px';
+    clone.style.boxShadow = '0 10px 30px rgba(0,0,0,0.15)';
+    clone.style.position = 'absolute';
+    clone.style.top = '-9999px';
+    clone.style.backgroundColor = '#fff';
+    
+    document.body.appendChild(clone);
+
+    html2canvas(clone, {
+        scale: 3,
+        useCORS: true,
+        backgroundColor: '#fff',
+        scrollY: -window.scrollY
+    }).then(canvas => {
+        const link = document.createElement('a');
+        link.href = canvas.toDataURL('image/png');
+        link.download = 'Hari_Diwali_Wish.png';
+        link.click();
+        document.body.removeChild(clone);
+    }).catch(err => {
+        console.error("Error generating image:", err);
+        alert("Sorry, failed to generate the image.");
+    });
 });
 </script>
 </body>
