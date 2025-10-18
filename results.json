@@ -3,6 +3,7 @@
     "roll": "101",
     "name": "Rahul Kumar",
     "class": "10",
+    "section": "A",
     "dob": "2010-05-12",
     "exams": [
       {
@@ -10,7 +11,10 @@
         "subjects": [
           {"name": "Mathematics", "marks": 95, "total": 100, "result": "Pass"},
           {"name": "Science", "marks": 88, "total": 100, "result": "Pass"},
-          {"name": "English", "marks": 90, "total": 100, "result": "Pass"}
+          {"name": "English", "marks": 90, "total": 100, "result": "Pass"},
+          {"name": "History", "marks": 80, "total": 100, "result": "Pass"},
+          {"name": "Geography", "marks": 85, "total": 100, "result": "Pass"},
+          {"name": "Computer", "marks": 92, "total": 100, "result": "Pass"}
         ]
       },
       {
@@ -18,7 +22,10 @@
         "subjects": [
           {"name": "Mathematics", "marks": 92, "total": 100, "result": "Pass"},
           {"name": "Science", "marks": 85, "total": 100, "result": "Pass"},
-          {"name": "English", "marks": 87, "total": 100, "result": "Pass"}
+          {"name": "English", "marks": 87, "total": 100, "result": "Pass"},
+          {"name": "History", "marks": 83, "total": 100, "result": "Pass"},
+          {"name": "Geography", "marks": 88, "total": 100, "result": "Pass"},
+          {"name": "Computer", "marks": 90, "total": 100, "result": "Pass"}
         ]
       }
     ]
@@ -27,6 +34,7 @@
     "roll": "102",
     "name": "Anjali Reddy",
     "class": "9",
+    "section": "B",
     "dob": "2010-08-20",
     "exams": [
       {
@@ -34,7 +42,42 @@
         "subjects": [
           {"name": "Mathematics", "marks": 78, "total": 100, "result": "Pass"},
           {"name": "Science", "marks": 85, "total": 100, "result": "Pass"},
-          {"name": "English", "marks": 82, "total": 100, "result": "Pass"}
+          {"name": "English", "marks": 82, "total": 100, "result": "Pass"},
+          {"name": "History", "marks": 79, "total": 100, "result": "Pass"},
+          {"name": "Geography", "marks": 81, "total": 100, "result": "Pass"},
+          {"name": "Computer", "marks": 88, "total": 100, "result": "Pass"}
+        ]
+      },
+      {
+        "examType": "Final",
+        "subjects": [
+          {"name": "Mathematics", "marks": 80, "total": 100, "result": "Pass"},
+          {"name": "Science", "marks": 83, "total": 100, "result": "Pass"},
+          {"name": "English", "marks": 85, "total": 100, "result": "Pass"},
+          {"name": "History", "marks": 82, "total": 100, "result": "Pass"},
+          {"name": "Geography", "marks": 84, "total": 100, "result": "Pass"},
+          {"name": "Computer", "marks": 90, "total": 100, "result": "Pass"}
+        ]
+      }
+    ]
+  },
+  {
+    "roll": "103",
+    "name": "Vikram Singh",
+    "class": "10",
+    "section": "B",
+    "dob": "2010-06-05",
+    "exams": [
+      {
+        "examType": "Midterm",
+        "subjects": [
+          {"name": "Mathematics", "marks": 85, "total": 100, "result": "Pass"},
+          {"name": "Science", "marks": 90, "total": 100, "result": "Pass"},
+          {"name": "English", "marks": 78, "total": 100, "result": "Pass"},
+          {"name": "History", "marks": 88, "total": 100, "result": "Pass"},
+          {"name": "Geography", "marks": 82, "total": 100, "result": "Pass"},
+          {"name": "Computer", "marks": 95, "total": 100, "result": "Pass"},
+          {"name": "Art", "marks": 92, "total": 100, "result": "Pass"}
         ]
       }
     ]
