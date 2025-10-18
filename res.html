@@ -41,7 +41,7 @@ h1,h2,h3,h4,h5 { font-family:'Fredoka One', cursive; margin:0; }
 .subject-card.fail { background:#dc3545; }
 .overall-result { background:#ffe66d; padding:15px; border-radius:12px; text-align:center; font-weight:600; font-size:1.1rem; margin-top:15px; color:#2c3e50; }
 
-/* PDF Content */
+/* PDF Content - Image-free */
 #pdf-content {
   width: 100%;
   max-width: 800px;
@@ -144,6 +144,7 @@ footer { background: linear-gradient(90deg,#0f2027,#2c5364); color:#fff; text-al
 <script>
 let studentResults = [];
 
+// Example JSON fetch (replace with your actual results.json)
 fetch('results.json')
   .then(res => res.json())
   .then(data => studentResults = data)
@@ -177,7 +178,6 @@ document.getElementById('search-btn').addEventListener('click', function() {
   let totalMarks = 0, obtainedMarks = 0;
   let cardsHTML = `<div class="result-card" id="printable-result">
     <div id="pdf-content">
-      <img src="https://harietechnoschool.com/LOGO.png" alt="School Logo" style="height:80px; margin-bottom:15px;">
       <h4>${student.name} (Roll: ${student.roll}) - ${examData.examType}</h4>`;
 
   examData.subjects.forEach(sub => {
@@ -210,32 +210,17 @@ document.getElementById('search-btn').addEventListener('click', function() {
   // PDF Download
   document.getElementById('download-btn').addEventListener('click', function(){
     const element = document.getElementById('pdf-content');
-    if (!element) return;
+    const filename = `${student.name.replace(/\s+/g,'_')}_${student.roll}_${examData.examType.replace(/\s+/g,'_')}.pdf`;
 
-    const images = element.querySelectorAll('img');
-    const promises = [];
-    images.forEach(img => {
-        if (!img.complete) {
-            promises.push(new Promise(resolve => { img.onload = img.onerror = resolve; }));
-        }
-    });
-
-    Promise.all(promises).then(() => {
-      setTimeout(() => {
-        const name = student.name.replace(/\s+/g,'_');
-        const rollNum = student.roll;
-        const examType = examData.examType.replace(/\s+/g,'_');
-        const filename = `${name}_${rollNum}_${examType}.pdf`;
-
-        html2pdf().set({
-            margin: 10,
-            filename: filename,
-            image: { type: 'jpeg', quality: 0.98 },
-            html2canvas: { scale: 2, backgroundColor: '#fff' },
-            jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
-        }).from(element).save();
-      }, 300);
-    });
+    setTimeout(() => {
+      html2pdf().set({
+        margin: 10,
+        filename: filename,
+        image: { type: 'jpeg', quality: 0.98 },
+        html2canvas: { scale: 2, backgroundColor: '#fff' },
+        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+      }).from(element).save();
+    }, 300); // short delay ensures content is fully rendered
   });
 });
 </script>
