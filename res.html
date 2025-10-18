@@ -11,7 +11,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&family=Fredoka+One&display=swap" rel="stylesheet">
 
 <style>
-:root { --pink:#ff6b6b; --yellow:#ffe66d; --blue:#0099FF; --lightblue:#e7f5ff; }
+:root { --pink:#ff6b6b; --yellow:#ffe66d; --blue:#0099FF; }
 body { font-family:'Roboto', sans-serif; background:#f8f9fa; color:#2c3e50; margin:0; }
 h1,h2,h3,h4,h5 { font-family:'Fredoka One', cursive; margin:0; }
 .navbar { background: linear-gradient(90deg,#2c5364,#203a43,#0f2027); }
@@ -20,7 +20,7 @@ h1,h2,h3,h4,h5 { font-family:'Fredoka One', cursive; margin:0; }
 .navbar-brand:hover img { transform: scale(1.1); }
 .navbar-nav .nav-link { color:#fff; font-weight:500; }
 .navbar-nav .nav-link:hover, .navbar-nav .nav-link.active { color:var(--yellow); }
-.section-title { text-align:center; margin-bottom:30px; color:var(--pink); }
+.section-title { text-align:center; margin-bottom:30px; color:var(--pink); font-size:2rem; }
 
 /* Search Card */
 #search-card { max-width:950px; margin:20px auto; padding:30px; border-radius:20px; background:#fff; box-shadow:0 10px 30px rgba(0,0,0,0.15); }
@@ -31,9 +31,8 @@ h1,h2,h3,h4,h5 { font-family:'Fredoka One', cursive; margin:0; }
 #filters button:hover { background:#0077cc; }
 
 /* Result Cards */
-.result-card-container { max-width:900px; margin:20px auto; }
-.result-card { background:#fff; border-radius:15px; padding:20px; margin-bottom:20px; }
-.result-card h4 { color:var(--blue); margin-bottom:15px; text-align:center; }
+.result-card-container { max-width:450px; margin:20px auto; }
+.result-card { background:#fff; border-radius:15px; padding:20px; margin-bottom:20px; box-shadow:0 6px 20px rgba(0,0,0,0.1); }
 .result-card img.logo { height:80px; display:block; margin:0 auto 15px auto; }
 
 /* Subjects Table */
@@ -48,13 +47,15 @@ h1,h2,h3,h4,h5 { font-family:'Fredoka One', cursive; margin:0; }
 /* Image Content */
 #image-content {
   width: 100%;
-  max-width: 720px;
+  max-width: 450px; 
+  height: 800px; /* WhatsApp-story-friendly */
   margin: auto;
   padding: 20px;
   background: #fff;
   display: block;
   border-radius:15px;
   box-shadow:0 6px 20px rgba(0,0,0,0.1);
+  overflow: hidden;
 }
 
 /* Info Table */
@@ -105,8 +106,8 @@ footer { background: linear-gradient(90deg,#0f2027,#2c5364); color:#fff; text-al
 </nav>
 
 <!-- Page Title -->
-<section class="py-5 bg-light">
-  <div class="container text-center">
+<section class="py-5 bg-light text-center">
+  <div class="container">
     <h2 class="section-title">Check Your Result</h2>
   </div>
 </section>
@@ -157,34 +158,30 @@ footer { background: linear-gradient(90deg,#0f2027,#2c5364); color:#fff; text-al
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
 <script>
 let studentResults = [];
-const logoBase64 = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMgAAADICAYAAACtWK6eAAAA..."; // Replace full base64
+const logoBase64 = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMgAAADICAYAAACtWK6eAAAA..."; // full base64 logo
 
 // Fetch results.json dynamically
 fetch('results.json')
   .then(res => res.json())
   .then(data => {
     studentResults = data;
-    const classes = new Set();
-    const exams = new Set();
-    studentResults.forEach(s => {
-      classes.add(s.class);
-      s.exams.forEach(e => exams.add(e.examType));
-    });
-
-    // Populate Class Select
+    // Populate classes dynamically
+    const classSet = new Set(studentResults.map(s => s.class));
     const classSelect = document.getElementById('class-select');
-    classes.forEach(c => {
+    classSet.forEach(c => {
       const option = document.createElement('option');
       option.value = c;
-      option.textContent = c;
+      option.textContent = "Class " + c;
       classSelect.appendChild(option);
     });
-
-    // Populate Exam Select
+    // Populate exams dynamically
+    const examSet = new Set();
+    studentResults.forEach(s => s.exams.forEach(e => examSet.add(e.examType)));
     const examSelect = document.getElementById('exam-select');
-    exams.forEach(e => {
+    examSet.forEach(e => {
       const option = document.createElement('option');
       option.value = e;
       option.textContent = e;
@@ -268,24 +265,11 @@ document.getElementById('search-btn').addEventListener('click', function() {
 
   document.getElementById('download-btn').onclick = function() {
     const element = document.getElementById('image-content');
-    const targetWidth = 1080;
-    const targetHeight = 1920;
-    const scale = Math.min(targetWidth / element.offsetWidth, targetHeight / element.offsetHeight);
-
-    html2canvas(element, { scale: scale, useCORS: true, backgroundColor: "#fff" }).then(canvas => {
-      const finalCanvas = document.createElement('canvas');
-      finalCanvas.width = targetWidth;
-      finalCanvas.height = targetHeight;
-      const ctx = finalCanvas.getContext('2d');
-      ctx.fillStyle = "#fff";
-      ctx.fillRect(0, 0, targetWidth, targetHeight);
-      const xOffset = (targetWidth - canvas.width) / 2;
-      const yOffset = (targetHeight - canvas.height) / 2;
-      ctx.drawImage(canvas, xOffset, yOffset, canvas.width, canvas.height);
-
+    const filename = `${student.name.replace(/\s+/g,'_')}_${student.roll}_${examData.examType.replace(/\s+/g,'_')}.png`;
+    html2canvas(element, { scale: 3 }).then(canvas => {
       const link = document.createElement('a');
-      link.href = finalCanvas.toDataURL("image/png");
-      link.download = `${student.name.replace(/\s+/g,'_')}_${student.roll}_${examData.examType.replace(/\s+/g,'_')}.png`;
+      link.href = canvas.toDataURL("image/png");
+      link.download = filename;
       link.click();
     });
   };
