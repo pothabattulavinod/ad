@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Personal Loan Agreement</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 20px;
+            color: #333;
+        }
+        h1, h2 {
+            color: #0056b3;
+        }
+        .section {
+            margin-bottom: 20px;
+        }
+        label {
+            font-weight: bold;
+        }
+        input, textarea {
+            width: 100%;
+            padding: 8px;
+            margin: 5px 0 15px 0;
+            box-sizing: border-box;
+        }
+        .signature {
+            margin-top: 30px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Personal Loan Agreement</h1>
+    <p>This Loan Agreement is made on <input type="date" id="loanDate">, between:</p>
+
+    <div class="section">
+        <h2>Lender Details</h2>
+        <label>Name:</label>
+        <input type="text" id="lenderName" placeholder="Enter Lender Name">
+        <label>Address:</label>
+        <textarea id="lenderAddress" placeholder="Enter Lender Address"></textarea>
+        <label>Aadhaar/PAN:</label>
+        <input type="text" id="lenderID" placeholder="Enter Aadhaar/PAN">
+        <label>Contact Number:</label>
+        <input type="text" id="lenderContact" placeholder="Enter Contact Number">
+    </div>
+
+    <div class="section">
+        <h2>Borrower Details</h2>
+        <label>Name:</label>
+        <input type="text" id="borrowerName" placeholder="Enter Borrower Name">
+        <label>Address:</label>
+        <textarea id="borrowerAddress" placeholder="Enter Borrower Address"></textarea>
+        <label>Aadhaar/PAN:</label>
+        <input type="text" id="borrowerID" placeholder="Enter Aadhaar/PAN">
+        <label>Contact Number:</label>
+        <input type="text" id="borrowerContact" placeholder="Enter Contact Number">
+    </div>
+
+    <div class="section">
+        <h2>Loan Details</h2>
+        <label>Loan Amount (₹):</label>
+        <input type="number" id="loanAmount" placeholder="Enter Amount">
+        <label>Repayment Schedule / Due Date:</label>
+        <input type="text" id="repaymentSchedule" placeholder="e.g., 2 installments by DD/MM/YYYY">
+        <label>Interest Rate (if any):</label>
+        <input type="text" id="interestRate" placeholder="e.g., 2% per month">
+        <label>Purpose of Loan:</label>
+        <textarea id="loanPurpose" placeholder="e.g., Educational expenses, emergency needs"></textarea>
+    </div>
+
+    <div class="section">
+        <h2>Terms & Conditions</h2>
+        <textarea readonly rows="10">
+1. The borrower agrees to repay the loan as per the schedule mentioned above.
+2. Interest, if applicable, will be charged at the agreed rate.
+3. In case of default, the lender may send reminders and initiate legal action.
+4. Borrower details and loan information will be kept confidential.
+5. This agreement is governed by the laws of India.
+        </textarea>
+    </div>
+
+    <div class="signature">
+        <p><strong>Lender Signature:</strong> ___________________</p>
+        <p><strong>Borrower Signature:</strong> ___________________</p>
+        <p><strong>Witness (optional):</strong> ___________________</p>
+    </div>
+
+</body>
+</html>
