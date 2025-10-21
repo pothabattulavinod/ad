@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Loan Management Kit - Individual PDFs</title>
+<style>
+    body { font-family: Arial, sans-serif; margin: 20px; color: #333; }
+    h1, h2 { color: #0056b3; }
+    label { font-weight: bold; }
+    input, textarea, select { width: 100%; padding: 8px; margin: 5px 0 15px 0; box-sizing: border-box; }
+    .section { margin-bottom: 30px; padding: 20px; border: 1px solid #ccc; border-radius: 5px; }
+    .signature { margin-top: 20px; }
+    button { padding: 10px 20px; margin: 5px 0; background-color: #2E8B57; color: white; border: none; cursor: pointer; font-size: 16px; }
+    button:hover { background-color: #246b45; }
+</style>
+</head>
+<body>
+
+<h1>Loan Management Kit - Generate PDFs</h1>
+<p>Fill the section below and click "Generate PDF" for that specific document.</p>
+
+<!-- Include jsPDF Library -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+<!-- Loan Agreement -->
+<div class="section" id="loanAgreementSection">
+    <h2>Loan Agreement</h2>
+    <label>Borrower Name:</label>
+    <input type="text" id="loanBorrower">
+    <label>Loan Amount (₹):</label>
+    <input type="number" id="loanAmount">
+    <label>Repayment Schedule:</label>
+    <input type="text" id="loanSchedule">
+    <label>Interest Rate (if any):</label>
+    <input type="text" id="loanInterest">
+    <label>Purpose of Loan:</label>
+    <textarea id="loanPurpose"></textarea>
+    <button onclick="generateLoanAgreementPDF()">Generate Loan Agreement PDF</button>
+</div>
+
+<!-- KYC Form -->
+<div class="section" id="kycSection">
+    <h2>KYC / ID Proof</h2>
+    <label>Borrower Name:</label>
+    <input type="text" id="kycBorrower">
+    <label>ID Type:</label>
+    <select id="kycIDType">
+        <option value="Aadhaar">Aadhaar</option>
+        <option value="PAN">PAN</option>
+        <option value="Passport">Passport</option>
+        <option value="Voter ID">Voter ID</option>
+    </select>
+    <label>ID Number:</label>
+    <input type="text" id="kycIDNumber">
+    <label>Address:</label>
+    <textarea id="kycAddress"></textarea>
+    <button onclick="generateKYCPDF()">Generate KYC PDF</button>
+</div>
+
+<!-- Payment Receipt -->
+<div class="section" id="receiptSection">
+    <h2>Payment Receipt</h2>
+    <label>Date of Payment:</label>
+    <input type="date" id="receiptDate">
+    <label>Borrower Name:</label>
+    <input type="text" id="receiptBorrower">
+    <label>Amount Received (₹):</label>
+    <input type="number" id="receiptAmount">
+    <label>Mode of Payment:</label>
+    <input type="text" id="receiptMode">
+    <button onclick="generateReceiptPDF()">Generate Receipt PDF</button>
+</div>
+
+<!-- Legal Notice -->
+<div class="section" id="legalNoticeSection">
+    <h2>Legal Notice</h2>
+    <label>Date:</label>
+    <input type="date" id="noticeDate">
+    <label>Borrower Name:</label>
+    <input type="text" id="noticeBorrower">
+    <label>Outstanding Amount / Details:</label>
+    <textarea id="noticeDetails"></textarea>
+    <button onclick="generateLegalNoticePDF()">Generate Legal Notice PDF</button>
+</div>
+
+<script>
+    const { jsPDF } = window.jspdf;
+
+    function generateLoanAgreementPDF() {
+        const doc = new jsPDF();
+        const borrower = document.getElementById('loanBorrower').value;
+        const amount = document.getElementById('loanAmount').value;
+        const schedule = document.getElementById('loanSchedule').value;
+        const interest = document.getElementById('loanInterest').value;
+        const purpose = document.getElementById('loanPurpose').value;
+
+        doc.setFontSize(16);
+        doc.text("Loan Agreement", 20, 20);
+        doc.setFontSize(12);
+        doc.text(`Borrower Name: ${borrower}`, 20, 40);
+        doc.text(`Loan Amount (₹): ${amount}`, 20, 50);
+        doc.text(`Repayment Schedule: ${schedule}`, 20, 60);
+        doc.text(`Interest Rate: ${interest}`, 20, 70);
+        doc.text(`Purpose of Loan: ${purpose}`, 20, 80);
+        doc.text("Terms & Conditions:", 20, 100);
+        doc.text("1. Borrower agrees to repay as per schedule.", 25, 110);
+        doc.text("2. Interest charged if applicable.", 25, 120);
+        doc.text("3. Legal action may be taken in case of default.", 25, 130);
+        doc.text("4. Governed by laws of India.", 25, 140);
+
+        doc.save(`Loan_Agreement_${borrower}.pdf`);
+    }
+
+    function generateKYCPDF() {
+        const doc = new jsPDF();
+        const borrower = document.getElementById('kycBorrower').value;
+        const idType = document.getElementById('kycIDType').value;
+        const idNumber = document.getElementById('kycIDNumber').value;
+        const address = document.getElementById('kycAddress').value;
+
+        doc.setFontSize(16);
+        doc.text("KYC / ID Proof", 20, 20);
+        doc.setFontSize(12);
+        doc.text(`Borrower Name: ${borrower}`, 20, 40);
+        doc.text(`ID Type: ${idType}`, 20, 50);
+        doc.text(`ID Number: ${idNumber}`, 20, 60);
+        doc.text(`Address: ${address}`, 20, 70);
+
+        doc.save(`KYC_${borrower}.pdf`);
+    }
+
+    function generateReceiptPDF() {
+        const doc = new jsPDF();
+        const date = document.getElementById('receiptDate').value;
+        const borrower = document.getElementById('receiptBorrower').value;
+        const amount = document.getElementById('receiptAmount').value;
+        const mode = document.getElementById('receiptMode').value;
+
+        doc.setFontSize(16);
+        doc.text("Payment Receipt", 20, 20);
+        doc.setFontSize(12);
+        doc.text(`Date: ${date}`, 20, 40);
+        doc.text(`Borrower Name: ${borrower}`, 20, 50);
+        doc.text(`Amount Received (₹): ${amount}`, 20, 60);
+        doc.text(`Mode of Payment: ${mode}`, 20, 70);
+
+        doc.save(`Payment_Receipt_${borrower}.pdf`);
+    }
+
+    function generateLegalNoticePDF() {
+        const doc = new jsPDF();
+        const date = document.getElementById('noticeDate').value;
+        const borrower = document.getElementById('noticeBorrower').value;
+        const details = document.getElementById('noticeDetails').value;
+
+        doc.setFontSize(16);
+        doc.text("Legal Notice", 20, 20);
+        doc.setFontSize(12);
+        doc.text(`Date: ${date}`, 20, 40);
+        doc.text(`Borrower Name: ${borrower}`, 20, 50);
+        doc.text("Outstanding Details:", 20, 60);
+        doc.text(details, 20, 70);
+
+        doc.save(`Legal_Notice_${borrower}.pdf`);
+    }
+</script>
+
+</body>
+</html>
