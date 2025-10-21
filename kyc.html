@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KYC / ID Proof Form</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 20px;
+            color: #333;
+        }
+        h1, h2 {
+            color: #0056b3;
+        }
+        label {
+            font-weight: bold;
+        }
+        input, textarea, select {
+            width: 100%;
+            padding: 8px;
+            margin: 5px 0 15px 0;
+            box-sizing: border-box;
+        }
+        .section {
+            margin-bottom: 20px;
+        }
+        .signature {
+            margin-top: 30px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>KYC / ID Proof Form</h1>
+    <p>Please fill out the form accurately for loan processing and record purposes.</p>
+
+    <div class="section">
+        <h2>Borrower Details</h2>
+        <label>Full Name:</label>
+        <input type="text" placeholder="Enter full name">
+        <label>Date of Birth:</label>
+        <input type="date">
+        <label>Contact Number:</label>
+        <input type="text" placeholder="Enter phone number">
+        <label>Email (optional):</label>
+        <input type="email" placeholder="Enter email address">
+    </div>
+
+    <div class="section">
+        <h2>Address</h2>
+        <label>Current Address:</label>
+        <textarea placeholder="Enter full address"></textarea>
+        <label>Permanent Address (if different):</label>
+        <textarea placeholder="Enter permanent address"></textarea>
+    </div>
+
+    <div class="section">
+        <h2>ID Proof</h2>
+        <label>Type of ID:</label>
+        <select>
+            <option value="aadhaar">Aadhaar Card</option>
+            <option value="pan">PAN Card</option>
+            <option value="passport">Passport</option>
+            <option value="voter">Voter ID</option>
+        </select>
+        <label>ID Number:</label>
+        <input type="text" placeholder="Enter ID number">
+        <label>Upload ID Copy (optional):</label>
+        <input type="file" accept=".jpg,.jpeg,.png,.pdf">
+    </div>
+
+    <div class="section">
+        <h2>Parent / Guardian Details (Optional for Students / Minors)</h2>
+        <label>Name:</label>
+        <input type="text" placeholder="Enter name">
+        <label>Contact Number:</label>
+        <input type="text" placeholder="Enter phone number">
+        <label>ID Proof Type:</label>
+        <select>
+            <option value="aadhaar">Aadhaar Card</option>
+            <option value="pan">PAN Card</option>
+            <option value="passport">Passport</option>
+            <option value="voter">Voter ID</option>
+        </select>
+        <label>ID Number:</label>
+        <input type="text" placeholder="Enter ID number">
+    </div>
+
+    <div class="signature">
+        <p><strong>Borrower Signature:</strong> ___________________</p>
+        <p><strong>Date:</strong> ___________________</p>
+        <p><strong>Witness / Lender Signature (optional):</strong> ___________________</p>
+    </div>
+
+</body>
+</html>
