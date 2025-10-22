@@ -9,7 +9,7 @@
       <description>JW Player XML example using HLS (.m3u8) and a VAST pre-roll ad</description>
 
       <!-- HLS stream -->
-      <media:content url="https://pothabattulavinod.github.io/pay/thep.m3u8"
+      <media:content url="https://raw.githubusercontent.com/pothabattulavinod/d/refs/heads/main/z/video1.m3u8"
                      type="application/vnd.apple.mpegurl" />
 
       <!-- VAST ad schedule -->
