@@ -1,22 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<VAST version="3.0">
-  <Ad id="1">
-    <InLine>
-      <AdSystem version="1.0">CustomHLS</AdSystem>
-      <AdTitle>Pre-roll Video</AdTitle>
-      <Impression><![CDATA[https://example.com/impression]]></Impression>
-      <Creatives>
-        <Creative sequence="1" id="1">
-          <Linear>
-            <Duration>00:00:30</Duration>
-            <MediaFiles>
-              <MediaFile delivery="progressive" type="application/x-mpegURL" width="1280" height="720">
-                <![CDATA[https://pothabattulavinod.github.io/pay/thep.m3u8]]>
-              </MediaFile>
-            </MediaFiles>
-          </Linear>
-        </Creative>
-      </Creatives>
-    </InLine>
-  </Ad>
-</VAST>
+<rss version="2.0"
+     xmlns:jwplayer="http://developer.jwplayer.com"
+     xmlns:media="http://search.yahoo.com/mrss/">
+  <channel>
+    <title>TheP HLS Video with VAST Ad</title>
+    <item>
+      <title>TheP HLS Stream</title>
+      <description>JW Player XML example using HLS (.m3u8) and a VAST pre-roll ad</description>
+
+      <!-- HLS stream -->
+      <media:content url="https://pothabattulavinod.github.io/pay/thep.m3u8"
+                     type="application/vnd.apple.mpegurl" />
+
+      <!-- VAST ad schedule -->
+      <jwplayer:adSchedule>
+        <jwplayer:adBreak time="pre">
+          <!-- Public test VAST ad URL -->
+          <jwplayer:vastAdTag url="https://playertest.longtailvideo.com/pre-roll-vast.xml" />
+        </jwplayer:adBreak>
+      </jwplayer:adSchedule>
+
+    </item>
+  </channel>
+</rss>
