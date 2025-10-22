@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Protected HLS Player</title>
+  <style>
+    body { font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial; background:#111; color:#eee; display:flex; align-items:center; justify-content:center; height:100vh; margin:0; }
+    #wrap { width:90%; max-width:900px; text-align:center; }
+    #message { margin-bottom:1rem; }
+    video { width:100%; height:auto; background:black; outline: 2px solid #333; border-radius:8px; }
+    .hidden { display:none; }
+    input[type="password"] { padding:.6rem; font-size:1rem; width:70%; max-width:400px; border-radius:6px; border:1px solid #444; background:#0d0d0d; color:#eee; }
+    button { padding:.6rem .9rem; font-size:1rem; margin-left:.5rem; border-radius:6px; border:none; cursor:pointer; background:#1e90ff; color:white; }
+    small.note { color:#bbb; display:block; margin-top:.6rem; }
+  </style>
+  <!-- hls.js from CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/hls.js@1.5.6/dist/hls.min.js"></script>
+</head>
+<body>
+  <div id="wrap">
+    <h2>Protected Player</h2>
+    <div id="message">Enter password to unlock the stream.</div>
+    <div id="auth">
+      <input id="pwd" type="password" placeholder="Password" autocomplete="current-password" />
+      <button id="unlock">Unlock</button>
+      <div><small class="note" id="status"></small></div>
+    </div>
+
+    <div id="playerArea" class="hidden">
+      <video id="video" controls playsinline></video>
+      <div><small class="note">If playback fails, your browser may not support HLS natively; this page uses hls.js for compatibility.</small></div>
+    </div>
+
+    <div id="denied" class="hidden">
+      <p>Access denied.</p>
+    </div>
+  </div>
+
+  <script>
+  (function () {
+    // ---- CONFIG (from user) ----
+    const PLAYLIST = "https://pothabattulavinod.github.io/pay/thep.m3u8";
+    const SALT = "somesalt";
+    const ALLOWED_DOMAIN = "https://yott.netlify.app/"; // normalize below
+    const EXPECTED_HASH = "11f120a63d86541f6d386405ac03dc94c334345c8a16aa4eddeb82327e9b3aa6";
+    // -----------------------------
+
+    // Normalize allowed origin (strip trailing slash)
+    function normalizeOrigin(url) {
+      try {
+        const u = new URL(url);
+        return u.origin;
+      } catch (e) {
+        // fallback: strip trailing slash if present
+        return url.replace(/\/$/, "");
+      }
+    }
+    const allowedOrigin = normalizeOrigin(ALLOWED_DOMAIN);
+
+    const statusEl = document.getElementById('status');
+    const messageEl = document.getElementById('message');
+    const authEl = document.getElementById('auth');
+    const playerArea = document.getElementById('playerArea');
+    const deniedEl = document.getElementById('denied');
+    const video = document.getElementById('video');
+    const pwdInput = document.getElementById('pwd');
+    const unlockBtn = document.getElementById('unlock');
+
+    // Check domain restriction:
+    function isAllowedDomain() {
+      try {
+        // Compare current origin
+        const currentOrigin = window.location.origin;
+        if (currentOrigin === allowedOrigin) return true;
+        // Also allow if document.referrer starts with allowedOrigin (opened from allowed domain)
+        if (document.referrer && document.referrer.startsWith(allowedOrigin)) return true;
+        // If allowedOrigin is empty string, allow any origin
+        if (!allowedOrigin) return true;
+        return false;
+      } catch (e) {
+        return false;
+      }
+    }
+
+    if (!isAllowedDomain()) {
+      messageEl.textContent = "This player may only be used from the allowed domain.";
+      authEl.classList.add('hidden');
+      deniedEl.classList.remove('hidden');
+      return;
+    }
+
+    // Utility: compute SHA-256 hex of a string
+    async function sha256Hex(str) {
+      const enc = new TextEncoder();
+      const data = enc.encode(str);
+      const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+      const hashArray = Array.from(new Uint8Array(hashBuffer));
+      return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+    }
+
+    // Try validation strategies (password+salt and salt+password)
+    async function checkPassword(password) {
+      const try1 = await sha256Hex(password + SALT);
+      if (try1 === EXPECTED_HASH) return true;
+      const try2 = await sha256Hex(SALT + password);
+      if (try2 === EXPECTED_HASH) return true;
+      return false;
+    }
+
+    // Initialize HLS playback
+    function initPlayer() {
+      messageEl.textContent = "Unlocked — initializing player...";
+      authEl.classList.add('hidden');
+      playerArea.classList.remove('hidden');
+
+      const src = PLAYLIST;
+      // If browser supports HLS natively (Safari), just set src
+      if (video.canPlayType('application/vnd.apple.mpegurl')) {
+        video.src = src;
+        video.addEventListener('loadedmetadata', () => video.play().catch(()=>{}));
+        return;
+      }
+      // Otherwise, use hls.js
+      if (window.Hls) {
+        const hls = new Hls();
+        hls.loadSource(src);
+        hls.attachMedia(video);
+        hls.on(Hls.Events.MANIFEST_PARSED, function() {
+          video.play().catch(()=>{});
+        });
+        hls.on(Hls.Events.ERROR, function (event, data) {
+          console.error("hls.js error", event, data);
+          statusEl.textContent = "Playback error: " + (data?.details || data?.type || "unknown");
+        });
+      } else {
+        statusEl.textContent = "HLS not supported in this browser and hls.js not available.";
+      }
+    }
+
+    unlockBtn.addEventListener('click', async () => {
+      statusEl.textContent = "Checking...";
+      const pwd = pwdInput.value || "";
+      try {
+        const ok = await checkPassword(pwd);
+        if (ok) {
+          initPlayer();
+        } else {
+          statusEl.textContent = "Incorrect password.";
+        }
+      } catch (e) {
+        console.error(e);
+        statusEl.textContent = "Error while checking password.";
+      }
+    });
+
+    // allow pressing Enter in the password field
+    pwdInput.addEventListener('keydown', (ev) => {
+      if (ev.key === 'Enter') {
+        unlockBtn.click();
+      }
+    });
+
+    // helpful hint (do not reveal password)
+    statusEl.textContent = "";
+  })();
+  </script>
+</body>
+</html>
