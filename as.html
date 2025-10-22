@@ -1,0 +1,207 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Encrypted HLS Player (PBKDF2 + AES-GCM)</title>
+  <style>
+    body { font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial; background:#0b0b0b; color:#eaeaea;
+           display:flex; align-items:center; justify-content:center; height:100vh; margin:0; }
+    #wrap { width:92%; max-width:980px; text-align:center; }
+    video { width:100%; height:auto; background:black; border-radius:8px; outline:2px solid #222; }
+    input, button { font-size:1rem; padding:.6rem; border-radius:6px; border:1px solid #333; }
+    input { width:60%; max-width:420px; background:#0d0d0d; color:#eee; }
+    button { margin-left:.6rem; background:#1e90ff; color:#fff; border:none; cursor:pointer; }
+    .hidden { display:none; }
+    small.note { color:#bbb; display:block; margin-top:.6rem; }
+  </style>
+  <!-- hls.js -->
+  <script src="https://cdn.jsdelivr.net/npm/hls.js@1.5.6/dist/hls.min.js"></script>
+</head>
+<body>
+  <div id="wrap">
+    <h2>Encrypted Player</h2>
+    <div id="message">Enter password to decrypt and play the stream.</div>
+
+    <div id="auth">
+      <input id="pwd" type="password" placeholder="Password" autocomplete="current-password" />
+      <button id="unlock">Unlock</button>
+      <div><small class="note" id="status"></small></div>
+    </div>
+
+    <div id="playerArea" class="hidden">
+      <video id="video" controls playsinline></video>
+      <div><small class="note">If playback fails, check browser HLS support or console for errors.</small></div>
+    </div>
+
+    <div id="denied" class="hidden">
+      <p>Access denied or wrong origin.</p>
+    </div>
+  </div>
+
+  <script>
+  (function () {
+    // ---------- CONFIG ----------
+    const ALLOWED_ORIGIN = "https://pothabattulavinod.github.io"; // allowed origin
+    // Embedded encrypted payload (base64 fields) - replace with your own if desired
+    const ENCRYPTED_PAYLOAD = {
+      kdf: "pbkdf2",
+      kdf_hash: "sha256",
+      iterations: 200000,
+      salt_b64: "nJexezKmsvo6rBw73qIYAw==",
+      iv_b64: "uhmxFNpVfOL5zDR+",
+      ct_b64: "6F68VWB+gnqBKfJKlnj1vc+m6NNFVH+Wj4eenBWC0VU1R0NS0jW5wE/Z/IvGYOOFUeMFhoTV7NUyWwJU0fm33oU="
+    };
+    // ----------------------------
+
+    const statusEl = document.getElementById('status');
+    const messageEl = document.getElementById('message');
+    const authEl = document.getElementById('auth');
+    const playerArea = document.getElementById('playerArea');
+    const deniedEl = document.getElementById('denied');
+    const video = document.getElementById('video');
+    const pwdInput = document.getElementById('pwd');
+    const unlockBtn = document.getElementById('unlock');
+
+    // Normalize origin (strip trailing slash)
+    function normalizeOrigin(url) {
+      try {
+        return (new URL(url)).origin;
+      } catch (e) {
+        return url.replace(/\/$/, "");
+      }
+    }
+    const allowedOrigin = normalizeOrigin(ALLOWED_ORIGIN);
+
+    // Check origin or referrer
+    function isAllowedDomain() {
+      try {
+        const current = window.location.origin;
+        if (current === allowedOrigin) return true;
+        if (document.referrer && document.referrer.startsWith(allowedOrigin)) return true;
+        return false;
+      } catch (e) {
+        return false;
+      }
+    }
+
+    if (!isAllowedDomain()) {
+      messageEl.textContent = "This player may only be used from the allowed domain.";
+      authEl.classList.add('hidden');
+      deniedEl.classList.remove('hidden');
+      return;
+    }
+
+    // UTIL: base64 -> ArrayBuffer
+    function b64ToBuf(b64) {
+      const bin = atob(b64);
+      const len = bin.length;
+      const buf = new Uint8Array(len);
+      for (let i = 0; i < len; i++) buf[i] = bin.charCodeAt(i);
+      return buf.buffer;
+    }
+
+    async function deriveKey(password, salt_b64, iterations) {
+      const enc = new TextEncoder();
+      const pwKey = await crypto.subtle.importKey(
+        "raw",
+        enc.encode(password),
+        { name: "PBKDF2" },
+        false,
+        ["deriveKey"]
+      );
+      const saltBuf = b64ToBuf(salt_b64);
+      const derivedKey = await crypto.subtle.deriveKey(
+        {
+          "name": "PBKDF2",
+          salt: saltBuf,
+          iterations: iterations,
+          hash: "SHA-256"
+        },
+        pwKey,
+        { name: "AES-GCM", length: 256 },
+        false,
+        ["decrypt"]
+      );
+      return derivedKey;
+    }
+
+    async function decryptPayload(password) {
+      try {
+        const p = ENCRYPTED_PAYLOAD;
+        if (p.kdf !== "pbkdf2") throw new Error("Unsupported KDF");
+        const key = await deriveKey(password, p.salt_b64, p.iterations);
+        const iv = b64ToBuf(p.iv_b64);
+        const ciphertext = b64ToBuf(p.ct_b64);
+        const plainBuf = await crypto.subtle.decrypt(
+          { name: "AES-GCM", iv: iv },
+          key,
+          ciphertext
+        );
+        const dec = new TextDecoder();
+        return dec.decode(plainBuf);
+      } catch (e) {
+        console.error("decrypt error:", e);
+        throw e;
+      }
+    }
+
+    // Initialize HLS playback from a playlist URL (may be blob URL or remote URL)
+    function initPlayerWithUrl(url) {
+      authEl.classList.add('hidden');
+      playerArea.classList.remove('hidden');
+      messageEl.textContent = "Unlocked — initializing player...";
+
+      // If browser supports HLS natively
+      if (video.canPlayType('application/vnd.apple.mpegurl')) {
+        video.src = url;
+        video.addEventListener('loadedmetadata', () => video.play().catch(()=>{}));
+        return;
+      }
+
+      // Use hls.js fallback
+      if (window.Hls) {
+        const hls = new Hls();
+        hls.loadSource(url);
+        hls.attachMedia(video);
+        hls.on(Hls.Events.MANIFEST_PARSED, function() {
+          video.play().catch(()=>{});
+        });
+        hls.on(Hls.Events.ERROR, function (event, data) {
+          console.error("hls.js error", event, data);
+          statusEl.textContent = "Playback error: " + (data?.details || data?.type || "unknown");
+        });
+      } else {
+        statusEl.textContent = "HLS not supported in this browser and hls.js not available.";
+      }
+    }
+
+    unlockBtn.addEventListener('click', async () => {
+      statusEl.textContent = "Decrypting...";
+      const pwd = pwdInput.value || "";
+      try {
+        const decrypted = await decryptPayload(pwd);
+        // decrypted is expected to be the playlist URL or the plaintext m3u8 content.
+        // If it's a full URL we will use it directly; if it's a full m3u8 content we will create
+        // a blob and use a blob URL.
+        if (decrypted.trim().startsWith("http://") || decrypted.trim().startsWith("https://")) {
+          initPlayerWithUrl(decrypted.trim());
+        } else {
+          // treat as playlist content; create blob
+          const blob = new Blob([decrypted], { type: "application/vnd.apple.mpegurl" });
+          const blobUrl = URL.createObjectURL(blob);
+          initPlayerWithUrl(blobUrl);
+        }
+      } catch (e) {
+        statusEl.textContent = "Incorrect password or decryption failed.";
+      }
+    });
+
+    pwdInput.addEventListener('keydown', (ev) => {
+      if (ev.key === 'Enter') unlockBtn.click();
+    });
+
+  })();
+  </script>
+</body>
+</html>
