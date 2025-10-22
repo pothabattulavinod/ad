@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>JW Player Ad Test</title>
+  <script src="https://ssl.p.jwpcdn.com/player/v/8.32.0/jwplayer.js"></script>
+  <script>
+    jwplayer.key = 'cLGMn8T20tGvW+0eXPhq4NNmLB57TrscPjd1IyJF84o=';
+  </script>
+</head>
+<body>
+  <div id="player"></div>
+  <script>
+    jwplayer("player").setup({
+      file: "https://pothabattulavinod.github.io/pay/dasara.m3u8",
+      width: "640",
+      height: "360",
+      advertising: {
+        client: "vast",
+        tag: "https://pothabattulavinod.github.io/ad/vid.xml"
+      }
+    });
+  </script>
+</body>
+</html>
