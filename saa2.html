@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<script src="https://ssl.p.jwpcdn.com/player/v/8.32.0/jwplayer.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+<script>
+jwplayer.key = 'cLGMn8T20tGvW+0eXPhq4NNmLB57TrscPjd1IyJF84o=';
+</script>
+<style>
+html,body { height:100%; margin:0; background:#000; }
+#player { width:100%; height:100%; background:#000; position:relative; }
+#pwOverlay { position:absolute; inset:0; display:flex; align-items:center; justify-content:center; z-index:9999; background:linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)); backdrop-filter: blur(4px); }
+#pwBox { width:92%; max-width:420px; background:rgba(18,18,18,0.95); border-radius:10px; padding:18px; text-align:center; box-shadow:0 6px 24px rgba(0,0,0,0.6); color:#eee; font-family:system-ui, -apple-system, "Segoe UI", Roboto, Arial; }
+#pwBox h3 { margin:0 0 10px; color:#ff6347; font-size:18px; }
+#pwInput { width:calc(100% - 110px); padding:10px 12px; border-radius:8px; border:1px solid #333; background:#0d0d0d; color:#eee; font-size:15px; outline:none; }
+#pwBtn { padding:10px 12px; margin-left:8px; border-radius:8px; border:none; background:#1e90ff; color:#fff; cursor:pointer; font-size:15px; }
+#pwMsg { margin-top:10px; color:#d0d0d0; font-size:13px; min-height:18px; }
+#overlayMsg { position:absolute; left:8px; top:8px; z-index:9998; color:#fff; background:rgba(0,0,0,.5); padding:6px 10px; border-radius:6px; font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial; font-size:13px; display:none; }
+.jw-title-primary { font-weight:bold; font-size:1.5em; color:#ff6347 !important; }
+.jwplayer .jw-progress { background-color:#06b6d4 !important; }
+.jwplayer .jw-text-time { color:#ff6347 !important; }
+.jwplayer .jw-button:hover { background:#ff6347 !important; }
+.jw-rightclick .jw-reset { display:none; }
+</style>
+</head>
+<body>
+<div id="player"></div>
+<div id="overlayMsg"></div>
+<div id="pwOverlay" aria-hidden="false">
+  <div id="pwBox" role="dialog" aria-labelledby="pwTitle" aria-describedby="pwHelp">
+    <h3 id="pwTitle">Enter Password to Unlock Stream</h3>
+    <div style="display:flex; align-items:center; justify-content:center;">
+      <input id="pwInput" type="password" autocomplete="current-password" aria-label="Password" placeholder="Password" />
+      <button id="pwBtn" aria-label="Unlock">Unlock</button>
+    </div>
+    <div id="pwMsg" role="status" aria-live="polite"></div>
+  </div>
+</div>
+
+<script>
+(async function() {
+const ENCRYPTED = {
+  kdf:"pbkdf2",
+  kdf_hash:"sha256",
+  iterations:200000,
+  salt_b64:"q48kWv2plyA=",
+  iv_b64:"bG1YQt/Gob9XTohP",
+  ct_b64:"kQm42wBbBWT5QESAFi2M0H+h8KPs68Rfzp/7tCXMG36Xct8P/UdNSD2JRQt8LVzIjinAjQSnPcUJtUPL573Q"
+};
+
+function b64ToBuf(b64) {
+  const bin = atob(b64);
+  const buf = new Uint8Array(bin.length);
+  for(let i=0;i<bin.length;i++) buf[i]=bin.charCodeAt(i);
+  return buf.buffer;
+}
+
+async function deriveKey(password,salt_b64,iterations){
+  const enc=new TextEncoder();
+  const pwKey=await crypto.subtle.importKey("raw",enc.encode(password),{name:"PBKDF2"},false,["deriveKey"]);
+  const saltBuf=b64ToBuf(salt_b64);
+  return crypto.subtle.deriveKey({name:"PBKDF2",salt:saltBuf,iterations:iterations,hash:"SHA-256"},pwKey,{name:"AES-GCM",length:256},false,["decrypt"]);
+}
+
+async function decryptPayload(password){
+  const key=await deriveKey(password,ENCRYPTED.salt_b64,ENCRYPTED.iterations);
+  const iv=b64ToBuf(ENCRYPTED.iv_b64);
+  const ct=b64ToBuf(ENCRYPTED.ct_b64);
+  const buf=await crypto.subtle.decrypt({name:"AES-GCM",iv},key,ct);
+  return new TextDecoder().decode(buf);
+}
+
+const pwOverlay=document.getElementById('pwOverlay');
+const pwInput=document.getElementById('pwInput');
+const pwBtn=document.getElementById('pwBtn');
+const pwMsg=document.getElementById('pwMsg');
+const overlay=document.getElementById('overlayMsg');
+
+function showOverlay(msg,timeout){
+  overlay.textContent=msg;
+  overlay.style.display='block';
+  if(timeout)setTimeout(()=>overlay.style.display='none',timeout);
+}
+
+function pwBoxAnimate(){
+  const box=document.getElementById('pwBox');
+  box.style.transition='transform 0.08s';
+  box.style.transform='translateX(-6px)';
+  setTimeout(()=>{box.style.transform='translateX(6px)';},80);
+  setTimeout(()=>{box.style.transform='translateX(0px)';},160);
+}
+
+async function attemptUnlock(){
+  const pwd=pwInput.value||'';
+  if(!pwd){pwMsg.textContent='Please enter a password.';return;}
+  pwMsg.textContent='Decrypting...';
+  try{
+    const decrypted=await decryptPayload(pwd);
+    pwOverlay.style.display='none';
+    initPlayerWithDecrypted(decrypted);
+    showOverlay('Decryption successful — initializing player...',3000);
+  }catch(e){
+    console.warn('Decrypt failed',e);
+    pwMsg.textContent='Incorrect password or decryption failed.';
+    pwBoxAnimate();
+  }
+}
+
+pwBtn.addEventListener('click',attemptUnlock);
+pwInput.addEventListener('keydown',e=>{if(e.key==='Enter')attemptUnlock();});
+
+async function initPlayerWithDecrypted(decrypted){
+  let sourceUrl=null;
+  if(decrypted.trim().startsWith("http")){ sourceUrl=decrypted.trim(); }
+  else{ sourceUrl=URL.createObjectURL(new Blob([decrypted],{type:"application/vnd.apple.mpegurl"})); }
+
+  const jwp=jwplayer('player');
+  const pageUrl=window.location.href;
+  const playbackKey=`jwplayer-playback-position-${pageUrl}`;
+  const savedPosition=localStorage.getItem(playbackKey);
+
+  // Seek to the saved position if available
+  jwp.setup({
+    aspectratio:"16:9",
+    width:"100%",
+    height:"100%",
+    sources:[{file:sourceUrl,type:"hls",default:true}],
+    tracks:[{file:"https://raw.githubusercontent.com/pothabattulavinod/wp/refs/heads/main/og.vtt",label:"English",kind:"captions",default:true,language:"en"}],
+    primary:"html5",
+    preload:"auto",
+    hlshtml:true,
+    html5:{hlsjsConfig:{liveSyncDuration:3,maxBufferLength:30}},
+    controls:true
+  });
+
+  jwp.on('ready',()=>{
+    if(savedPosition&&!isNaN(savedPosition))jwp.seek(parseFloat(savedPosition));
+
+    // Attempt to add forward button(s) — best-effort (JW internals may vary)
+    try {
+      const playerContainer=document.querySelector('#player');
+      const rewindContainer=playerContainer.querySelector('.jw-display-icon-rewind');
+      if(rewindContainer){
+        const forwardContainer=rewindContainer.cloneNode(true);
+        const forwardDisplayButton=forwardContainer.querySelector('.jw-icon-rewind');
+        forwardDisplayButton.style.transform="scaleX(-1)";
+        forwardDisplayButton.ariaLabel="Forward 10 Seconds";
+        const nextContainer=playerContainer.querySelector('.jw-display-icon-next');
+        if(nextContainer&&nextContainer.parentNode)nextContainer.parentNode.insertBefore(forwardContainer,nextContainer);
+      }
+      const buttonContainer=playerContainer.querySelector('.jw-button-container');
+      if(buttonContainer){
+        const rewindControlBarButton=buttonContainer.querySelector(".jw-icon-rewind");
+        if(rewindControlBarButton){
+          const forwardControlBarButton=rewindControlBarButton.cloneNode(true);
+          forwardControlBarButton.style.transform="scaleX(-1)";
+          forwardControlBarButton.ariaLabel="Forward 10 Seconds";
+          // Add onclick handler
+          forwardControlBarButton.onclick=()=>{jwp.seek(jwp.getPosition()+10);};
+          rewindControlBarButton.parentNode.insertBefore(forwardControlBarButton,rewindControlBarButton.nextElementSibling);
+        }
+        const displayNext=playerContainer.querySelector('.jw-display-icon-next');
+        if(displayNext)displayNext.style.display='none';
+      }
+    } catch(e){console.warn("Icon customization failed:",e);}
+  });
+
+  // Save playback position
+  jwp.on('time',e=>{localStorage.setItem(playbackKey,e.position);});
+  // Clear position when complete
+  jwp.on('complete',()=>{localStorage.removeItem(playbackKey);});
+  // diagnostics
+  if(typeof Hls!=="undefined"){
+    if(Hls.isSupported())console.log("✅ hls.js is supported and running.");
+    else console.log("ℹ️ Falling back to native HLS (Safari/iPhone).");
+  }else{console.log("⚠️ hls.js not loaded, relying on JWPlayer native handling.");}
+}
+
+pwInput.focus();
+})();
+</script>
+</body>
+</html>
