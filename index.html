@@ -1,360 +1,340 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>WILD ROCKER — Hacker Login Console</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>WILD ROCKER — Hacker Login Console</title>
 
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 
-<style>
-:root {
-  --bg:#020204;
-  --neon:#39ff14;
-  --muted:#7f8f7f;
-}
-html,body {
-  height:100%;
-  margin:0;
-  background:var(--bg);
-  font-family:"Courier New", Courier, monospace;
-  color:var(--neon);
-}
+  <style>
+    :root{
+      --bg:#020204;
+      --neon:#39ff14;
+      --muted:#7f8f7f;
+    }
+    html,body{
+      height:100%; margin:0;
+      background:var(--bg);
+      font-family:"Courier New", Courier, monospace;
+      color:var(--neon);
+      overflow-x:hidden; /* prevent mobile cut off */
+    }
 
-/* === Layout === */
-.stage {
-  min-height:100vh;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  position:relative;
-  overflow:hidden;
-  padding:24px;
-}
-.bg-layer { position:absolute; inset:0; z-index:0; pointer-events:none; }
-.bg-gradient {
-  background:
-    radial-gradient(circle at 10% 10%, rgba(57,255,20,0.03), transparent 10%),
-    radial-gradient(circle at 90% 80%, rgba(0,255,120,0.02), transparent 10%),
-    linear-gradient(180deg, rgba(0,0,0,0.0), rgba(0,0,0,0.16));
-  height:100%;
-}
-.scanlines {
-  position:absolute; inset:0; z-index:2;
-  background-image: linear-gradient(rgba(0,0,0,0.04) 50%, rgba(255,255,255,0.0) 50%);
-  background-size: 100% 4px;
-  opacity:0.06;
-}
+    .stage {
+      min-height:100vh;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      position:relative;
+      overflow:hidden;
+      padding:24px;
+      box-sizing:border-box;
+    }
 
-canvas.matrix {
-  position:absolute; inset:0; z-index:1; width:100%; height:100%;
-  opacity:0.9;
-}
+    .bg-layer { position:absolute; inset:0; z-index:0; pointer-events:none; }
+    .bg-gradient {
+      background:
+        radial-gradient(circle at 10% 10%, rgba(57,255,20,0.03), transparent 10%),
+        radial-gradient(circle at 90% 80%, rgba(0,255,120,0.02), transparent 10%),
+        linear-gradient(180deg, rgba(0,0,0,0.0), rgba(0,0,0,0.16));
+      height:100%;
+    }
+    .scanlines {
+      position:absolute; inset:0; z-index:2;
+      background-image: linear-gradient(rgba(0,0,0,0.04) 50%, rgba(255,255,255,0.0) 50%);
+      background-size: 100% 4px;
+      opacity:0.06;
+    }
 
-/* === Card Layout === */
-.card-shell {
-  width:100%;
-  max-width:1100px;
-  display:flex;
-  gap:20px;
-  position:relative;
-  z-index:5;
-  flex-wrap:wrap;
-  justify-content:center;
-}
+    canvas.matrix {
+      position:absolute; inset:0; z-index:1; width:100%; height:100%;
+      opacity:0.9; max-width:100vw;
+    }
 
-/* === Terminal === */
-.terminal {
-  flex:1.2;
-  min-width:340px;
-  background:rgba(0,0,0,0.65);
-  border-radius:12px;
-  padding:18px;
-  border:1px solid rgba(57,255,20,0.1);
-  box-shadow:0 0 25px rgba(57,255,20,0.1);
-  display:flex;
-  flex-direction:column;
-  gap:12px;
-  min-height:360px;
-}
-.wild-rocker {
-  text-align:center;
-  font-size:1.8rem;
-  font-weight:700;
-  color:var(--neon);
-  margin-bottom:12px;
-  text-shadow:0 0 10px rgba(57,255,20,0.4);
-}
-.glitch {
-  position:relative;
-  font-weight:700;
-  color:var(--neon);
-  text-transform:uppercase;
-}
-.glitch::before, .glitch::after {
-  content:attr(data-text);
-  position:absolute;
-  left:0; top:0; width:100%;
-  overflow:hidden;
-  clip:rect(0,9999px,0,0);
-}
-.glitch::before { color:rgba(57,255,20,0.88); text-shadow:-2px 0 rgba(255,0,80,0.1); animation:glitchTop 2.6s infinite linear; }
-.glitch::after { color:rgba(57,255,20,0.62); text-shadow:2px 0 rgba(0,150,255,0.08); animation:glitchBot 3.2s infinite linear; }
+    .card-shell {
+      width:100%;
+      max-width:1100px;
+      display:flex;
+      gap:20px;
+      position:relative;
+      z-index:5;
+      flex-wrap:wrap;
+      justify-content:center;
+      box-sizing:border-box;
+    }
 
-@keyframes glitchTop {
-  0% { clip: rect(0,9999px,0,0); transform:translate(0,0); }
-  10%{ clip: rect(2px,9999px,8px,0); transform:translate(-1px,-1px); }
-  20%{ clip: rect(10px,9999px,28px,0); transform:translate(1px,1px); }
-  100%{ clip: rect(0,9999px,0,0); transform:translate(0,0); }
-}
-@keyframes glitchBot {
-  0% { clip: rect(0,9999px,0,0); transform:translate(0,0); }
-  15%{ clip: rect(6px,9999px,20px,0); transform:translate(1px,1px); }
-  40%{ clip: rect(0,9999px,30px,0); transform:translate(-1px,-1px); }
-  100%{ clip: rect(0,9999px,0,0); transform:translate(0,0); }
-}
+    .terminal {
+      flex:1.2;
+      min-width:360px;
+      background:rgba(0,0,0,0.65);
+      border-radius:12px;
+      padding:18px;
+      border:1px solid rgba(57,255,20,0.1);
+      box-shadow: 0 0 25px rgba(57,255,20,0.1);
+      display:flex;
+      flex-direction:column;
+      gap:12px;
+      min-height:360px;
+      box-sizing:border-box;
+      width:100%;
+    }
 
-.output {
-  flex:1;
-  background:rgba(0,0,0,0.25);
-  padding:12px;
-  border-radius:8px;
-  border:1px solid rgba(57,255,20,0.08);
-  font-size:0.84rem;
-  line-height:1.45;
-  overflow:auto;
-  white-space:pre-wrap;
-}
-.cursor {
-  display:inline-block;
-  width:8px;
-  background:var(--neon);
-  margin-left:4px;
-  animation:blink 900ms steps(1) infinite;
-  vertical-align:bottom;
-  height:1.05em;
-}
-@keyframes blink { 0%,50% { opacity:1 } 51%,100% { opacity:0 } }
+    .wild-rocker {
+      text-align:center;
+      font-size:1.8rem;
+      font-weight:700;
+      color:var(--neon);
+      margin-bottom:12px;
+      text-shadow:0 0 10px rgba(57,255,20,0.4);
+    }
 
-.progress-shell { display:flex; gap:10px; align-items:center; margin-top:6px; }
-.progress-track { flex:1; height:8px; background: rgba(57,255,20,0.06); border-radius:999px; overflow:hidden; }
-.progress-fill { height:100%; width:0%; background: linear-gradient(90deg, rgba(57,255,20,0.28), rgba(0,255,120,0.14)); transition: width 600ms linear; }
+    .glitch {
+      position:relative;
+      font-weight:700;
+      color:var(--neon);
+      text-transform:uppercase;
+    }
+    .glitch::before, .glitch::after {
+      content:attr(data-text);
+      position:absolute; left:0; top:0; width:100%;
+      overflow:hidden;
+      clip:rect(0,9999px,0,0);
+    }
+    .glitch::before { color:rgba(57,255,20,0.88); text-shadow:-2px 0 rgba(255,0,80,0.1); animation:glitchTop 2.6s infinite linear; }
+    .glitch::after { color:rgba(57,255,20,0.62); text-shadow:2px 0 rgba(0,150,255,0.08); animation:glitchBot 3.2s infinite linear; }
 
-/* === Panel === */
-.panel {
-  width:420px;
-  min-width:260px;
-  background:rgba(0,0,0,0.55);
-  border-radius:12px;
-  padding:18px;
-  border:1px solid rgba(57,255,20,0.06);
-  display:flex;
-  flex-direction:column;
-  gap:12px;
-  min-height:360px;
-}
-.form-label { color:var(--muted); font-size:0.85rem; }
-.form-control {
-  background:transparent;
-  border:1px dashed rgba(57,255,20,0.10);
-  color:var(--neon);
-  border-radius:8px;
-  height:44px;
-}
-.form-control::placeholder { color:rgba(57,255,20,0.4); }
-.btn-neon {
-  background:transparent;
-  border:1px solid rgba(57,255,20,0.2);
-  color:var(--neon);
-  width:100%;
-  border-radius:10px;
-  height:44px;
-  font-weight:700;
-  transition:background .2s;
-}
-.btn-neon:hover { background:rgba(57,255,20,0.1); }
+    @keyframes glitchTop {
+      0% { clip: rect(0,9999px,0,0); transform:translate(0,0); }
+      10%{ clip: rect(2px,9999px,8px,0); transform:translate(-1px,-1px); }
+      20%{ clip: rect(10px,9999px,28px,0); transform:translate(1px,1px); }
+      100%{ clip: rect(0,9999px,0,0); transform:translate(0,0); }
+    }
+    @keyframes glitchBot {
+      0% { clip: rect(0,9999px,0,0); transform:translate(0,0); }
+      15%{ clip: rect(6px,9999px,20px,0); transform:translate(1px,1px); }
+      40%{ clip: rect(0,9999px,30px,0); transform:translate(-1px,-1px); }
+      100%{ clip: rect(0,9999px,0,0); transform:translate(0,0); }
+    }
 
-.ticker {
-  position:absolute;
-  left:0; right:0; bottom:16px;
-  z-index:9;
-  display:flex;
-  justify-content:center;
-}
-.ribbon {
-  width:calc(100% - 80px);
-  max-width:1200px;
-  background:rgba(0,0,0,0.55);
-  border-radius:10px;
-  padding:8px 12px;
-  overflow:hidden;
-  border:1px solid rgba(57,255,20,0.06);
-}
-.strip {
-  display:inline-block;
-  white-space:nowrap;
-  animation:scroll-left 18s linear infinite;
-  color:var(--muted);
-  font-size:0.82rem;
-}
-.strip b { color:var(--neon); margin-right:16px; }
-@keyframes scroll-left {
-  0% { transform:translateX(0%); }
-  100% { transform:translateX(-50%); }
-}
+    .output {
+      flex:1;
+      background:rgba(0,0,0,0.25);
+      padding:12px;
+      border-radius:8px;
+      border:1px solid rgba(57,255,20,0.08);
+      font-size:0.84rem;
+      line-height:1.45;
+      overflow:auto;
+      white-space:pre-wrap;
+    }
+    .cursor {
+      display:inline-block;
+      width:8px;
+      background:var(--neon);
+      margin-left:4px;
+      animation:blink 900ms steps(1) infinite;
+      vertical-align:bottom;
+      height:1.05em;
+    }
+    @keyframes blink { 0%,50% { opacity:1 } 51%,100% { opacity:0 } }
 
-/* === Responsiveness === */
-@media (max-width:880px){
-  .card-shell { flex-direction:column; max-width:440px; }
-  .wild-rocker { font-size:1.4rem; margin-bottom:8px; }
-  .terminal, .panel { min-width:100%; }
-}
-@media (max-width:480px){
-  .stage { padding:12px; }
-  .panel, .terminal { padding:14px; }
-  .wild-rocker { font-size:1.3rem; }
-  .form-control, .btn-neon { height:40px; font-size:0.9rem; }
-}
-@media (max-width:360px){
-  .wild-rocker { font-size:1.1rem; }
-  .panel, .terminal { min-height:auto; }
-  .strip { font-size:0.7rem; }
-}
-</style>
+    .progress-shell { display:flex; gap:10px; align-items:center; margin-top:6px; }
+    .progress-track { flex:1; height:8px; background: rgba(57,255,20,0.06); border-radius:999px; overflow:hidden; }
+    .progress-fill { height:100%; width:0%; background: linear-gradient(90deg, rgba(57,255,20,0.28), rgba(0,255,120,0.14)); transition: width 600ms linear; }
+
+    .panel {
+      width:420px;
+      min-width:280px;
+      background:rgba(0,0,0,0.55);
+      border-radius:12px;
+      padding:18px;
+      border:1px solid rgba(57,255,20,0.06);
+      display:flex;
+      flex-direction:column;
+      gap:12px;
+      min-height:360px;
+      box-sizing:border-box;
+    }
+
+    .form-label { color:var(--muted); font-size:0.85rem; }
+    .form-control {
+      background:transparent; border:1px dashed rgba(57,255,20,0.10); color:var(--neon);
+      border-radius:8px; height:44px;
+    }
+    .btn-neon {
+      background:transparent; border:1px solid rgba(57,255,20,0.2);
+      color:var(--neon); width:100%; border-radius:10px; height:44px; font-weight:700;
+    }
+
+    .ticker { position:absolute; left:0; right:0; bottom:16px; z-index:9; display:flex; justify-content:center; width:100%; box-sizing:border-box; }
+    .ribbon { width:calc(100% - 24px); max-width:1200px; background:rgba(0,0,0,0.55); border-radius:10px; padding:8px 12px; overflow:hidden; border:1px solid rgba(57,255,20,0.06); box-sizing:border-box; }
+    .strip { display:inline-block; white-space:nowrap; animation:scroll-left 18s linear infinite; color:var(--muted); font-size:0.82rem; }
+    .strip b { color:var(--neon); margin-right:16px; }
+    @keyframes scroll-left {
+      0% { transform:translateX(0%); }
+      100% { transform:translateX(-50%); }
+    }
+
+    /* Responsive Fixes */
+    @media (max-width:880px){
+      .card-shell {
+        flex-direction:column;
+        align-items:center;
+        justify-content:center;
+        max-width:100%;
+        width:100%;
+        padding:0;
+      }
+      .terminal, .panel {
+        width:100%;
+        max-width:100%;
+      }
+      .wild-rocker { font-size:1.4rem; margin-bottom:8px; }
+      .ticker { bottom:8px; }
+      .ribbon { width:100%; border-radius:0; margin:0; padding:6px 8px; }
+    }
+  </style>
 </head>
 <body>
 
-<!-- === BODY === -->
-<div class="stage">
-  <div class="bg-layer bg-gradient"></div>
-  <canvas id="particles" class="matrix"></canvas>
-  <div class="bg-layer scanlines"></div>
+  <div class="stage">
+    <div class="bg-layer bg-gradient"></div>
+    <canvas id="particles" class="matrix"></canvas>
+    <div class="bg-layer scanlines"></div>
 
-  <div class="card-shell">
-    <!-- Terminal -->
-    <section class="terminal">
-      <div class="wild-rocker glitch" data-text="WILD ROCKER">WILD ROCKER</div>
-      <div class="glitch" data-text="ACCESS CONSOLE">ACCESS CONSOLE</div>
-      <div class="output" id="output"></div>
-      <div class="progress-shell">
-        <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
-        <div style="min-width:72px; font-size:.8rem; color:var(--muted);" id="progressLabel">idle</div>
-      </div>
-    </section>
-
-    <!-- Login Panel -->
-    <aside class="panel">
-      <h3 style="margin:0 0 8px 0; font-size:1rem; color:var(--neon);">AUTHENTICATION</h3>
-      <form id="loginForm" novalidate>
-        <div class="mb-3">
-          <label class="form-label" for="user">Username</label>
-          <input id="user" name="user" type="text" class="form-control" placeholder="root@node" required>
+    <div class="card-shell">
+      <!-- Terminal -->
+      <section class="terminal">
+        <div class="wild-rocker glitch" data-text="WILD ROCKER">WILD ROCKER</div>
+        <div class="glitch" data-text="ACCESS CONSOLE">ACCESS CONSOLE</div>
+        <div class="output" id="output"></div>
+        <div class="progress-shell">
+          <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+          <div style="min-width:72px; font-size:.8rem; color:var(--muted);" id="progressLabel">idle</div>
         </div>
-        <div class="mb-3">
-          <label class="form-label" for="pass">Passphrase</label>
-          <div class="input-group">
-            <input id="pass" name="pass" type="password" class="form-control" placeholder="••••••••" required>
-            <button type="button" id="pwToggle" class="btn btn-sm" style="border-radius:8px; border:1px solid rgba(255,255,255,0.04); color:var(--neon); background:transparent;">👁</button>
+      </section>
+
+      <!-- Panel -->
+      <aside class="panel">
+        <h3 style="margin:0 0 8px 0; font-size:1rem; color:var(--neon);">AUTHENTICATION</h3>
+        <form id="loginForm" novalidate>
+          <div class="mb-3">
+            <label class="form-label" for="user">Username</label>
+            <input id="user" name="user" type="text" class="form-control" placeholder="root@node" required>
           </div>
-        </div>
-        <div class="d-flex gap-2 mb-3 align-items-center">
-          <div style="display:flex; gap:8px; align-items:center;">
-            <input id="remember" type="checkbox" />
-            <label for="remember" style="color:var(--muted); font-size:.86rem;">Remember</label>
+          <div class="mb-3">
+            <label class="form-label" for="pass">Passphrase</label>
+            <div class="input-group">
+              <input id="pass" name="pass" type="password" class="form-control" placeholder="••••••••" required>
+              <button type="button" id="pwToggle" class="btn btn-sm" style="border-radius:8px; border:1px solid rgba(255,255,255,0.04); color:var(--neon); background:transparent;">👁</button>
+            </div>
           </div>
-          <a href="#" style="margin-left:auto; color:var(--muted); font-size:.86rem;">Forgot?</a>
-        </div>
-        <button class="btn-neon" id="submitBtn" type="submit">INITIATE SESSION</button>
-      </form>
-    </aside>
-  </div>
+          <div class="d-flex gap-2 mb-3 align-items-center">
+            <div style="display:flex; gap:8px; align-items:center;">
+              <input id="remember" type="checkbox" />
+              <label for="remember" style="color:var(--muted); font-size:.86rem;">Remember</label>
+            </div>
+            <a href="#" style="margin-left:auto; color:var(--muted); font-size:.86rem;">Forgot?</a>
+          </div>
+          <button class="btn-neon" id="submitBtn" type="submit">INITIATE SESSION</button>
+        </form>
+      </aside>
+    </div>
 
-  <div class="ticker">
-    <div class="ribbon">
-      <div class="strip">
-        <span><b>ALERT</b> System integrity check passed — </span>
-        <span><b>NOTICE</b> Firmware updates available — </span>
-        <span><b>LOG</b> Connection established — </span>
-        <span><b>PROBE</b> Inbound scan mitigated — </span>
+    <div class="ticker">
+      <div class="ribbon">
+        <div class="strip">
+          <span><b>ALERT</b> System integrity check passed — </span>
+          <span><b>NOTICE</b> Firmware updates available — </span>
+          <span><b>LOG</b> Connection established — </span>
+          <span><b>PROBE</b> Inbound scan mitigated — </span>
+        </div>
       </div>
     </div>
   </div>
-</div>
 
-<script>
-/* === Matrix Background === */
-const canvas=document.getElementById("particles");
-const ctx=canvas.getContext("2d");
-canvas.width=window.innerWidth;canvas.height=window.innerHeight;
-const letters="01";const fontSize=14;let columns=canvas.width/fontSize;
-let drops=Array.from({length:columns},()=>1);
-function draw(){
-  ctx.fillStyle="rgba(0,0,0,0.05)";
-  ctx.fillRect(0,0,canvas.width,canvas.height);
-  ctx.fillStyle="#39ff14";
-  ctx.font=fontSize+"px monospace";
-  for(let i=0;i<drops.length;i++){
-    const text=letters.charAt(Math.floor(Math.random()*letters.length));
-    ctx.fillText(text,i*fontSize,drops[i]*fontSize);
-    if(drops[i]*fontSize>canvas.height&&Math.random()>0.975)drops[i]=0;
-    drops[i]++;
-  }
-}
-setInterval(draw,35);
-window.addEventListener("resize",()=>{canvas.width=window.innerWidth;canvas.height=window.innerHeight;columns=canvas.width/fontSize;drops=Array.from({length:columns},()=>1);});
+  <script>
+    const canvas = document.getElementById("particles");
+    const ctx = canvas.getContext("2d");
+    function resizeCanvas() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+    resizeCanvas();
+    window.addEventListener("resize", resizeCanvas);
 
-/* === Terminal Typing === */
-const output=document.getElementById("output");
-const progressFill=document.getElementById("progressFill");
-const progressLabel=document.getElementById("progressLabel");
-const messages=[
-  "[SYS] Initializing WILD ROCKER kernel...",
-  "[OK] Network stack online.",
-  "[OK] Crypto module engaged.",
-  "[WARN] Unauthorized attempt detected on port 443.",
-  "[OK] Firewall rules updated.",
-  "[SYS] Awaiting user credentials..."
-];
-let idx=0;
-function typeLine(line,cb){let i=0;const iv=setInterval(()=>{output.textContent+=line.charAt(i);i++;if(i>=line.length){clearInterval(iv);output.textContent+="\n";if(cb)setTimeout(cb,400);}},30);}
-function printMessages(){if(idx<messages.length){typeLine(messages[idx],()=>{idx++;printMessages();});}else{output.innerHTML+="> Ready for input <span class='cursor'></span>";}}
-printMessages();
+    const letters = "01";
+    const fontSize = 14;
+    let drops = [];
+    function initDrops() {
+      const columns = Math.floor(canvas.width / fontSize);
+      drops = Array.from({length: columns}, () => 1);
+    }
+    initDrops();
 
-/* === Progress Simulation === */
-function progressSequence(){let p=0;const timer=setInterval(()=>{p+=5;progressFill.style.width=p+"%";progressLabel.textContent=p+"%";if(p>=100){clearInterval(timer);progressLabel.textContent="complete";}},150);}
-setTimeout(progressSequence,500);
+    function draw() {
+      ctx.fillStyle = "rgba(0,0,0,0.05)";
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      ctx.fillStyle = "#39ff14";
+      ctx.font = fontSize + "px monospace";
+      for(let i = 0; i < drops.length; i++) {
+        const text = letters.charAt(Math.floor(Math.random() * letters.length));
+        ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+        if(drops[i] * fontSize > canvas.height && Math.random() > 0.975) drops[i] = 0;
+        drops[i]++;
+      }
+    }
+    setInterval(draw, 35);
 
-/* === Password Toggle === */
-document.getElementById("pwToggle").addEventListener("click",()=>{
-  const pass=document.getElementById("pass");
-  pass.type=pass.type==="password"?"text":"password";
-});
+    const output = document.getElementById("output");
+    const progressFill = document.getElementById("progressFill");
+    const progressLabel = document.getElementById("progressLabel");
+    const messages = [
+      "[SYS] Initializing WILD ROCKER kernel...",
+      "[OK] Network stack online.",
+      "[OK] Crypto module engaged.",
+      "[WARN] Unauthorized attempt detected on port 443.",
+      "[OK] Firewall rules updated.",
+      "[SYS] Awaiting user credentials...",
+    ];
+    let idx = 0;
+    function typeLine(line, callback) {
+      let i = 0;
+      const interval = setInterval(() => {
+        output.textContent += line.charAt(i);
+        i++;
+        if (i >= line.length) {
+          clearInterval(interval);
+          output.textContent += "\n";
+          if(callback) setTimeout(callback, 400);
+        }
+      }, 30);
+    }
+    function printMessages() {
+      if (idx < messages.length) {
+        typeLine(messages[idx], () => { idx++; printMessages(); });
+      } else {
+        output.innerHTML += "> Ready for input <span class='cursor'></span>";
+      }
+    }
+    printMessages();
 
-/* === Google Sheet Auth === */
-const SHEET_ENDPOINT="https://script.google.com/macros/s/AKfycbwthlxHJOMi1c8tA1sp-oMFNtnBVupszWLqmnS1xd5JWx5_G2IBwKwOK2kfSjtBMyNRqg/exec";
-async function fetchWithTimeout(url,opt={},timeout=8000){const ctrl=new AbortController();const id=setTimeout(()=>ctrl.abort(),timeout);opt.signal=ctrl.signal;const res=await fetch(url,opt);clearTimeout(id);return res;}
-async function getSheetData(){const res=await fetchWithTimeout(SHEET_ENDPOINT,{method:"GET",cache:"no-store"},10000);if(!res.ok)throw new Error("Network response was not ok: "+res.status);return await res.json();}
-function writeOutputLine(t){output.textContent+="\n"+t;output.scrollTop=output.scrollHeight;}
+    function progressSequence() {
+      let progress = 0;
+      const timer = setInterval(() => {
+        progress += 5;
+        progressFill.style.width = progress + "%";
+        progressLabel.textContent = progress + "%";
+        if(progress >= 100){ clearInterval(timer); progressLabel.textContent = "complete"; }
+      }, 150);
+    }
+    setTimeout(progressSequence, 500);
 
-/* === Form === */
-document.getElementById("loginForm").addEventListener("submit",async(e)=>{
-  e.preventDefault();
-  const username=document.getElementById("user").value.trim();
-  const password=document.getElementById("pass").value.trim();
-  if(!username||!password){writeOutputLine("[AUTH] Please enter username and passphrase.");return;}
-  progressFill.style.width="0%";progressLabel.textContent="0%";
-  writeOutputLine("\n[AUTH] Validating credentials...");
-  let p=0;const iv=setInterval(()=>{p=Math.min(95,p+10);progressFill.style.width=p+"%";progressLabel.textContent=p+"%";},180);
-  try{
-    const sheetData=await getSheetData();clearInterval(iv);
-    progressFill.style.width="100%";progressLabel.textContent="100%";
-    const records=Array.isArray(sheetData)?sheetData:(sheetData.records||[sheetData]);
-    const match=records.find(r=>String(r.Username||r.username||"").trim()===username&&String(r.Password||r.password||"").trim()===password);
-    if(match){const role=match.Role||match.role||"user";writeOutputLine(`[ACCESS GRANTED] Welcome, ${username}! Role: ${role}`);sessionStorage.setItem("user",username);sessionStorage.setItem("role",role);setTimeout(()=>{window.location.href="dashboard.html";},1500);}
-    else{writeOutputLine("[ACCESS DENIED] Invalid username or passphrase.");}
-  }catch(err){clearInterval(iv);progressFill.style.width="0%";progressLabel.textContent="error";writeOutputLine("[ERROR] "+(err.message||"Unable to validate credentials."));}
-});
-setTimeout(()=>{if(output.textContent.startsWith("\n"))output.textContent=output.textContent.slice(1);},800);
-</script>
+    document.getElementById("pwToggle").addEventListener("click",()=>{
+      const pass = document.getElementById("pass");
+      pass.type = pass.type === "password" ? "text" : "password";
+    });
+  </script>
 </body>
 </html>
