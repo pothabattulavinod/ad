@@ -197,6 +197,17 @@ footer {
 }
 
 /* Responsive Navbar Fix */
+.navbar .container-fluid {
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  flex-wrap:wrap;
+}
+@media (min-width:577px) {
+  .navbar .container-fluid {
+    flex-direction:row-reverse; /* Logout left, Brand right on desktop */
+  }
+}
 @media (max-width:576px) {
   .navbar .container-fluid {
     flex-direction:column;
@@ -211,7 +222,6 @@ footer {
   .logout-btn {
     padding:6px 12px;
     font-size:0.85rem;
-    width:auto;
   }
 }
 
@@ -231,9 +241,9 @@ footer {
 
 <body>
 <nav class="navbar navbar-dark">
-  <div class="container-fluid d-flex justify-content-between align-items-center flex-wrap">
-    <span class="navbar-brand w-100 w-sm-auto">⚡ WILD ROCKER :: DASHBOARD</span>
+  <div class="container-fluid">
     <button id="logoutBtn" class="logout-btn">Logout</button>
+    <span class="navbar-brand">⚡ WILD ROCKER :: DASHBOARD</span>
   </div>
 </nav>
 
