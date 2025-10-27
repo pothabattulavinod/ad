@@ -272,6 +272,8 @@ setInterval(updateMetrics,6000);
 
 
 
+
+
 async function sendChatMessage() {
   const msg = document.getElementById("chatMsg").value.trim();
   const recipient = document.getElementById("recipient").value;
@@ -282,46 +284,34 @@ async function sendChatMessage() {
   }
 
   const payload = {
-    sender: user,         // logged-in user from sessionStorage
-    recipient: recipient, // dropdown or selection value
+    sender: user,
+    recipient: recipient,
     message: msg
   };
 
-  console.log("🟢 Sending payload:", payload);
+  console.log("🟢 Sending to:", SHEET_ENDPOINT);
+  console.log("🟢 Payload:", payload);
 
   try {
-    const response = await fetch(SHEET_ENDPOINT, {
+    await fetch(SHEET_ENDPOINT, {
       method: "POST",
+      mode: "no-cors", // ✅ allows browser → Apps Script
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(payload)
     });
 
-    const text = await response.text(); // GAS may not return CORS JSON
-    console.log("🟡 Raw response text:", text);
-
-    let json = {};
-    try {
-      json = JSON.parse(text);
-    } catch (e) {
-      console.warn("⚠️ Non-JSON response (expected in no-cors mode):", e);
-    }
-
-    if (response.ok) {
-      console.log("✅ Message send success:", json);
-      document.getElementById("chatMsg").value = "";
-      alert("✅ Message sent successfully!");
-      setTimeout(loadChat, 1500); // reload chat after small delay
-    } else {
-      console.error("❌ Response not OK:", response.status);
-      alert("❌ Server responded with error. Check console for details.");
-    }
-  } catch (err) {
-    console.error("🚨 Network or script error:", err);
-    alert("❌ Failed to send message. See console log.");
+    document.getElementById("chatMsg").value = "";
+    alert("✅ Message sent! It may take a few seconds to appear.");
+    setTimeout(loadChat, 2000);
+  } catch (error) {
+    console.error("🚨 Send failed:", error);
+    alert("❌ Send failed. Check console.");
   }
 }
 
 document.getElementById("sendMsgBtn").addEventListener("click", sendChatMessage);
+
+
 
 
 </script>
