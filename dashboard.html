@@ -4,17 +4,16 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>WILD ROCKER — Secure Dashboard</title>
-
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 
 <style>
-:root {
+:root{
   --bg:#020204;
   --neon:#39ff14;
   --muted:#7f8f7f;
   --panel:rgba(0,0,0,0.55);
 }
-body {
+body{
   background:var(--bg);
   color:var(--neon);
   font-family:"Courier New", monospace;
@@ -22,17 +21,17 @@ body {
   display:flex;
   flex-direction:column;
 }
-.navbar {
+.navbar{
   background:rgba(0,0,0,0.6);
   border-bottom:1px solid rgba(57,255,20,0.2);
   box-shadow:0 0 20px rgba(57,255,20,0.15);
 }
-.navbar-brand {
+.navbar-brand{
   color:var(--neon)!important;
   font-weight:700;
   text-shadow:0 0 8px rgba(57,255,20,0.4);
 }
-.logout-btn {
+.logout-btn{
   border:1px solid rgba(57,255,20,0.3);
   color:var(--neon);
   background:transparent;
@@ -40,17 +39,26 @@ body {
   padding:8px 18px;
   transition:0.2s;
 }
-.logout-btn:hover { background:rgba(57,255,20,0.15); }
-.dashboard {
+.logout-btn:hover{
+  background:rgba(57,255,20,0.15);
+}
+.dashboard{
   flex:1;
   padding:40px 20px;
   display:flex;
   flex-direction:column;
   align-items:center;
 }
-h1 { font-size:2rem; text-shadow:0 0 10px rgba(57,255,20,0.4); margin-bottom:5px; }
-#roleText { color:var(--muted); font-size:0.9rem; }
-.status-grid {
+h1{
+  font-size:2rem;
+  text-shadow:0 0 10px rgba(57,255,20,0.4);
+  margin-bottom:5px;
+}
+#roleText{
+  color:var(--muted);
+  font-size:0.9rem;
+}
+.status-grid{
   display:grid;
   grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
   gap:20px;
@@ -58,7 +66,7 @@ h1 { font-size:2rem; text-shadow:0 0 10px rgba(57,255,20,0.4); margin-bottom:5px
   max-width:1100px;
   margin-top:30px;
 }
-.status-card {
+.status-card{
   background:var(--panel);
   border:1px solid rgba(57,255,20,0.1);
   border-radius:12px;
@@ -66,18 +74,24 @@ h1 { font-size:2rem; text-shadow:0 0 10px rgba(57,255,20,0.4); margin-bottom:5px
   box-shadow:0 0 20px rgba(57,255,20,0.06);
   transition:0.3s;
 }
-.status-card:hover {
+.status-card:hover{
   box-shadow:0 0 30px rgba(57,255,20,0.3);
   transform:translateY(-3px);
 }
-.status-title { color:var(--muted); font-weight:bold; font-size:0.9rem; }
-.status-value {
+.status-title{
+  color:var(--muted);
+  font-weight:bold;
+  font-size:0.9rem;
+}
+.status-value{
   font-size:1.4rem;
   color:var(--neon);
   margin-top:6px;
   text-shadow:0 0 10px rgba(57,255,20,0.3);
 }
-.chat-panel {
+
+/* Chat Section */
+.chat-panel{
   margin-top:40px;
   background:var(--panel);
   border:1px solid rgba(57,255,20,0.1);
@@ -86,7 +100,7 @@ h1 { font-size:2rem; text-shadow:0 0 10px rgba(57,255,20,0.4); margin-bottom:5px
   max-width:700px;
   width:100%;
 }
-.chat-messages {
+.chat-messages{
   background:rgba(0,0,0,0.4);
   border:1px solid rgba(57,255,20,0.1);
   border-radius:8px;
@@ -95,10 +109,36 @@ h1 { font-size:2rem; text-shadow:0 0 10px rgba(57,255,20,0.4); margin-bottom:5px
   overflow-y:auto;
   font-size:0.9rem;
   margin-bottom:12px;
-  scroll-behavior:smooth;
+  display:flex;
+  flex-direction:column;
 }
-.chat-input { display:flex; gap:10px; }
-.chat-input textarea {
+.msg{
+  max-width:70%;
+  padding:8px 12px;
+  margin:5px 0;
+  border-radius:8px;
+  word-wrap:break-word;
+  position:relative;
+}
+.msg small{
+  display:block;
+  color:var(--muted);
+  font-size:0.7rem;
+  margin-top:4px;
+}
+.sent{
+  align-self:flex-end;
+  background:rgba(57,255,20,0.1);
+}
+.recv{
+  align-self:flex-start;
+  background:rgba(255,255,255,0.05);
+}
+.chat-input{
+  display:flex;
+  gap:10px;
+}
+.chat-input textarea{
   flex:1;
   background:transparent;
   border:1px dashed rgba(57,255,20,0.2);
@@ -108,34 +148,17 @@ h1 { font-size:2rem; text-shadow:0 0 10px rgba(57,255,20,0.4); margin-bottom:5px
   height:60px;
   resize:none;
 }
-.chat-input button {
+.chat-input button{
   background:transparent;
   border:1px solid rgba(57,255,20,0.3);
   color:var(--neon);
   border-radius:8px;
   padding:0 16px;
 }
-.chat-input button:hover { background:rgba(57,255,20,0.15); }
-.msg {
-  margin:6px 0;
-  padding:6px 10px;
-  border-radius:8px;
-  max-width:85%;
-  word-wrap:break-word;
+.chat-input button:hover{
+  background:rgba(57,255,20,0.15);
 }
-.msg.sent {
-  background:rgba(57,255,20,0.1);
-  margin-left:auto;
-  text-align:right;
-}
-.msg.recv {
-  background:rgba(255,255,255,0.05);
-  margin-right:auto;
-  text-align:left;
-}
-.msg small { display:block; font-size:0.7rem; color:var(--muted); margin-top:3px; }
-.seen-label { font-size:0.7rem; color:#7f8f7f; margin-top:2px; text-align:right; }
-.ticker {
+.ticker{
   background:rgba(0,0,0,0.55);
   color:var(--muted);
   font-size:0.82rem;
@@ -144,16 +167,16 @@ h1 { font-size:2rem; text-shadow:0 0 10px rgba(57,255,20,0.4); margin-bottom:5px
   overflow:hidden;
   white-space:nowrap;
 }
-.ticker span {
+.ticker span{
   display:inline-block;
   padding-left:100%;
   animation:ticker-scroll 25s linear infinite;
 }
-@keyframes ticker-scroll {
-  0% {transform:translateX(0);}
-  100% {transform:translateX(-100%);}
+@keyframes ticker-scroll{
+  0%{transform:translateX(0);}
+  100%{transform:translateX(-100%);}
 }
-footer {
+footer{
   text-align:center;
   color:var(--muted);
   font-size:0.85rem;
@@ -188,12 +211,12 @@ footer {
   <div class="chat-panel">
     <h4 style="margin-bottom:10px;">💬 Secure Chat</h4>
     <div class="mb-2">
-      <label style="color:var(--muted);font-size:0.85rem;">Chat with:</label>
+      <label style="color:var(--muted);font-size:0.85rem;">Send To:</label>
       <select id="recipient" class="form-select" style="background:transparent;color:var(--neon);border:1px dashed rgba(57,255,20,0.2);">
         <option value="">Loading users...</option>
       </select>
     </div>
-    <div class="chat-messages" id="chatBox">Select a person to chat.</div>
+    <div class="chat-messages" id="chatBox">Fetching messages...</div>
     <div class="chat-input">
       <textarea id="chatMsg" placeholder="Type your message..."></textarea>
       <button id="sendMsgBtn">Send</button>
@@ -202,35 +225,35 @@ footer {
 </div>
 
 <div class="ticker">
-  <span>[SYS] Monitoring node activity — [FIREWALL] No intrusions detected — [SYNC] Backup complete — [NETWORK] 99.98% uptime — [SECURITY] Active modules — </span>
+  <span>[SYS] Monitoring node activity — [FIREWALL] No intrusions detected — [SYNC] Database backup completed — [NETWORK] 99.98% uptime maintained — [SECURITY] Crypto modules active — </span>
 </div>
 
-<footer>© 2025 WILD ROCKER Systems | Secure Node v2.5</footer>
+<footer>© 2025 WILD ROCKER Systems | Secure Node v3.0</footer>
 
 <script>
-const SHEET_ENDPOINT = "https://script.google.com/macros/s/AKfycbwRqGmyV2yoyEOxG0tfrCRidmqmCI_Iu5yV371JChC-SM7QV2C7l4Xt1R_ZbqWYMT0leA/exec";
+const SHEET_ENDPOINT = "https://script.google.com/macros/s/AKfycbwRqGmyV2yoyEOxG0tfrCRidmqmCI_Iu5YV371JChC-SM7QV2C7l4Xt1R_ZbqWYMT0leA/exec";
 const user = sessionStorage.getItem("user");
-if(!user){ window.location.href = "index.html"; }
+if(!user){ window.location.href="index.html"; }
 
+// dynamic time
 function updateTime(){ document.getElementById("dateTime").textContent = new Date().toLocaleString(); }
 setInterval(updateTime,1000); updateTime();
 
+// logout
 document.getElementById("logoutBtn").addEventListener("click",()=>{ sessionStorage.clear(); window.location.href="index.html"; });
 
-let userName = user;
-
-// Load users list
+let userName=user;
 async function fetchUserData(){
-  const res = await fetch(SHEET_ENDPOINT + "?sheet=Sheet1");
-  const data = await res.json();
-  const found = data.find(r=>String(r.Username||r.username)==user);
+  const res=await fetch(SHEET_ENDPOINT+"?sheet=Sheet1");
+  const data=await res.json();
+  const found=data.find(r=>r.Username==user);
   if(found){
-    userName = found.Name || user;
-    document.getElementById("welcomeText").textContent = `Welcome, ${userName}`;
-    document.getElementById("roleText").textContent = `Access Level: ${found.Role || "User"}`;
+    userName=found.Name||user;
+    document.getElementById("welcomeText").textContent=`Welcome, ${userName}`;
+    document.getElementById("roleText").textContent=`Access Level: ${found.Role||"user"}`;
   }
-  const sel = document.getElementById("recipient");
-  sel.innerHTML = "<option value=''>Select a person</option>";
+  const sel=document.getElementById("recipient");
+  sel.innerHTML="<option value=''>Select recipient</option>";
   data.forEach(u=>{
     if(u.Username!==user){
       const opt=document.createElement("option");
@@ -239,74 +262,79 @@ async function fetchUserData(){
       sel.appendChild(opt);
     }
   });
-  document.getElementById("activeUsers").textContent=data.length;
 }
 fetchUserData();
 
-// System metrics simulation
-function rand(min,max){return Math.floor(Math.random()*(max-min+1))+min;}
+// simulate system metrics
+function randomInt(a,b){return Math.floor(Math.random()*(b-a+1))+a;}
 function updateMetrics(){
-  document.getElementById("serverLoad").textContent = rand(10,95)+"%";
-  document.getElementById("firewall").textContent = ["🟢 Engaged","🟡 Monitoring","🔴 Rebooting"][rand(0,2)];
-  document.getElementById("lastBackup").textContent=`${rand(0,12)}h ${rand(0,59)}m ago`;
-  document.getElementById("sysHealth").textContent=["✅ Stable","🟢 Optimal","⚠️ Degraded","🟥 Failure"][rand(0,3)];
+  document.getElementById("activeUsers").textContent=randomInt(4,18);
+  document.getElementById("serverLoad").textContent=randomInt(10,92)+"%";
+  const fire=["🟢 Engaged","🟡 Monitoring","🔴 Rebooting"];
+  document.getElementById("firewall").textContent=fire[randomInt(0,2)];
+  const threat=["Low","Moderate","Elevated","High","Critical"];
+  const t=threat[randomInt(0,4)];
+  document.getElementById("threatLevel").textContent=t;
+  document.getElementById("threatLevel").style.color=(t==="High"||t==="Critical")?"#ff4b4b":(t==="Elevated"?"#f6ff4b":"#39ff14");
+  document.getElementById("lastBackup").textContent=`${randomInt(0,12)}h ${randomInt(0,59)}m ago`;
+  const sys=["✅ Stable","🟢 Optimal","⚠️ Degraded","🟥 Failure"];
+  document.getElementById("sysHealth").textContent=sys[randomInt(0,3)];
 }
 updateMetrics(); setInterval(updateMetrics,6000);
 
-let lastSeen = {};
+// chat functions
+let currentRecipient="";
+document.getElementById("recipient").addEventListener("change",()=>{
+  currentRecipient=document.getElementById("recipient").value;
+  loadChat();
+});
 
-// Load chat messages for selected user
 async function loadChat(){
-  const recipient = document.getElementById("recipient").value;
-  if(!recipient){ document.getElementById("chatBox").innerHTML="Select a person to chat."; return; }
-  const res = await fetch(SHEET_ENDPOINT + "?sheet=Chat&t="+Date.now());
-  const chat = await res.json();
-  const box = document.getElementById("chatBox");
-  box.innerHTML = "";
-  const msgs = chat.filter(m=>
-    (m.Sender===user && m.Recipient===recipient) ||
-    (m.Sender===recipient && m.Recipient===user)
+  const recipient=currentRecipient;
+  const box=document.getElementById("chatBox");
+  if(!recipient){ box.innerHTML="Select a person."; return; }
+  const res=await fetch(SHEET_ENDPOINT+"?sheet=Chat&t="+Date.now());
+  const data=await res.json();
+  const msgs=data.filter(m=>
+    (m.Sender===user&&m.Recipient===recipient)||
+    (m.Sender===recipient&&m.Recipient===user)
   );
+  box.innerHTML="";
   msgs.forEach(m=>{
-    const msgDiv=document.createElement("div");
-    msgDiv.className = "msg " + (m.Sender===user ? "sent" : "recv");
-    msgDiv.innerHTML = `
-      ${m.Message}
-      <small>${m.Time || m.Timestamp || ""}</small>
-    `;
-    box.appendChild(msgDiv);
+    const div=document.createElement("div");
+    div.className="msg "+(m.Sender===user?"sent":"recv");
+    div.innerHTML=`${m.Message}<small>${new Date(m.Timestamp).toLocaleTimeString()}</small>`;
+    if(m.Sender===user && m.SeenBy){
+      div.innerHTML+=`<small style="color:#7f8f7f;">✔️ Seen</small>`;
+    }
+    box.appendChild(div);
   });
-  box.scrollTop = box.scrollHeight;
-  // update seen status
-  if(msgs.some(m=>m.Sender!==user)){
-    lastSeen[recipient]=new Date();
-  }
-  if(lastSeen[recipient]){
-    const seen=document.createElement("div");
-    seen.className="seen-label";
-    seen.textContent="Seen "+lastSeen[recipient].toLocaleTimeString();
-    box.appendChild(seen);
+  box.scrollTop=box.scrollHeight;
+
+  // mark as seen
+  const unseen=data.some(m=>m.Recipient===user && m.Sender===recipient && !m.SeenBy);
+  if(unseen){
+    await fetch(SHEET_ENDPOINT,{
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({action:"seen",viewer:user,with:recipient})
+    });
   }
 }
-setInterval(loadChat,4000);
 
-// When user selects new recipient, load chat instantly
-document.getElementById("recipient").addEventListener("change",loadChat);
+setInterval(()=>{ if(currentRecipient) loadChat(); },4000);
 
-// Send chat
 async function sendChatMessage(){
   const msg=document.getElementById("chatMsg").value.trim();
-  const recipient=document.getElementById("recipient").value;
-  if(!msg||!recipient)return;
-  const payload={sender:user,recipient:recipient,message:msg,time:new Date().toLocaleTimeString()};
-  fetch(SHEET_ENDPOINT,{
+  if(!msg||!currentRecipient)return;
+  const payload={sender:user,recipient:currentRecipient,message:msg};
+  await fetch(SHEET_ENDPOINT,{
     method:"POST",
-    mode:"no-cors",
     headers:{"Content-Type":"application/json"},
     body:JSON.stringify(payload)
   });
   document.getElementById("chatMsg").value="";
-  loadChat(); // show immediately
+  loadChat();
 }
 document.getElementById("sendMsgBtn").addEventListener("click",sendChatMessage);
 </script>
