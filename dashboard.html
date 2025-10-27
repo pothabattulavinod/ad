@@ -4,6 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>WILD ROCKER — Secure Dashboard</title>
+
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 
 <style>
@@ -39,8 +40,9 @@ body{
   padding:8px 18px;
   transition:0.2s;
 }
-.logout-btn:hover{ background:rgba(57,255,20,0.15); }
-
+.logout-btn:hover{
+  background:rgba(57,255,20,0.15);
+}
 .dashboard{
   flex:1;
   padding:40px 20px;
@@ -48,7 +50,6 @@ body{
   flex-direction:column;
   align-items:center;
 }
-
 h1{
   font-size:2rem;
   text-shadow:0 0 10px rgba(57,255,20,0.4);
@@ -78,12 +79,80 @@ h1{
   box-shadow:0 0 30px rgba(57,255,20,0.3);
   transform:translateY(-3px);
 }
-.status-title{ color:var(--muted); font-weight:bold; font-size:0.9rem; }
+.status-title{
+  color:var(--muted);
+  font-weight:bold;
+  font-size:0.9rem;
+}
 .status-value{
   font-size:1.4rem;
   color:var(--neon);
   margin-top:6px;
   text-shadow:0 0 10px rgba(57,255,20,0.3);
+}
+.chat-container{
+  background:var(--panel);
+  border:1px solid rgba(57,255,20,0.1);
+  border-radius:12px;
+  padding:15px;
+  margin-top:40px;
+  width:100%;
+  max-width:700px;
+  display:flex;
+  flex-direction:column;
+  box-shadow:0 0 20px rgba(57,255,20,0.08);
+}
+.chat-messages{
+  flex:1;
+  max-height:350px;
+  overflow-y:auto;
+  background:rgba(0,0,0,0.35);
+  border-radius:8px;
+  padding:10px;
+  margin-bottom:12px;
+}
+.message{
+  margin:6px 0;
+  padding:8px 12px;
+  border-radius:8px;
+  max-width:80%;
+  word-wrap:break-word;
+}
+.message.sent{
+  background:rgba(57,255,20,0.15);
+  align-self:flex-end;
+  color:var(--neon);
+}
+.message.recv{
+  background:rgba(255,255,255,0.05);
+  color:var(--muted);
+  align-self:flex-start;
+}
+.message small{
+  display:block;
+  font-size:0.7rem;
+  color:var(--muted);
+}
+.chat-controls{
+  display:flex;
+  gap:8px;
+}
+.chat-controls select,.chat-controls input{
+  background:rgba(0,0,0,0.3);
+  border:1px solid rgba(57,255,20,0.2);
+  color:var(--neon);
+  border-radius:8px;
+  height:42px;
+}
+.chat-controls button{
+  border:1px solid rgba(57,255,20,0.3);
+  color:var(--neon);
+  background:transparent;
+  border-radius:8px;
+  padding:8px 16px;
+}
+.chat-controls button:hover{
+  background:rgba(57,255,20,0.15);
 }
 .ticker{
   background:rgba(0,0,0,0.55);
@@ -109,60 +178,6 @@ footer{
   font-size:0.85rem;
   padding:10px 0;
 }
-
-/* Chat section */
-.chat-section{
-  margin-top:40px;
-  width:100%;
-  max-width:900px;
-  background:var(--panel);
-  border-radius:12px;
-  border:1px solid rgba(57,255,20,0.1);
-  padding:20px;
-}
-.chat-header{
-  font-weight:700;
-  margin-bottom:10px;
-  text-shadow:0 0 6px rgba(57,255,20,0.3);
-}
-.chat-box{
-  height:300px;
-  overflow-y:auto;
-  background:rgba(0,0,0,0.3);
-  border-radius:8px;
-  padding:12px;
-  font-size:0.9rem;
-}
-.msg{
-  margin-bottom:10px;
-  padding:6px 10px;
-  border-radius:6px;
-}
-.msg.you{ background:rgba(57,255,20,0.1); text-align:right; }
-.msg.other{ background:rgba(255,255,255,0.05); }
-.chat-input{
-  display:flex;
-  gap:10px;
-  margin-top:10px;
-}
-.chat-input input, .chat-input select{
-  background:transparent;
-  border:1px dashed rgba(57,255,20,0.15);
-  color:var(--neon);
-  border-radius:8px;
-  height:42px;
-  padding:0 10px;
-  flex:1;
-}
-.chat-input button{
-  border:1px solid rgba(57,255,20,0.3);
-  background:transparent;
-  color:var(--neon);
-  border-radius:8px;
-  height:42px;
-  width:120px;
-}
-.chat-input button:hover{ background:rgba(57,255,20,0.1); }
 </style>
 </head>
 
@@ -188,136 +203,138 @@ footer{
     <div class="status-card"><div class="status-title">Threat Level</div><div class="status-value" id="threatLevel">--</div></div>
   </div>
 
-  <!-- CHAT SYSTEM -->
-  <div class="chat-section mt-4">
-    <div class="chat-header">💬 Secure Node Chat</div>
-    <div class="chat-box" id="chatBox"></div>
-    <div class="chat-input">
-      <select id="chatTo">
-        <option value="admin0">admin0</option>
-        <option value="operator">operator</option>
-        <option value="guest">guest</option>
-      </select>
-      <input id="chatText" type="text" placeholder="Type your message..." />
+  <!-- CHAT PANEL -->
+  <div class="chat-container">
+    <h4 style="margin-bottom:10px;">💬 Secure Chat</h4>
+    <div class="chat-messages" id="chatBox"></div>
+
+    <div class="chat-controls">
+      <select id="recipientSelect"></select>
+      <input id="chatInput" type="text" class="form-control" placeholder="Type message...">
       <button id="sendBtn">Send</button>
     </div>
   </div>
 </div>
 
 <div class="ticker">
-  <span>[SYS] Monitoring node activity — [FIREWALL] No intrusions detected — [SYNC] Backup completed — [NETWORK] 99.98% uptime — [SECURITY] Crypto modules active — </span>
+  <span>[SYS] Monitoring node activity — [FIREWALL] No intrusions detected — [SYNC] Database backup completed — [NETWORK] 99.98% uptime maintained — [SECURITY] Crypto modules active — </span>
 </div>
 
 <footer>© 2025 WILD ROCKER Systems | Secure Node v2.1</footer>
 
 <script>
-/* ----------------- CONFIG ----------------- */
-const SHEET_ENDPOINT = "https://script.google.com/macros/s/AKfycbwthlxHJOMi1c8tA1sp-oMFNtnBVupszWLqmnS1xd5JWx5_G2IBwKwOK2kfSjtBMyNRqg/exec";
+const BASE_ENDPOINT = "https://script.google.com/macros/s/AKfycbyIYFmyHnqY4aPNEDG6YYE8ak90uKX59FGWmUci7EbxwSJRcyG4m_zkUymXRQLolNDQoA/exec";
 
-// For chat, replace with your Apps Script endpoints (read/write)
-const CHAT_WRITE_URL = "YOUR_POST_CHAT_URL";
-const CHAT_READ_URL = "YOUR_GET_CHAT_URL";
-
-/* ----------------- AUTH + USER ----------------- */
+// Redirect if not logged in
 const user = sessionStorage.getItem("user");
 if(!user){ window.location.href = "index.html"; }
 
-async function fetchUserData(){
-  try{
-    const res = await fetch(SHEET_ENDPOINT);
-    const data = await res.json();
-    const found = data.find(r=>String(r.Username||r.username)==user);
-    if(found){
-      const name = found.Name || found.FullName || user;
-      const role = found.Role || "user";
-      sessionStorage.setItem("name", name);
-      document.getElementById("welcomeText").textContent = `Welcome, ${name}`;
-      document.getElementById("roleText").textContent = `Access Level: ${role}`;
-    } else {
-      document.getElementById("welcomeText").textContent = `Welcome, ${user}`;
-    }
-  }catch(e){ console.error("Sheet fetch failed",e); }
-}
-fetchUserData();
-
-/* ----------------- TIME + METRICS ----------------- */
+// Display dynamic time
 function updateTime(){
   document.getElementById("dateTime").textContent = new Date().toLocaleString();
 }
 setInterval(updateTime,1000); updateTime();
 
+// Logout
+document.getElementById("logoutBtn").addEventListener("click",()=>{
+  sessionStorage.clear();
+  window.location.href="index.html";
+});
+
+// Fetch user data and set welcome
+async function fetchUserData(){
+  try{
+    const res = await fetch(BASE_ENDPOINT + "?sheet=Sheet1");
+    const data = await res.json();
+    const found = data.find(r=>String(r.Username||r.username)==user);
+    if(found){
+      const name = found.Name || found.FullName || user;
+      const role = found.Role || "user";
+      document.getElementById("welcomeText").textContent = `Welcome, ${name}`;
+      document.getElementById("roleText").textContent = `Access Level: ${role}`;
+    }
+    populateRecipients(data);
+  }catch(e){console.error(e);}
+}
+
+// Populate recipient dropdown
+function populateRecipients(users){
+  const select = document.getElementById("recipientSelect");
+  select.innerHTML = "";
+  users.forEach(u=>{
+    const uname = u.Username || u.username;
+    if(uname && uname!==user){
+      const opt = document.createElement("option");
+      opt.value = uname;
+      opt.textContent = uname;
+      select.appendChild(opt);
+    }
+  });
+}
+
+// Fetch chat messages
+async function loadChat(){
+  try{
+    const res = await fetch(BASE_ENDPOINT + "?sheet=Chat");
+    const data = await res.json();
+    renderChat(data);
+  }catch(e){console.error(e);}
+}
+
+// Render chat
+function renderChat(messages){
+  const box = document.getElementById("chatBox");
+  box.innerHTML = "";
+  messages.forEach(m=>{
+    if(!m.Sender || !m.Recipient || !m.Message) return;
+    const div = document.createElement("div");
+    const isMine = (m.Sender===user);
+    div.className = "message " + (isMine ? "sent" : "recv");
+    div.innerHTML = `<strong>${m.Sender}</strong>: ${m.Message}<small>${m.Timestamp||""}</small>`;
+    box.appendChild(div);
+  });
+  box.scrollTop = box.scrollHeight;
+}
+
+// Send message
+document.getElementById("sendBtn").addEventListener("click", async ()=>{
+  const msg = document.getElementById("chatInput").value.trim();
+  const rec = document.getElementById("recipientSelect").value;
+  if(!msg) return;
+  try{
+    await fetch(BASE_ENDPOINT,{
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({sender:user, recipient:rec, message:msg})
+    });
+    document.getElementById("chatInput").value="";
+    loadChat();
+  }catch(e){console.error(e);}
+});
+
+// Update metrics (random)
 function randomInt(min,max){return Math.floor(Math.random()*(max-min+1))+min;}
 function updateMetrics(){
   document.getElementById("activeUsers").textContent = randomInt(4,18);
   document.getElementById("serverLoad").textContent = randomInt(10,92)+"%";
-
   const fireStates=["🟢 Engaged","🟡 Monitoring","🔴 Rebooting"];
   document.getElementById("firewall").textContent = fireStates[randomInt(0,fireStates.length-1)];
-
   const threats=["Low","Moderate","Elevated","High","Critical"];
   const t = threats[randomInt(0,threats.length-1)];
   document.getElementById("threatLevel").textContent = t;
   document.getElementById("threatLevel").style.color = (t==="High"||t==="Critical")?"#ff4b4b":(t==="Elevated"?"#f6ff4b":"#39ff14");
-
   const hrs=randomInt(0,12), mins=randomInt(0,59);
   document.getElementById("lastBackup").textContent = `${hrs}h ${mins}m ago`;
-
   const sysStates=["✅ Stable","🟢 Optimal","⚠️ Degraded","🟥 Failure"];
   document.getElementById("sysHealth").textContent = sysStates[randomInt(0,sysStates.length-1)];
 }
 updateMetrics();
 setInterval(updateMetrics,6000);
 
-/* ----------------- LOGOUT ----------------- */
-document.getElementById("logoutBtn").addEventListener("click",()=>{
-  sessionStorage.clear();
-  window.location.href="index.html";
-});
-
-/* ----------------- CHAT SYSTEM ----------------- */
-const chatBox = document.getElementById("chatBox");
-const chatText = document.getElementById("chatText");
-const chatTo = document.getElementById("chatTo");
-const sendBtn = document.getElementById("sendBtn");
-const username = sessionStorage.getItem("name") || user;
-
-function renderChat(data){
-  chatBox.innerHTML="";
-  data.slice(-50).forEach(r=>{
-    const [time,sender,recipient,msg]=r;
-    const div=document.createElement("div");
-    div.className="msg "+(sender===username?"you":"other");
-    div.textContent=`${sender}: ${msg}`;
-    chatBox.appendChild(div);
-  });
-  chatBox.scrollTop=chatBox.scrollHeight;
-}
-
-async function loadChat(){
-  try{
-    const res = await fetch(CHAT_READ_URL+"?t="+Date.now());
-    const data = await res.json();
-    renderChat(data);
-  }catch(e){console.error("Chat read failed",e);}
-}
-async function sendChat(){
-  const msg = chatText.value.trim();
-  if(!msg) return;
-  const payload = {sender:username, recipient:chatTo.value, message:msg};
-  chatText.value="";
-  try{
-    await fetch(CHAT_WRITE_URL,{
-      method:"POST",
-      headers:{"Content-Type":"application/json"},
-      body:JSON.stringify(payload)
-    });
-    loadChat();
-  }catch(e){console.error("Chat send failed",e);}
-}
-sendBtn.addEventListener("click",sendChat);
-chatText.addEventListener("keypress",e=>{if(e.key==="Enter")sendChat();});
-setInterval(loadChat,5000);
+// Init
+fetchUserData();
 loadChat();
+setInterval(loadChat, 8000); // refresh chat every 8s
 </script>
 </body>
 </html>
