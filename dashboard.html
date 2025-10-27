@@ -269,33 +269,61 @@ updateMetrics();
 setInterval(updateMetrics,6000);
 
 // Chat functions
-async function loadChat(){
-  const res = await fetch(SHEET_ENDPOINT + "?sheet=Chat");
-  const chats = await res.json();
-  const box = document.getElementById("chatBox");
-  box.innerHTML = "";
-  chats.filter(c=>c.Sender && c.Message).forEach(c=>{
-    const div = document.createElement("div");
-    div.textContent = `[${c.Timestamp}] ${c.Sender} → ${c.Recipient}: ${c.Message}`;
-    box.appendChild(div);
-  });
-  box.scrollTop = box.scrollHeight;
-}
-loadChat();
-setInterval(loadChat,5000);
 
-document.getElementById("sendMsgBtn").addEventListener("click", async ()=>{
+
+
+async function sendChatMessage() {
   const msg = document.getElementById("chatMsg").value.trim();
   const recipient = document.getElementById("recipient").value;
-  if(!msg || !recipient) return alert("Select recipient and type a message!");
-  await fetch(SHEET_ENDPOINT, {
-    method:"POST",
-    headers:{"Content-Type":"application/json"},
-    body:JSON.stringify({sender:user,recipient:recipient,message:msg})
-  });
-  document.getElementById("chatMsg").value="";
-  loadChat();
-});
+
+  if (!msg || !recipient) {
+    alert("⚠️ Please select a recipient and type your message first!");
+    return;
+  }
+
+  const payload = {
+    sender: user,         // logged-in user from sessionStorage
+    recipient: recipient, // dropdown or selection value
+    message: msg
+  };
+
+  console.log("🟢 Sending payload:", payload);
+
+  try {
+    const response = await fetch(SHEET_ENDPOINT, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload)
+    });
+
+    const text = await response.text(); // GAS may not return CORS JSON
+    console.log("🟡 Raw response text:", text);
+
+    let json = {};
+    try {
+      json = JSON.parse(text);
+    } catch (e) {
+      console.warn("⚠️ Non-JSON response (expected in no-cors mode):", e);
+    }
+
+    if (response.ok) {
+      console.log("✅ Message send success:", json);
+      document.getElementById("chatMsg").value = "";
+      alert("✅ Message sent successfully!");
+      setTimeout(loadChat, 1500); // reload chat after small delay
+    } else {
+      console.error("❌ Response not OK:", response.status);
+      alert("❌ Server responded with error. Check console for details.");
+    }
+  } catch (err) {
+    console.error("🚨 Network or script error:", err);
+    alert("❌ Failed to send message. See console log.");
+  }
+}
+
+document.getElementById("sendMsgBtn").addEventListener("click", sendChatMessage);
+
+
 </script>
 </body>
 </html>
