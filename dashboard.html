@@ -157,6 +157,8 @@ footer{
   font-size:0.85rem;
   padding:10px 0;
 }
+.msg-sent{ text-align:right; color:#39ff14; }
+.msg-recv{ text-align:left; color:#7f8f7f; }
 </style>
 </head>
 
@@ -207,19 +209,17 @@ footer{
 
 <script>
 const SHEET_ENDPOINT = "https://script.google.com/macros/s/AKfycbwRqGmyV2yoyEOxG0tfrCRidmqmCI_Iu5yV371JChC-SM7QV2C7l4Xt1R_ZbqWYMT0leA/exec";
-
-// redirect if not logged in
 const user = sessionStorage.getItem("user");
 if(!user){ window.location.href = "index.html"; }
 
-// Display dynamic time
+// Show date/time
 function updateTime(){ document.getElementById("dateTime").textContent = new Date().toLocaleString(); }
 setInterval(updateTime,1000); updateTime();
 
-// Logout button
+// Logout
 document.getElementById("logoutBtn").addEventListener("click",()=>{ sessionStorage.clear(); window.location.href="index.html"; });
 
-// Fetch user name + role from sheet
+// Fetch user info + recipient list
 async function fetchUserData(){
   try{
     const res = await fetch(SHEET_ENDPOINT + "?sheet=Sheet1");
@@ -230,10 +230,8 @@ async function fetchUserData(){
       const role = found.Role || "user";
       document.getElementById("welcomeText").textContent = `Welcome, ${name}`;
       document.getElementById("roleText").textContent = `Access Level: ${role}`;
-    } else {
-      document.getElementById("welcomeText").textContent = `Welcome, ${user}`;
     }
-    // populate recipients
+    // recipients
     const recipientSelect = document.getElementById("recipient");
     recipientSelect.innerHTML = "";
     data.forEach(u=>{
@@ -244,76 +242,65 @@ async function fetchUserData(){
         recipientSelect.appendChild(opt);
       }
     });
-  }catch(e){
-    console.error("Sheet fetch failed",e);
-  }
+    document.getElementById("activeUsers").textContent = data.length;
+  }catch(e){ console.error("Sheet fetch failed",e); }
 }
 fetchUserData();
 
-// Simulate system metrics
+// Random metrics
 function randomInt(min,max){return Math.floor(Math.random()*(max-min+1))+min;}
 function updateMetrics(){
-  document.getElementById("activeUsers").textContent = randomInt(4,18);
   document.getElementById("serverLoad").textContent = randomInt(10,92)+"%";
-  const fireStates=["🟢 Engaged","🟡 Monitoring","🔴 Rebooting"];
-  document.getElementById("firewall").textContent = fireStates[randomInt(0,2)];
+  document.getElementById("firewall").textContent = ["🟢 Engaged","🟡 Monitoring","🔴 Rebooting"][randomInt(0,2)];
   const threats=["Low","Moderate","Elevated","High","Critical"];
-  const t = threats[randomInt(0,4)];
-  document.getElementById("threatLevel").textContent = t;
-  document.getElementById("threatLevel").style.color = (t==="High"||t==="Critical")?"#ff4b4b":(t==="Elevated"?"#f6ff4b":"#39ff14");
-  document.getElementById("lastBackup").textContent = `${randomInt(0,12)}h ${randomInt(0,59)}m ago`;
-  const sysStates=["✅ Stable","🟢 Optimal","⚠️ Degraded","🟥 Failure"];
-  document.getElementById("sysHealth").textContent = sysStates[randomInt(0,3)];
+  const t=threats[randomInt(0,4)];
+  document.getElementById("threatLevel").textContent=t;
+  document.getElementById("threatLevel").style.color=(t==="High"||t==="Critical")?"#ff4b4b":(t==="Elevated"?"#f6ff4b":"#39ff14");
+  document.getElementById("lastBackup").textContent=`${randomInt(0,12)}h ${randomInt(0,59)}m ago`;
+  document.getElementById("sysHealth").textContent=["✅ Stable","🟢 Optimal","⚠️ Degraded","🟥 Failure"][randomInt(0,3)];
 }
-updateMetrics();
-setInterval(updateMetrics,6000);
+updateMetrics(); setInterval(updateMetrics,6000);
 
-// Chat functions
-
-
-
-
-
-async function sendChatMessage() {
-  const msg = document.getElementById("chatMsg").value.trim();
-  const recipient = document.getElementById("recipient").value;
-
-  if (!msg || !recipient) {
-    alert("⚠️ Please select a recipient and type your message first!");
-    return;
-  }
-
-  const payload = {
-    sender: user,
-    recipient: recipient,
-    message: msg
-  };
-
-  console.log("🟢 Sending to:", SHEET_ENDPOINT);
-  console.log("🟢 Payload:", payload);
-
-  try {
-    await fetch(SHEET_ENDPOINT, {
-      method: "POST",
-      mode: "no-cors", // ✅ allows browser → Apps Script
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload)
+// Fetch chat messages
+async function loadChat(){
+  try{
+    const res = await fetch(SHEET_ENDPOINT + "?sheet=Chat&t=" + Date.now());
+    const chat = await res.json();
+    const box = document.getElementById("chatBox");
+    box.innerHTML="";
+    chat.forEach(m=>{
+      if(!m.Sender || !m.Message) return;
+      const div=document.createElement("div");
+      div.className = (m.Sender===user) ? "msg-sent" : "msg-recv";
+      div.innerHTML = `<small>${m.Sender} → ${m.Recipient}</small><br>${m.Message}`;
+      box.appendChild(div);
     });
-
-    document.getElementById("chatMsg").value = "";
-    alert("✅ Message sent! It may take a few seconds to appear.");
-    setTimeout(loadChat, 2000);
-  } catch (error) {
-    console.error("🚨 Send failed:", error);
-    alert("❌ Send failed. Check console.");
+    box.scrollTop=box.scrollHeight;
+  }catch(e){
+    console.error("Chat load failed",e);
   }
 }
+loadChat();
+setInterval(loadChat,8000);
 
-document.getElementById("sendMsgBtn").addEventListener("click", sendChatMessage);
-
-
-
-
+// Send chat message
+async function sendChatMessage() {
+  const msg=document.getElementById("chatMsg").value.trim();
+  const recipient=document.getElementById("recipient").value;
+  if(!msg||!recipient){ alert("⚠️ Please select a recipient and type your message!"); return; }
+  const payload={sender:user,recipient:recipient,message:msg};
+  console.log("🟢 Sending:",payload);
+  fetch(SHEET_ENDPOINT,{
+    method:"POST",
+    mode:"no-cors",
+    headers:{"Content-Type":"application/json"},
+    body:JSON.stringify(payload)
+  });
+  document.getElementById("chatMsg").value="";
+  alert("✅ Message sent! It may take a few seconds to appear.");
+  setTimeout(loadChat,3000);
+}
+document.getElementById("sendMsgBtn").addEventListener("click",sendChatMessage);
 </script>
 </body>
 </html>
