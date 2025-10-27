@@ -32,8 +32,8 @@ body {
   color:var(--neon)!important;
   font-weight:700;
   text-shadow:0 0 8px rgba(57,255,20,0.4);
-  white-space:normal;
   text-align:center;
+  width:100%;
 }
 .logout-btn {
   border:1px solid rgba(57,255,20,0.3);
@@ -196,30 +196,34 @@ footer {
   margin-top:auto;
 }
 
-/* Responsive Navbar Fix */
+/* Responsive Navbar Layout */
 .navbar .container-fluid {
   display:flex;
-  justify-content:space-between;
   align-items:center;
+  justify-content:space-between;
   flex-wrap:wrap;
 }
+
+/* Desktop: Logout Left, Title Right */
 @media (min-width:577px) {
   .navbar .container-fluid {
-    flex-direction:row-reverse; /* Logout left, Brand right on desktop */
+    flex-direction:row-reverse;
   }
 }
+
+/* Mobile: Title Above, Logout Below */
 @media (max-width:576px) {
   .navbar .container-fluid {
     flex-direction:column;
     align-items:center;
-    justify-content:center;
     text-align:center;
-    gap:8px;
+    gap:6px;
   }
   .navbar-brand {
-    font-size:1rem;
+    order:1;
   }
   .logout-btn {
+    order:2;
     padding:6px 12px;
     font-size:0.85rem;
   }
@@ -242,8 +246,8 @@ footer {
 <body>
 <nav class="navbar navbar-dark">
   <div class="container-fluid">
-    <button id="logoutBtn" class="logout-btn">Logout</button>
     <span class="navbar-brand">⚡ WILD ROCKER :: DASHBOARD</span>
+    <button id="logoutBtn" class="logout-btn">Logout</button>
   </div>
 </nav>
 
@@ -331,7 +335,6 @@ updateMetrics(); setInterval(updateMetrics,6000);
 
 let lastSeen = {};
 
-// Load chat messages
 async function loadChat(){
   const recipient = document.getElementById("recipient").value;
   if(!recipient){ document.getElementById("chatBox").innerHTML="Select a person to chat."; return; }
@@ -363,7 +366,6 @@ async function loadChat(){
 setInterval(loadChat,4000);
 document.getElementById("recipient").addEventListener("change",loadChat);
 
-// Send chat
 async function sendChatMessage(){
   const msg=document.getElementById("chatMsg").value.trim();
   const recipient=document.getElementById("recipient").value;
