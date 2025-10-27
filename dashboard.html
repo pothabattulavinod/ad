@@ -1,230 +1,214 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>WILD ROCKER — Dashboard</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>WILD ROCKER — Secure Dashboard</title>
 
-  <!-- Bootstrap -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 
-  <style>
-    :root {
-      --bg: #020204;
-      --neon: #39ff14;
-      --muted: #7f8f7f;
-      --panel: rgba(0,0,0,0.65);
-    }
-
-    body {
-      background: var(--bg);
-      color: var(--neon);
-      font-family: "Courier New", monospace;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-    }
-
-    .navbar {
-      background: rgba(0,0,0,0.6);
-      border-bottom: 1px solid rgba(57,255,20,0.2);
-      box-shadow: 0 0 20px rgba(57,255,20,0.1);
-    }
-
-    .navbar-brand {
-      font-weight: 700;
-      color: var(--neon) !important;
-      text-shadow: 0 0 8px rgba(57,255,20,0.4);
-    }
-
-    .dashboard {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: flex-start;
-      padding: 40px 16px;
-      position: relative;
-      overflow: hidden;
-    }
-
-    h1 {
-      font-size: 2rem;
-      text-shadow: 0 0 12px rgba(57,255,20,0.5);
-      margin-bottom: 20px;
-    }
-
-    .status-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-      gap: 20px;
-      width: 100%;
-      max-width: 1100px;
-    }
-
-    .status-card {
-      background: var(--panel);
-      border: 1px solid rgba(57,255,20,0.1);
-      border-radius: 12px;
-      padding: 20px;
-      box-shadow: 0 0 20px rgba(57,255,20,0.05);
-      transition: all 0.3s ease;
-    }
-
-    .status-card:hover {
-      box-shadow: 0 0 30px rgba(57,255,20,0.3);
-      transform: translateY(-4px);
-    }
-
-    .status-title {
-      font-weight: bold;
-      font-size: 1rem;
-      color: var(--muted);
-    }
-
-    .status-value {
-      font-size: 1.4rem;
-      color: var(--neon);
-      margin-top: 6px;
-      text-shadow: 0 0 10px rgba(57,255,20,0.4);
-    }
-
-    .logout-btn {
-      border: 1px solid rgba(57,255,20,0.2);
-      color: var(--neon);
-      background: transparent;
-      border-radius: 8px;
-      padding: 8px 20px;
-      transition: all 0.2s ease;
-    }
-    .logout-btn:hover {
-      background: rgba(57,255,20,0.1);
-    }
-
-    .ticker {
-      background: rgba(0,0,0,0.55);
-      color: var(--muted);
-      font-size: 0.82rem;
-      padding: 6px 0;
-      border-top: 1px solid rgba(57,255,20,0.1);
-      overflow: hidden;
-      white-space: nowrap;
-    }
-    .ticker span {
-      display: inline-block;
-      padding-left: 100%;
-      animation: ticker-scroll 20s linear infinite;
-    }
-    @keyframes ticker-scroll {
-      0% { transform: translateX(0); }
-      100% { transform: translateX(-100%); }
-    }
-
-    footer {
-      text-align: center;
-      color: var(--muted);
-      font-size: 0.85rem;
-      margin-top: auto;
-      padding: 10px 0;
-    }
-  </style>
+<style>
+:root{
+  --bg:#020204;
+  --neon:#39ff14;
+  --muted:#7f8f7f;
+  --panel:rgba(0,0,0,0.55);
+}
+body{
+  background:var(--bg);
+  color:var(--neon);
+  font-family:"Courier New", monospace;
+  min-height:100vh;
+  display:flex;
+  flex-direction:column;
+}
+.navbar{
+  background:rgba(0,0,0,0.6);
+  border-bottom:1px solid rgba(57,255,20,0.2);
+  box-shadow:0 0 20px rgba(57,255,20,0.15);
+}
+.navbar-brand{
+  color:var(--neon)!important;
+  font-weight:700;
+  text-shadow:0 0 8px rgba(57,255,20,0.4);
+}
+.logout-btn{
+  border:1px solid rgba(57,255,20,0.3);
+  color:var(--neon);
+  background:transparent;
+  border-radius:8px;
+  padding:8px 18px;
+  transition:0.2s;
+}
+.logout-btn:hover{
+  background:rgba(57,255,20,0.15);
+}
+.dashboard{
+  flex:1;
+  padding:40px 20px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+}
+h1{
+  font-size:2rem;
+  text-shadow:0 0 10px rgba(57,255,20,0.4);
+  margin-bottom:5px;
+}
+#roleText{
+  color:var(--muted);
+  font-size:0.9rem;
+}
+.status-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+  gap:20px;
+  width:100%;
+  max-width:1100px;
+  margin-top:30px;
+}
+.status-card{
+  background:var(--panel);
+  border:1px solid rgba(57,255,20,0.1);
+  border-radius:12px;
+  padding:20px;
+  box-shadow:0 0 20px rgba(57,255,20,0.06);
+  transition:0.3s;
+}
+.status-card:hover{
+  box-shadow:0 0 30px rgba(57,255,20,0.3);
+  transform:translateY(-3px);
+}
+.status-title{
+  color:var(--muted);
+  font-weight:bold;
+  font-size:0.9rem;
+}
+.status-value{
+  font-size:1.4rem;
+  color:var(--neon);
+  margin-top:6px;
+  text-shadow:0 0 10px rgba(57,255,20,0.3);
+}
+.ticker{
+  background:rgba(0,0,0,0.55);
+  color:var(--muted);
+  font-size:0.82rem;
+  border-top:1px solid rgba(57,255,20,0.1);
+  padding:6px 0;
+  overflow:hidden;
+  white-space:nowrap;
+}
+.ticker span{
+  display:inline-block;
+  padding-left:100%;
+  animation:ticker-scroll 25s linear infinite;
+}
+@keyframes ticker-scroll{
+  0%{transform:translateX(0);}
+  100%{transform:translateX(-100%);}
+}
+footer{
+  text-align:center;
+  color:var(--muted);
+  font-size:0.85rem;
+  padding:10px 0;
+}
+</style>
 </head>
+
 <body>
-
-  <!-- Navbar -->
-  <nav class="navbar navbar-dark">
-    <div class="container-fluid">
-      <span class="navbar-brand">⚡ WILD ROCKER :: DASHBOARD</span>
-      <button class="logout-btn" id="logoutBtn">Logout</button>
-    </div>
-  </nav>
-
-  <!-- Dashboard Content -->
-  <div class="dashboard">
-    <h1 id="welcomeText">Welcome, Operator</h1>
-    <p style="color: var(--muted);" id="roleText">Access Level: --</p>
-    <p style="color: var(--muted); font-size: 0.9rem;" id="dateTime"></p>
-
-    <div class="status-grid mt-4">
-      <div class="status-card">
-        <div class="status-title">System Health</div>
-        <div class="status-value">✅ Optimal</div>
-      </div>
-      <div class="status-card">
-        <div class="status-title">Active Users</div>
-        <div class="status-value" id="userCount">6</div>
-      </div>
-      <div class="status-card">
-        <div class="status-title">Firewall Status</div>
-        <div class="status-value">🟢 Engaged</div>
-      </div>
-      <div class="status-card">
-        <div class="status-title">Server Load</div>
-        <div class="status-value" id="serverLoad">23%</div>
-      </div>
-      <div class="status-card">
-        <div class="status-title">Connection</div>
-        <div class="status-value">🔒 Secure</div>
-      </div>
-      <div class="status-card">
-        <div class="status-title">Last Backup</div>
-        <div class="status-value">3h 12m ago</div>
-      </div>
-    </div>
+<nav class="navbar navbar-dark">
+  <div class="container-fluid">
+    <span class="navbar-brand">⚡ WILD ROCKER :: DASHBOARD</span>
+    <button id="logoutBtn" class="logout-btn">Logout</button>
   </div>
+</nav>
 
-  <!-- Scrolling Ticker -->
-  <div class="ticker">
-    <span>
-      [LOG] System integrity verified — All modules operational — Updating threat database... — 
-      [NOTICE] User connections stable — No breaches detected — 
-      [ALERT] Routine maintenance scheduled at 02:00 UTC — 
-    </span>
+<div class="dashboard">
+  <h1 id="welcomeText">Welcome, Operator</h1>
+  <p id="roleText">Access Level: --</p>
+  <p style="color:var(--muted);font-size:0.9rem;" id="dateTime"></p>
+
+  <div class="status-grid">
+    <div class="status-card"><div class="status-title">System Health</div><div class="status-value" id="sysHealth">✅ Stable</div></div>
+    <div class="status-card"><div class="status-title">Active Users</div><div class="status-value" id="activeUsers">--</div></div>
+    <div class="status-card"><div class="status-title">Firewall Status</div><div class="status-value" id="firewall">--</div></div>
+    <div class="status-card"><div class="status-title">Server Load</div><div class="status-value" id="serverLoad">--</div></div>
+    <div class="status-card"><div class="status-title">Last Backup</div><div class="status-value" id="lastBackup">--</div></div>
+    <div class="status-card"><div class="status-title">Threat Level</div><div class="status-value" id="threatLevel">--</div></div>
   </div>
+</div>
 
-  <footer>
-    © 2025 WILD ROCKER Systems | Secure Node v2.0
-  </footer>
+<div class="ticker">
+  <span>[SYS] Monitoring node activity — [FIREWALL] No intrusions detected — [SYNC] Database backup completed — [NETWORK] 99.98% uptime maintained — [SECURITY] Crypto modules active — </span>
+</div>
 
-  <script>
-    // Load session info
-    const user = sessionStorage.getItem("user");
-    const role = sessionStorage.getItem("role");
+<footer>© 2025 WILD ROCKER Systems | Secure Node v2.1</footer>
 
-    if (!user) {
-      // Redirect if not logged in
-      window.location.href = "index.html";
+<script>
+const SHEET_ENDPOINT = "https://script.google.com/macros/s/AKfycbwthlxHJOMi1c8tA1sp-oMFNtnBVupszWLqmnS1xd5JWx5_G2IBwKwOK2kfSjtBMyNRqg/exec";
+
+// redirect if not logged in
+const user = sessionStorage.getItem("user");
+if(!user){ window.location.href = "index.html"; }
+
+// Display dynamic time
+function updateTime(){
+  document.getElementById("dateTime").textContent = new Date().toLocaleString();
+}
+setInterval(updateTime,1000); updateTime();
+
+// Logout button
+document.getElementById("logoutBtn").addEventListener("click",()=>{
+  sessionStorage.clear();
+  window.location.href="index.html";
+});
+
+// Fetch user name + role from sheet
+async function fetchUserData(){
+  try{
+    const res = await fetch(SHEET_ENDPOINT);
+    const data = await res.json();
+    const found = data.find(r=>String(r.Username||r.username)==user);
+    if(found){
+      const name = found.Name || found.FullName || user;
+      const role = found.Role || "user";
+      document.getElementById("welcomeText").textContent = `Welcome, ${name}`;
+      document.getElementById("roleText").textContent = `Access Level: ${role}`;
     } else {
       document.getElementById("welcomeText").textContent = `Welcome, ${user}`;
-      document.getElementById("roleText").textContent = `Access Level: ${role}`;
     }
+  }catch(e){
+    console.error("Sheet fetch failed",e);
+  }
+}
+fetchUserData();
 
-    // Live time
-    function updateTime() {
-      const now = new Date();
-      document.getElementById("dateTime").textContent = now.toLocaleString();
-    }
-    updateTime();
-    setInterval(updateTime, 1000);
+// Simulate dynamic system metrics
+function randomInt(min,max){return Math.floor(Math.random()*(max-min+1))+min;}
 
-    // Simulate server load changes
-    setInterval(() => {
-      const load = Math.floor(Math.random() * 60) + 10;
-      document.getElementById("serverLoad").textContent = load + "%";
-    }, 5000);
+function updateMetrics(){
+  document.getElementById("activeUsers").textContent = randomInt(4,18);
+  document.getElementById("serverLoad").textContent = randomInt(10,92)+"%";
 
-    // Simulate active users
-    setInterval(() => {
-      const users = Math.floor(Math.random() * 12) + 3;
-      document.getElementById("userCount").textContent = users;
-    }, 8000);
+  const fireStates=["🟢 Engaged","🟡 Monitoring","🔴 Rebooting"];
+  document.getElementById("firewall").textContent = fireStates[randomInt(0,fireStates.length-1)];
 
-    // Logout
-    document.getElementById("logoutBtn").addEventListener("click", () => {
-      sessionStorage.clear();
-      window.location.href = "index.html";
-    });
-  </script>
+  const threats=["Low","Moderate","Elevated","High","Critical"];
+  const t = threats[randomInt(0,threats.length-1)];
+  document.getElementById("threatLevel").textContent = t;
+  document.getElementById("threatLevel").style.color = (t==="High"||t==="Critical")?"#ff4b4b":(t==="Elevated"?"#f6ff4b":"#39ff14");
 
+  // simulate "last backup" as time ago
+  const hrs=randomInt(0,12), mins=randomInt(0,59);
+  document.getElementById("lastBackup").textContent = `${hrs}h ${mins}m ago`;
+
+  const sysStates=["✅ Stable","🟢 Optimal","⚠️ Degraded","🟥 Failure"];
+  document.getElementById("sysHealth").textContent = sysStates[randomInt(0,sysStates.length-1)];
+}
+updateMetrics();
+setInterval(updateMetrics,6000);
+</script>
 </body>
 </html>
