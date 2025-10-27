@@ -18,7 +18,6 @@
       background:var(--bg);
       font-family:"Courier New", Courier, monospace;
       color:var(--neon);
-      overflow-x:hidden; /* prevent mobile cut off */
     }
 
     .stage {
@@ -29,9 +28,7 @@
       position:relative;
       overflow:hidden;
       padding:24px;
-      box-sizing:border-box;
     }
-
     .bg-layer { position:absolute; inset:0; z-index:0; pointer-events:none; }
     .bg-gradient {
       background:
@@ -49,7 +46,7 @@
 
     canvas.matrix {
       position:absolute; inset:0; z-index:1; width:100%; height:100%;
-      opacity:0.9; max-width:100vw;
+      opacity:0.9;
     }
 
     .card-shell {
@@ -60,8 +57,6 @@
       position:relative;
       z-index:5;
       flex-wrap:wrap;
-      justify-content:center;
-      box-sizing:border-box;
     }
 
     .terminal {
@@ -76,8 +71,6 @@
       flex-direction:column;
       gap:12px;
       min-height:360px;
-      box-sizing:border-box;
-      width:100%;
     }
 
     .wild-rocker {
@@ -154,7 +147,6 @@
       flex-direction:column;
       gap:12px;
       min-height:360px;
-      box-sizing:border-box;
     }
 
     .form-label { color:var(--muted); font-size:0.85rem; }
@@ -167,8 +159,8 @@
       color:var(--neon); width:100%; border-radius:10px; height:44px; font-weight:700;
     }
 
-    .ticker { position:absolute; left:0; right:0; bottom:16px; z-index:9; display:flex; justify-content:center; width:100%; box-sizing:border-box; }
-    .ribbon { width:calc(100% - 24px); max-width:1200px; background:rgba(0,0,0,0.55); border-radius:10px; padding:8px 12px; overflow:hidden; border:1px solid rgba(57,255,20,0.06); box-sizing:border-box; }
+    .ticker { position:absolute; left:0; right:0; bottom:16px; z-index:9; display:flex; justify-content:center; }
+    .ribbon { width:calc(100% - 80px); max-width:1200px; background:rgba(0,0,0,0.55); border-radius:10px; padding:8px 12px; overflow:hidden; border:1px solid rgba(57,255,20,0.06); }
     .strip { display:inline-block; white-space:nowrap; animation:scroll-left 18s linear infinite; color:var(--muted); font-size:0.82rem; }
     .strip b { color:var(--neon); margin-right:16px; }
     @keyframes scroll-left {
@@ -176,23 +168,9 @@
       100% { transform:translateX(-50%); }
     }
 
-    /* Responsive Fixes */
     @media (max-width:880px){
-      .card-shell {
-        flex-direction:column;
-        align-items:center;
-        justify-content:center;
-        max-width:100%;
-        width:100%;
-        padding:0;
-      }
-      .terminal, .panel {
-        width:100%;
-        max-width:100%;
-      }
+      .card-shell { flex-direction:column; max-width:420px; }
       .wild-rocker { font-size:1.4rem; margin-bottom:8px; }
-      .ticker { bottom:8px; }
-      .ribbon { width:100%; border-radius:0; margin:0; padding:6px 8px; }
     }
   </style>
 </head>
@@ -255,24 +233,15 @@
   </div>
 
   <script>
+    // === Matrix Background ===
     const canvas = document.getElementById("particles");
     const ctx = canvas.getContext("2d");
-    function resizeCanvas() {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-    }
-    resizeCanvas();
-    window.addEventListener("resize", resizeCanvas);
-
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
     const letters = "01";
     const fontSize = 14;
-    let drops = [];
-    function initDrops() {
-      const columns = Math.floor(canvas.width / fontSize);
-      drops = Array.from({length: columns}, () => 1);
-    }
-    initDrops();
-
+    const columns = canvas.width / fontSize;
+    const drops = Array.from({length: columns}, () => 1);
     function draw() {
       ctx.fillStyle = "rgba(0,0,0,0.05)";
       ctx.fillRect(0, 0, canvas.width, canvas.height);
@@ -286,7 +255,12 @@
       }
     }
     setInterval(draw, 35);
+    window.addEventListener("resize", () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    });
 
+    // === Terminal Typing ===
     const output = document.getElementById("output");
     const progressFill = document.getElementById("progressFill");
     const progressLabel = document.getElementById("progressLabel");
@@ -320,6 +294,7 @@
     }
     printMessages();
 
+    // Progress Simulation
     function progressSequence() {
       let progress = 0;
       const timer = setInterval(() => {
@@ -331,10 +306,89 @@
     }
     setTimeout(progressSequence, 500);
 
+    // Password Toggle
     document.getElementById("pwToggle").addEventListener("click",()=>{
       const pass = document.getElementById("pass");
       pass.type = pass.type === "password" ? "text" : "password";
     });
+
+    // === Google Sheet Endpoint ===
+    const SHEET_ENDPOINT = "https://script.google.com/macros/s/AKfycbwthlxHJOMi1c8tA1sp-oMFNtnBVupszWLqmnS1xd5JWx5_G2IBwKwOK2kfSjtBMyNRqg/exec";
+
+    async function fetchWithTimeout(url, options = {}, timeout = 8000) {
+      const controller = new AbortController();
+      const id = setTimeout(() => controller.abort(), timeout);
+      options.signal = controller.signal;
+      const res = await fetch(url, options);
+      clearTimeout(id);
+      return res;
+    }
+
+    async function getSheetData() {
+      const res = await fetchWithTimeout(SHEET_ENDPOINT, { method: "GET", cache: "no-store" }, 10000);
+      if (!res.ok) throw new Error("Network response was not ok: " + res.status);
+      return await res.json();
+    }
+
+    function writeOutputLine(text) {
+      output.textContent += "\n" + text;
+      output.scrollTop = output.scrollHeight;
+    }
+
+    // === Login Form Submit ===
+    document.getElementById("loginForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const username = document.getElementById("user").value.trim();
+      const password = document.getElementById("pass").value.trim();
+
+      if (!username || !password) {
+        writeOutputLine("[AUTH] Please enter username and passphrase.");
+        return;
+      }
+
+      progressFill.style.width = "0%";
+      progressLabel.textContent = "0%";
+      writeOutputLine("\n[AUTH] Validating credentials...");
+
+      let p = 0;
+      const progInterval = setInterval(() => {
+        p = Math.min(95, p + 10);
+        progressFill.style.width = p + "%";
+        progressLabel.textContent = p + "%";
+      }, 180);
+
+      try {
+        const sheetData = await getSheetData();
+        clearInterval(progInterval);
+        progressFill.style.width = "100%";
+        progressLabel.textContent = "100%";
+
+        const records = Array.isArray(sheetData) ? sheetData : (sheetData.records || [sheetData]);
+        const match = records.find(r =>
+          String(r.Username || r.username || "").trim() === username &&
+          String(r.Password || r.password || "").trim() === password
+        );
+
+        if (match) {
+          const role = match.Role || match.role || "user";
+          writeOutputLine(`[ACCESS GRANTED] Welcome, ${username}! Role: ${role}`);
+          sessionStorage.setItem("user", username);
+          sessionStorage.setItem("role", role);
+          setTimeout(() => { window.location.href = "dashboard.html"; }, 1500);
+        } else {
+          writeOutputLine("[ACCESS DENIED] Invalid username or passphrase.");
+        }
+      } catch (err) {
+        clearInterval(progInterval);
+        progressFill.style.width = "0%";
+        progressLabel.textContent = "error";
+        writeOutputLine("[ERROR] " + (err.message || "Unable to validate credentials."));
+      }
+    });
+
+    setTimeout(() => {
+      if (output.textContent.startsWith("\n")) output.textContent = output.textContent.slice(1);
+    }, 800);
   </script>
 </body>
 </html>
