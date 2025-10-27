@@ -26,12 +26,14 @@ body {
   background:rgba(0,0,0,0.6);
   border-bottom:1px solid rgba(57,255,20,0.2);
   box-shadow:0 0 20px rgba(57,255,20,0.15);
+  padding:10px 15px;
 }
 .navbar-brand {
   color:var(--neon)!important;
   font-weight:700;
   text-shadow:0 0 8px rgba(57,255,20,0.4);
   white-space:normal;
+  text-align:center;
 }
 .logout-btn {
   border:1px solid rgba(57,255,20,0.3);
@@ -194,17 +196,33 @@ footer {
   margin-top:auto;
 }
 
-/* Responsive Adjustments */
+/* Responsive Navbar Fix */
+@media (max-width:576px) {
+  .navbar .container-fluid {
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    gap:8px;
+  }
+  .navbar-brand {
+    font-size:1rem;
+  }
+  .logout-btn {
+    padding:6px 12px;
+    font-size:0.85rem;
+    width:auto;
+  }
+}
+
+/* General Responsive Adjustments */
 @media (max-width:768px){
   h1 { font-size:1.6rem; }
   .status-value { font-size:1.2rem; }
   .status-grid { gap:15px; }
   .chat-panel { padding:15px; }
-  .navbar-brand { font-size:1rem; }
 }
 @media (max-width:480px){
-  .navbar-brand { font-size:0.95rem; }
-  .logout-btn { padding:6px 12px; font-size:0.8rem; }
   .dashboard { padding:25px 10px; }
   .chat-messages { height:250px; }
 }
@@ -214,8 +232,8 @@ footer {
 <body>
 <nav class="navbar navbar-dark">
   <div class="container-fluid d-flex justify-content-between align-items-center flex-wrap">
-    <span class="navbar-brand">⚡ WILD ROCKER :: DASHBOARD</span>
-    <button id="logoutBtn" class="logout-btn mt-2 mt-sm-0">Logout</button>
+    <span class="navbar-brand w-100 w-sm-auto">⚡ WILD ROCKER :: DASHBOARD</span>
+    <button id="logoutBtn" class="logout-btn">Logout</button>
   </div>
 </nav>
 
