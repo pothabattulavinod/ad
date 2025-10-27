@@ -8,13 +8,13 @@
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 
 <style>
-:root{
+:root {
   --bg:#020204;
   --neon:#39ff14;
   --muted:#7f8f7f;
   --panel:rgba(0,0,0,0.55);
 }
-body{
+body {
   background:var(--bg);
   color:var(--neon);
   font-family:"Courier New", monospace;
@@ -22,53 +22,62 @@ body{
   display:flex;
   flex-direction:column;
 }
-.navbar{
+.navbar {
   background:rgba(0,0,0,0.6);
   border-bottom:1px solid rgba(57,255,20,0.2);
+  box-shadow:0 0 20px rgba(57,255,20,0.15);
 }
-.navbar-brand{
+.navbar-brand {
   color:var(--neon)!important;
   font-weight:700;
+  text-shadow:0 0 8px rgba(57,255,20,0.4);
 }
-.logout-btn{
+.logout-btn {
   border:1px solid rgba(57,255,20,0.3);
   color:var(--neon);
   background:transparent;
   border-radius:8px;
   padding:8px 18px;
+  transition:0.2s;
 }
-.logout-btn:hover{
-  background:rgba(57,255,20,0.15);
-}
-.dashboard{
+.logout-btn:hover { background:rgba(57,255,20,0.15); }
+.dashboard {
   flex:1;
   padding:40px 20px;
   display:flex;
   flex-direction:column;
   align-items:center;
 }
-h1{font-size:1.8rem;text-shadow:0 0 10px rgba(57,255,20,0.4);}
-#roleText{color:var(--muted);font-size:0.9rem;margin-bottom:20px;}
-.status-grid{
+h1 { font-size:2rem; text-shadow:0 0 10px rgba(57,255,20,0.4); margin-bottom:5px; }
+#roleText { color:var(--muted); font-size:0.9rem; }
+.status-grid {
   display:grid;
   grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
   gap:20px;
   width:100%;
   max-width:1100px;
-  margin-top:10px;
+  margin-top:30px;
 }
-.status-card{
+.status-card {
   background:var(--panel);
+  border:1px solid rgba(57,255,20,0.1);
   border-radius:12px;
   padding:20px;
-  border:1px solid rgba(57,255,20,0.1);
-  text-align:center;
+  box-shadow:0 0 20px rgba(57,255,20,0.06);
+  transition:0.3s;
 }
-.status-title{color:var(--muted);font-size:0.9rem;font-weight:bold;}
-.status-value{font-size:1.3rem;margin-top:6px;color:var(--neon);}
-
-/* Chat Section */
-.chat-panel{
+.status-card:hover {
+  box-shadow:0 0 30px rgba(57,255,20,0.3);
+  transform:translateY(-3px);
+}
+.status-title { color:var(--muted); font-weight:bold; font-size:0.9rem; }
+.status-value {
+  font-size:1.4rem;
+  color:var(--neon);
+  margin-top:6px;
+  text-shadow:0 0 10px rgba(57,255,20,0.3);
+}
+.chat-panel {
   margin-top:40px;
   background:var(--panel);
   border:1px solid rgba(57,255,20,0.1);
@@ -77,44 +86,19 @@ h1{font-size:1.8rem;text-shadow:0 0 10px rgba(57,255,20,0.4);}
   max-width:700px;
   width:100%;
 }
-.chat-messages{
+.chat-messages {
   background:rgba(0,0,0,0.4);
   border:1px solid rgba(57,255,20,0.1);
   border-radius:8px;
   padding:10px;
-  height:350px;
+  height:300px;
   overflow-y:auto;
-  display:flex;
-  flex-direction:column;
-}
-.msg{
-  max-width:70%;
-  padding:8px 12px;
-  margin:4px 0;
-  border-radius:8px;
-  word-wrap:break-word;
   font-size:0.9rem;
+  margin-bottom:12px;
+  scroll-behavior:smooth;
 }
-.sent{
-  align-self:flex-end;
-  background:rgba(57,255,20,0.1);
-}
-.recv{
-  align-self:flex-start;
-  background:rgba(255,255,255,0.05);
-}
-.msg small{
-  display:block;
-  color:var(--muted);
-  font-size:0.7rem;
-  margin-top:4px;
-}
-.chat-input{
-  display:flex;
-  gap:10px;
-  margin-top:8px;
-}
-.chat-input textarea{
+.chat-input { display:flex; gap:10px; }
+.chat-input textarea {
   flex:1;
   background:transparent;
   border:1px dashed rgba(57,255,20,0.2);
@@ -124,17 +108,52 @@ h1{font-size:1.8rem;text-shadow:0 0 10px rgba(57,255,20,0.4);}
   height:60px;
   resize:none;
 }
-.chat-input button{
+.chat-input button {
   background:transparent;
   border:1px solid rgba(57,255,20,0.3);
   color:var(--neon);
   border-radius:8px;
   padding:0 16px;
 }
-.chat-input button:hover{
-  background:rgba(57,255,20,0.15);
+.chat-input button:hover { background:rgba(57,255,20,0.15); }
+.msg {
+  margin:6px 0;
+  padding:6px 10px;
+  border-radius:8px;
+  max-width:85%;
+  word-wrap:break-word;
 }
-footer{
+.msg.sent {
+  background:rgba(57,255,20,0.1);
+  margin-left:auto;
+  text-align:right;
+}
+.msg.recv {
+  background:rgba(255,255,255,0.05);
+  margin-right:auto;
+  text-align:left;
+}
+.msg small { display:block; font-size:0.7rem; color:var(--muted); margin-top:3px; }
+.seen-label { font-size:0.7rem; color:#7f8f7f; margin-top:2px; text-align:right; }
+.ticker {
+  background:rgba(0,0,0,0.55);
+  color:var(--muted);
+  font-size:0.82rem;
+  border-top:1px solid rgba(57,255,20,0.1);
+  padding:6px 0;
+  overflow:hidden;
+  white-space:nowrap;
+}
+.ticker span {
+  display:inline-block;
+  padding-left:100%;
+  animation:ticker-scroll 25s linear infinite;
+}
+@keyframes ticker-scroll {
+  0% {transform:translateX(0);}
+  100% {transform:translateX(-100%);}
+}
+footer {
   text-align:center;
   color:var(--muted);
   font-size:0.85rem;
@@ -146,7 +165,7 @@ footer{
 <body>
 <nav class="navbar navbar-dark">
   <div class="container-fluid">
-    <span class="navbar-brand">⚡ WILD ROCKER DASHBOARD</span>
+    <span class="navbar-brand">⚡ WILD ROCKER :: DASHBOARD</span>
     <button id="logoutBtn" class="logout-btn">Logout</button>
   </div>
 </nav>
@@ -154,14 +173,27 @@ footer{
 <div class="dashboard">
   <h1 id="welcomeText">Welcome, Operator</h1>
   <p id="roleText">Access Level: --</p>
+  <p style="color:var(--muted);font-size:0.9rem;" id="dateTime"></p>
 
-  <!-- Chat -->
+  <div class="status-grid">
+    <div class="status-card"><div class="status-title">System Health</div><div class="status-value" id="sysHealth">✅ Stable</div></div>
+    <div class="status-card"><div class="status-title">Active Users</div><div class="status-value" id="activeUsers">--</div></div>
+    <div class="status-card"><div class="status-title">Firewall Status</div><div class="status-value" id="firewall">--</div></div>
+    <div class="status-card"><div class="status-title">Server Load</div><div class="status-value" id="serverLoad">--</div></div>
+    <div class="status-card"><div class="status-title">Last Backup</div><div class="status-value" id="lastBackup">--</div></div>
+    <div class="status-card"><div class="status-title">Threat Level</div><div class="status-value" id="threatLevel">--</div></div>
+  </div>
+
+  <!-- Chat Section -->
   <div class="chat-panel">
-    <h4>💬 Secure Chat</h4>
-    <select id="recipient" class="form-select mb-2" style="background:transparent;color:var(--neon);border:1px dashed rgba(57,255,20,0.2);">
-      <option>Loading users...</option>
-    </select>
-    <div class="chat-messages" id="chatBox">Loading chat...</div>
+    <h4 style="margin-bottom:10px;">💬 Secure Chat</h4>
+    <div class="mb-2">
+      <label style="color:var(--muted);font-size:0.85rem;">Chat with:</label>
+      <select id="recipient" class="form-select" style="background:transparent;color:var(--neon);border:1px dashed rgba(57,255,20,0.2);">
+        <option value="">Loading users...</option>
+      </select>
+    </div>
+    <div class="chat-messages" id="chatBox">Select a person to chat.</div>
     <div class="chat-input">
       <textarea id="chatMsg" placeholder="Type your message..."></textarea>
       <button id="sendMsgBtn">Send</button>
@@ -169,112 +201,114 @@ footer{
   </div>
 </div>
 
-<footer>© 2025 WILD ROCKER Systems</footer>
+<div class="ticker">
+  <span>[SYS] Monitoring node activity — [FIREWALL] No intrusions detected — [SYNC] Backup complete — [NETWORK] 99.98% uptime — [SECURITY] Active modules — </span>
+</div>
+
+<footer>© 2025 WILD ROCKER Systems | Secure Node v2.5</footer>
 
 <script>
-const SHEET_ENDPOINT = "https://script.google.com/macros/s/AKfycbxlKCDNZiriGMx6QKCcBRs-4w-tmp1JjKki2QyBJQG4LY6yJp5j5wG2uvt7oeiQm9m7nw/exec";
+const SHEET_ENDPOINT = "https://script.google.com/macros/s/AKfycbx9STgtHT5iA8s-hVwiZl7dFvpqC0o5sDtuqoGxvOaUXKMvDYebLLCA-mwa_Wm2jXg0Jg/exec";
 const user = sessionStorage.getItem("user");
-if(!user){ location.href="index.html"; }
+if(!user){ window.location.href = "index.html"; }
 
-let currentRecipient = "";
+function updateTime(){ document.getElementById("dateTime").textContent = new Date().toLocaleString(); }
+setInterval(updateTime,1000); updateTime();
+
+document.getElementById("logoutBtn").addEventListener("click",()=>{ sessionStorage.clear(); window.location.href="index.html"; });
+
 let userName = user;
 
-// Logout
-document.getElementById("logoutBtn").onclick = () => {
-  sessionStorage.clear();
-  location.href = "index.html";
-};
-
-// Load users
-async function fetchUsers(){
-  try {
-    const res = await fetch(SHEET_ENDPOINT + "?sheet=Sheet1");
-    const data = await res.json();
-    const sel = document.getElementById("recipient");
-    sel.innerHTML = "<option value=''>Select recipient</option>";
-
-    data.forEach(u => {
-      if(u.Username !== user){
-        const opt = document.createElement("option");
-        opt.value = u.Username;
-        opt.textContent = u.Name || u.Username;
-        sel.appendChild(opt);
-      } else {
-        userName = u.Name || user;
-        document.getElementById("welcomeText").textContent = `Welcome, ${userName}`;
-        document.getElementById("roleText").textContent = `Access Level: ${u.Role || "User"}`;
-      }
-    });
-  } catch (e) {
-    console.error("User fetch failed", e);
+// Load users list
+async function fetchUserData(){
+  const res = await fetch(SHEET_ENDPOINT + "?sheet=Sheet1");
+  const data = await res.json();
+  const found = data.find(r=>String(r.Username||r.username)==user);
+  if(found){
+    userName = found.Name || user;
+    document.getElementById("welcomeText").textContent = `Welcome, ${userName}`;
+    document.getElementById("roleText").textContent = `Access Level: ${found.Role || "User"}`;
   }
+  const sel = document.getElementById("recipient");
+  sel.innerHTML = "<option value=''>Select a person</option>";
+  data.forEach(u=>{
+    if(u.Username!==user){
+      const opt=document.createElement("option");
+      opt.value=u.Username;
+      opt.textContent=u.Name||u.Username;
+      sel.appendChild(opt);
+    }
+  });
+  document.getElementById("activeUsers").textContent=data.length;
 }
-fetchUsers();
+fetchUserData();
 
-// Load chat for selected user
+// System metrics simulation
+function rand(min,max){return Math.floor(Math.random()*(max-min+1))+min;}
+function updateMetrics(){
+  document.getElementById("serverLoad").textContent = rand(10,95)+"%";
+  document.getElementById("firewall").textContent = ["🟢 Engaged","🟡 Monitoring","🔴 Rebooting"][rand(0,2)];
+  document.getElementById("lastBackup").textContent=`${rand(0,12)}h ${rand(0,59)}m ago`;
+  document.getElementById("sysHealth").textContent=["✅ Stable","🟢 Optimal","⚠️ Degraded","🟥 Failure"][rand(0,3)];
+}
+updateMetrics(); setInterval(updateMetrics,6000);
+
+let lastSeen = {};
+
+// Load chat messages for selected user
 async function loadChat(){
-  if(!currentRecipient) return;
-  try {
-    const res = await fetch(SHEET_ENDPOINT + "?sheet=Chat&t=" + Date.now());
-    const msgs = await res.json();
-    const chatBox = document.getElementById("chatBox");
-    chatBox.innerHTML = "";
-
-    msgs
-      .filter(m =>
-        (m.Sender === user && m.Recipient === currentRecipient) ||
-        (m.Sender === currentRecipient && m.Recipient === user)
-      )
-      .forEach(m => {
-        const div = document.createElement("div");
-        div.className = "msg " + (m.Sender === user ? "sent" : "recv");
-        const seen = (m.Sender === user && m.SeenBy && m.SeenBy.includes(currentRecipient))
-          ? "<small>✔ Seen</small>" : "";
-        div.innerHTML = `${m.Message}<small>${new Date(m.Timestamp).toLocaleTimeString()}</small>${seen}`;
-        chatBox.appendChild(div);
-      });
-
-    chatBox.scrollTop = chatBox.scrollHeight;
-
-    // Mark as seen
-    await fetch(SHEET_ENDPOINT, {
-      method: "POST",
-      headers: {"Content-Type": "application/json"},
-      body: JSON.stringify({ action: "seen", viewer: user, with: currentRecipient })
-    });
-  } catch(e){
-    console.error("Chat load failed", e);
+  const recipient = document.getElementById("recipient").value;
+  if(!recipient){ document.getElementById("chatBox").innerHTML="Select a person to chat."; return; }
+  const res = await fetch(SHEET_ENDPOINT + "?sheet=Chat&t="+Date.now());
+  const chat = await res.json();
+  const box = document.getElementById("chatBox");
+  box.innerHTML = "";
+  const msgs = chat.filter(m=>
+    (m.Sender===user && m.Recipient===recipient) ||
+    (m.Sender===recipient && m.Recipient===user)
+  );
+  msgs.forEach(m=>{
+    const msgDiv=document.createElement("div");
+    msgDiv.className = "msg " + (m.Sender===user ? "sent" : "recv");
+    msgDiv.innerHTML = `
+      ${m.Message}
+      <small>${m.Time || m.Timestamp || ""}</small>
+    `;
+    box.appendChild(msgDiv);
+  });
+  box.scrollTop = box.scrollHeight;
+  // update seen status
+  if(msgs.some(m=>m.Sender!==user)){
+    lastSeen[recipient]=new Date();
+  }
+  if(lastSeen[recipient]){
+    const seen=document.createElement("div");
+    seen.className="seen-label";
+    seen.textContent="Seen "+lastSeen[recipient].toLocaleTimeString();
+    box.appendChild(seen);
   }
 }
+setInterval(loadChat,4000);
 
-// Select recipient
-document.getElementById("recipient").onchange = () => {
-  currentRecipient = document.getElementById("recipient").value;
-  loadChat();
-};
+// When user selects new recipient, load chat instantly
+document.getElementById("recipient").addEventListener("change",loadChat);
 
-// Send message
-async function sendChat(){
-  const msg = document.getElementById("chatMsg").value.trim();
-  if(!msg || !currentRecipient) return;
-
-  const payload = { sender: user, recipient: currentRecipient, message: msg };
-  try {
-    await fetch(SHEET_ENDPOINT, {
-      method: "POST",
-      headers: { "Content-Type":"application/json" },
-      body: JSON.stringify(payload)
-    });
-    document.getElementById("chatMsg").value = "";
-    setTimeout(loadChat, 500);
-  } catch(e){
-    console.error("Send failed", e);
-  }
+// Send chat
+async function sendChatMessage(){
+  const msg=document.getElementById("chatMsg").value.trim();
+  const recipient=document.getElementById("recipient").value;
+  if(!msg||!recipient)return;
+  const payload={sender:user,recipient:recipient,message:msg,time:new Date().toLocaleTimeString()};
+  fetch(SHEET_ENDPOINT,{
+    method:"POST",
+    mode:"no-cors",
+    headers:{"Content-Type":"application/json"},
+    body:JSON.stringify(payload)
+  });
+  document.getElementById("chatMsg").value="";
+  loadChat(); // show immediately
 }
-document.getElementById("sendMsgBtn").onclick = sendChat;
-
-// Refresh chat periodically
-setInterval(() => { if(currentRecipient) loadChat(); }, 4000);
+document.getElementById("sendMsgBtn").addEventListener("click",sendChatMessage);
 </script>
 </body>
 </html>
